@@ -1,0 +1,81 @@
+<!-- <li *ngFor="let column of this.panel.Columns">{{column | json}}</li> -->
+<!-- <kendo-grid [data]="dataList" [loading]="reportService.loading" [height]="panel.additionalParameters?.GridHeight"
+  [pageable]="container.listParams.pageable" [pageSize]="container.listParams.take" [skip]="container.listParams.skip"
+  [sortable]= "true" [sort]="container.listParams.sort"> -->
+<kendo-grid [data]="dataList" [loading]="reportService.loading" [height]="panel.additionalParameters?.GridHeight"
+  [pageable]="container.listParams.pageable" [pageSize]="container.listParams.take" [skip]="container.listParams.skip"
+  [sortable]= "true" [sort]="container.listParams.sort" (dataStateChange)="handleDataStateChange($event)" 
+  [filterable]="panel.additionalParameters?.Filterable" [filter]="this.container.listParams.filter">
+
+  <div *ngFor="let column of panel.Columns; let i = index" >
+    
+    <kendo-grid-column *ngIf="column.additionalParameters?.isDate" 
+      field="{{column.FieldName}}" 
+      title="{{column.Header}}" 
+      width="{{column.additionalParameters?.width || 90}}"
+      filter="date"
+      [headerStyle]="panel.Columns[i].additionalParamaters?.headerStyle"
+      [style]="panel.Columns[i].additionalParameters?.style"
+      >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem[column.FieldName] | date: column.additionalParameters?.format}}
+      </ng-template>
+      <!-- <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem[column.FieldName] | date: "dd.MM.yyyy HH:mm"}}
+      </ng-template> -->
+    </kendo-grid-column>
+
+    <kendo-grid-column *ngIf="column.additionalParameters?.isPercent" 
+      field="{{column.FieldName}}" 
+      title="{{column.Header}}" 
+      width="{{column.additionalParameters?.width || 90}}"
+      filter="numeric"
+      [headerStyle]="panel.Columns[i].additionalParamaters?.headerStyle"
+      [style]="panel.Columns[i].additionalParameters?.style"
+      >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem[column.FieldName] | percent: column.additionalParameters?.format : "tr" }}
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column *ngIf="column.additionalParameters?.isCurrency" 
+      field="{{column.FieldName}}" 
+      title="{{column.Header}}" 
+      width="{{column.additionalParameters?.width || 90}}"
+      filter="numeric"
+      [headerStyle]="panel.Columns[i].additionalParamaters?.headerStyle"
+      [style]="panel.Columns[i].additionalParameters?.style"
+      >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem[column.FieldName] | currency:'TRY':'symbol-narrow':column.additionalParameters?.format }}
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column *ngIf="column.additionalParameters?.isNumber" 
+      field="{{column.FieldName}}" 
+      title="{{column.Header}}" 
+      width="{{column.additionalParameters?.width || 90}}"
+      filter="numeric"
+      [headerStyle]="panel.Columns[i].additionalParamaters?.headerStyle"
+      [style]="panel.Columns[i].additionalParameters?.style"
+      >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem[column.FieldName] | number:column.additionalParameters?.format }}
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column *ngIf="!column.additionalParameters?.isDate
+                           && !column.additionalParameters?.isPercent
+                           && !column.additionalParameters?.isCurrency
+                           && !column.additionalParameters?.isNumber"   
+      field="{{column.FieldName}}" 
+      title="{{column.Header}}" 
+      width="{{column.additionalParameters?.width || 90}}"
+      [format]="panel.Columns[i].additionalParameters?.format"
+      filter="{{column.additionalParameters?.type}}"
+      [style]="panel.Columns[i].additionalParameters?.style"
+      [headerStyle]="panel.Columns[i].additionalParamaters?.headerStyle"
+    ></kendo-grid-column>
+  </div>
+
+</kendo-grid>

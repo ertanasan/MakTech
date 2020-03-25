@@ -1,0 +1,40 @@
+<!-- <ol *ngIf="!showAsDetail" class="breadcrumb">
+  <li class="breadcrumb-item"><h5>{{ header }}</h5></li>
+  <li *ngIf="!hasCustomHeader" class="ml-auto">
+    <ng-content select="[header-items]"></ng-content>
+  </li>
+  <ng-content *ngIf="hasCustomHeader" select="[custom-header]"></ng-content>
+</ol>
+<div *ngIf="!showAsDetail" class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <ng-template [ngTemplateOutlet]="pageContent"></ng-template>
+    </div>
+  </div>    
+</div>
+<ng-template *ngIf="showAsDetail" [ngTemplateOutlet]="pageContent"></ng-template>
+<ng-template #pageContent>
+  <ng-content></ng-content>
+</ng-template> -->
+
+<kt-portlet *ngIf="!showAsDetail">
+  <kt-portlet-header [sticky]="true" [title]="header" [class]="'kt-portlet__head--lg'">
+    <ng-container ktPortletTools>
+      <ng-content select="[header-items]"></ng-content>
+      <!-- <button (click)="createProduct()" mat-raised-button color="primary" matTooltip="Create new product">New product</button> -->
+    </ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <ng-template [ngTemplateOutlet]="pageContent"></ng-template>
+        </div>
+      </div>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>
+<ng-template *ngIf="showAsDetail" [ngTemplateOutlet]="pageContent"></ng-template>
+<ng-template #pageContent>
+  <ng-content></ng-content>
+</ng-template>

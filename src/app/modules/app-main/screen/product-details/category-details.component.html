@@ -1,0 +1,189 @@
+<div class="col-md-12 mt-2 mb-1">
+<div class="row">
+  <ol class="col-md-6 breadcrumb">
+    <h4 class="ml-3">{{ 'Kategori : '}}{{(categoryName !== 'All')?categoryName:'Hepsi'}} {{selectedProductName}}</h4>
+  </ol>
+  <div class="col-md-6 breadcrumb">
+    <div class="float-right m-auto">
+      <kendo-buttongroup [selection]="'single'">
+        <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="onSelectedChange($event, 1)" >Bugün</button>
+        <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 2)">Dün</button>
+        <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 3)">Son 7 gün</button>
+        <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 4)" >Son 30 gün</button>
+      </kendo-buttongroup>
+      <kendo-datepicker class="mr-2" [(value)]="this.endDate" format="dd.MM.yyyy" (valueChange)="onSelectedChange($event, 1)"></kendo-datepicker>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="container-fluid">
+  <div *ngIf="categoryStore && !categoryStoreLoading" class="row">
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          icon="fa fa-shopping-cart"
+          caption="Mağaza Sayısı"
+          text="{{categoryStore.length}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-shopping-bag"
+          caption="Satış / Müşteri"
+          text="{{saleTotal | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} / {{customerTotal | number:'1.0-0':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-shopping-bag"
+          caption="Fiş Başına Ürün"
+          text="{{avgUnit | number:'1.2-2':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="warning"
+          icon="fa fa-shopping-bag"
+          caption="Fiş Başına Satış"
+          text="{{avgSale | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+  </div>
+  
+  <ot-panel *ngIf="categorySales && !categorySalesLoading" [caption]="getSaleCaption()">
+      <kendo-chart [seriesColors]="['red']"
+                   *ngIf="!categorySalesLoading"  >
+          <kendo-chart-area [margin]="0" [height]="200"> </kendo-chart-area>
+          <kendo-chart-legend position="top"></kendo-chart-legend>
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="categorySales.TRANSACTION_DT" baseUnit="fit" maxDateGroups="31" type="date"  >
+               </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line"
+                                      [data]="categorySales"
+                                      field="SALE"
+                                      categoryField="TRANSACTION_DT">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <!-- <div class="header font-weight-bold">
+                    {{category}}
+                  </div> -->
+                  <div class="row">
+                      <div class="col-12" style="text-align: center">
+                          {{ value | number:'1.0-0':'tr'}}
+                      </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+  </ot-panel>
+
+  <ot-panel [caption]="getStoreCaption()">
+    <!-- <div class="row"> -->
+      <!-- <div class = "col-md-6"> -->
+        <kendo-grid [data]="categoryStoreActiveList" [loading]="categoryStoreLoading" [height]="400"
+          [pageable]="false" [pageSize]="1000" [sortable]="true" [sort]="lpCategoryStore.sort" 
+          [filterable]="false" (sortChange)="handleSortChange($event, 1)" [navigable]="true" [selectable]="selectableSettings"
+          [kendoGridSelectBy]="'STORE'"
+          [selectedKeys]="storeSelection"
+          (selectedKeysChange)="onSelectedKeysChange($event, 1)">
+
+          <kendo-grid-checkbox-column width="40">
+            <ng-template kendoGridHeaderTemplate>
+              <ot-light-button color="success" icon=" fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+            </ng-template>
+          </kendo-grid-checkbox-column>
+          <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+          <kendo-grid-column field="SALE" [title]="'Satış'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.SALE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <!-- <kendo-grid-column field="QUANTITY"  [title]="'Miktar'" width="80" filter="numeric"></kendo-grid-column> -->
+          <kendo-grid-column field="CUSTOMERS" [title]="'Müşteri'" width="80" filter="numeric"></kendo-grid-column>
+          <kendo-grid-column field="AVGTRANSACTIONVALUE" [title]="'Fiş Başına Satış'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGTRANSACTIONVALUE | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="AVGUNITPERCUSTOMER" [title]="'Fiş Başına Ürün'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGUNITPERCUSTOMER | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <!-- <kendo-grid-column field="AVGQUANTITYPERCUSTOMER" [title]="'Fiş Başına Miktar'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGQUANTITYPERCUSTOMER | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column field="SALE_PCT" [title]="'Mağaza Yüzde'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.SALE_PCT | percent:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-excel [fileName]="getStoreFileName()"></kendo-grid-excel>
+        </kendo-grid>
+      <!-- </div> -->
+    </ot-panel>
+    <ot-panel [caption]="getProductCaption()">
+
+      <!-- <div class="col-md-6"> -->
+        <kendo-grid [data]="categoryProductActiveList" [loading]="categoryProductLoading" [height]="400"
+          [pageable]="false" [pageSize]="1000" [sortable]="true" [sort]="lpCategoryProduct.sort" 
+          [filterable]="false" (sortChange)="handleSortChange($event, 2)" [navigable]="true" [selectable]="selectableSettings"
+          [kendoGridSelectBy]="'PRODUCTID'"
+          [selectedKeys]="productSelection"
+          (selectedKeysChange)="onSelectedKeysChange($event, 2)">
+          <kendo-grid-checkbox-column width="40">
+            <ng-template kendoGridHeaderTemplate>
+              <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+            </ng-template>
+          </kendo-grid-checkbox-column>
+          <kendo-grid-column field="PRODUCTNAME" [title]="'Ürün Adı'" width="150"></kendo-grid-column>
+          <kendo-grid-column field="SALE" [title]="'Satış'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.SALE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="QUANTITY"  [title]="'Miktar'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.QUANTITY | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <!-- <kendo-grid-column field="CUSTOMERS" [title]="'Müşteri'" width="80" filter="numeric"></kendo-grid-column> -->
+          <!-- <kendo-grid-column field="AVGTRANSACTIONVALUE" [title]="'Fiş Başına Satış'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGTRANSACTIONVALUE | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="AVGUNITPERCUSTOMER" [title]="'Fiş Başına Ürün'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGUNITPERCUSTOMER | number:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column> -->
+          <kendo-grid-column field="AVGQUANTITYPERCUSTOMER" [title]="'Fiş Başına Miktar'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.AVGQUANTITYPERCUSTOMER | number:'1.2-2'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="SALE_PCT" [title]="'Ürün Yüzde'" width="80" filter="numeric">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  <span>{{dataItem.SALE_PCT | percent:'1.2-2':'tr'}}</span>
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-excel [fileName]="getProductFileName()"></kendo-grid-excel>
+        </kendo-grid>
+      <!-- </div>  -->
+    <!-- </div> -->
+  </ot-panel>
+
+</div>

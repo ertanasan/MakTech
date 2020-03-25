@@ -1,0 +1,100 @@
+<div class="row">
+  <ol class="col-md-12 breadcrumb">
+    <h4 class="ml-3">{{ 'Kampanya Performans Panosu'}}</h4>
+  </ol>
+</div>
+
+<div class="m-3 parent-container">
+  <ot-panel [caption]="'Active Campaings' | translate">
+    <div class="row" *ngIf="pricePackageService.completeListExceptGeneral"> 
+      <div class="col-md-12 col-lg-6 col-xl-3" *ngFor="let lpackage of fourPackages; index as lpackageIndex">
+        <ot-dropdown-entry captionWidth="0" editorWidth="12" [items]="pricePackageService.completeListExceptGeneral" textField="PackageName" valueField="PackageId" usePrimitiveValue="true" [value]="lpackage" (valueChange)="onPackageChange($event, lpackageIndex)"></ot-dropdown-entry>
+        <ot-radial-gauge-widget [title]="lpackage.PackageName" 
+                                [pointers]="[{'value': packagePerformansArr[lpackageIndex].SaleChangePercentage + 1 }]" 
+                                [scaleMin]=0.8 [scaleMax]=2.0 minorUnit=0.05 majorUnit=0.2 labelFormat="p" 
+                                [scaleBands]="[{ 'from': 0.8, 'to': 1, 'color': 'red' }, { 'from': 1.2, 'to': 2.0, 'color': 'green' }]"
+                                [description]="lpackage.Comment"
+                                (onGaugeClick)="listPerformanceDetails(lpackageIndex)">
+        </ot-radial-gauge-widget>
+      </div>
+    </div>
+  </ot-panel>
+</div>
+
+<div *ngIf="selectedPerformance" class="m-3 parent-container">
+  <ot-panel [caption]="'Private Campaing Performans Report' | translate">
+    <div class="row infoRow" *ngIf="pckgPerfActiveList.total">
+      <div class="col-md-1">
+        {{ 'Price Change Percentage' | translate }}
+      </div>
+      <div class="col-md-3"><strong> : {{ selectedPerformance.PriceChangePercentage | percent:'1.2-2':'tr' }} </strong></div>
+      <div class="col-md-1">
+        {{ 'Sale Change Percentage' | translate }}
+      </div>
+      <div class="col-md-3"><strong> : {{ selectedPerformance.SaleChangePercentage | percent:'1.2-2':'tr' }} </strong></div>
+      <div class="col-md-1">
+        {{ 'Product Count' | translate }}
+      </div>
+      <div class="col-md-3"><strong> : {{ selectedPerformance.ProductCount }} </strong></div>
+      <!-- <div class="col-md-2">
+        {{ 'Store Count' | translate }}
+      </div>
+      <div class="col-md-4"><strong> : 20 </strong></div> -->
+    </div>
+    <br>
+    <kendo-grid [data]="pckgPerfActiveList" [pageable]="false" [pageSize]="1000" [style.maxHeight.px]="400">
+      <kendo-grid-column field="STORE_NM" [title]="'Stores' | translate">
+          <ng-template kendoGridHeaderTemplate>
+            <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="PACKAGESTORE_FL" [title]="'In Package' | translate"></kendo-grid-column>
+      <kendo-grid-column field="CMPSTART_DT" [title]="'Campaing Start Date' | translate" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{utility.toDate(dataItem.CMPSTART_DT) | date:('dd.MM.yyyy')}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="CMPEND_DT" [title]="'Campaing End Date' | translate" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{utility.toDate(dataItem.CMPEND_DT) | date:('dd.MM.yyyy')}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REPORTSTART_DT" [title]="'Report Start Date' | translate" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{utility.toDate(dataItem.REPORTSTART_DT) | date:('dd.MM.yyyy')}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REPORTEND_DT" [title]="'Report End Date' | translate" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{utility.toDate(dataItem.REPORTEND_DT) | date:('dd.MM.yyyy')}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DAY_CN" [title]="'Day Count' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DAY_CN | number:'1.0-0':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="QUANTITY_SUM" [title]="'Total Sale Quantity' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.QUANTITY_SUM | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="SALE_SUM" [title]="'Total Sale' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.SALE_SUM | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DAILYQUANTITYBYSTORE_AVG" [title]="'Average Quantity' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DAILYQUANTITYBYSTORE_AVG | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DAILYSALEBYSTORE_AVG" [title]="'Average Sale' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DAILYSALEBYSTORE_AVG | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-excel [fileName]="getFileName()"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+</div>

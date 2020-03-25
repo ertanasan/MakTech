@@ -1,0 +1,24 @@
+// If you want to override variables do it here
+@import "variables";
+
+// If you want to add something do it here
+@import "custom";
+@import "node_modules/spinkit/scss/spinkit.scss";
+
+
+
+.fa-fw{
+    width: initial; 
+    text-align: center;
+    border-style: hidden;
+}
+
+.flexirow{
+    display:block !important;
+    height:45px !important;
+    width:100% !important;
+}
+
+.flexirow > button {
+    float:right !important;
+}

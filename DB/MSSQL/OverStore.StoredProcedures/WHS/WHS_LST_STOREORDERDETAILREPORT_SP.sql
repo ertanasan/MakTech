@@ -1,0 +1,152 @@
+﻿CREATE PROCEDURE [dbo].[WHS_LST_STOREORDERDETAILREPORT_SP]      
+ @Store INT = -1,      
+ @StartDate DATE = NULL,      
+ @EndDate DATE = NULL,  
+ @Product INT = -1 ,
+ @StoreOrder INT = NULL AS      
+BEGIN      
+ 
+	IF OBJECT_ID('tempdb.dbo.#stores', 'U') IS NOT NULL  DROP TABLE #stores;
+	SELECT * into #stores FROM dbo.STR_GETUSERSTORES_FN();
+
+	IF @StartDate IS NULL       
+	BEGIN      
+		Set @StartDate = GETDATE()      
+		Set @EndDate = GETDATE()      
+	END      
+	ELSE IF @EndDate IS NULL
+	BEGIN
+		Set @EndDate = @StartDate
+	END
+
+	IF ISNULL(@Store, -1) = -1  
+	BEGIN  
+   
+		IF ISNULL(@Product, -1) = -1  
+		BEGIN  
+  
+			SELECT OD.STOREORDERDETAILID,  
+				   OD.STOREORDER,  
+				   ST.STOREID,  
+				   ST.STORE_NM,  
+				   OS.STATUS_NM [ORDER_STATUS],  
+				   O.ORDER_DT,  
+				   O.SHIPMENT_DT,  
+				   P.CODE_NM [PRODUCT_CODE],   
+				   P.NAME_NM [PRODUCT_NAME],  
+				   OD.ORDERUNIT_QTY, 
+				   OD.ORDER_QTY,  
+				   OD.SHIPPED_QTY,
+				   OD.SHIPPED_QTY - OD.ORDER_QTY [QUANTITY_DIFFERENCE] 
+			  FROM WHS_STOREORDERDETAIL OD (NOLOCK)  
+			  JOIN WHS_STOREORDER O (NOLOCK) ON OD.STOREORDER = O.STOREORDERID  
+			  JOIN WHS_STOREORDERSTATUS OS ON O.STATUS = OS.STOREORDERSTATUSID  
+			  JOIN #stores ST  ON O.STORE = ST.STOREID    
+			  JOIN PRD_PRODUCT P ON OD.PRODUCT = P.PRODUCTID  
+			 WHERE OD.DELETED_FL = 'N'  
+			   AND O.DELETED_FL = 'N'  
+			   AND CAST(O.ORDER_DT AS DATE) >= @StartDate  
+			   AND CAST(O.ORDER_DT AS DATE) <= @EndDate  
+			   AND (@StoreOrder IS NULL OR OD.STOREORDER = @StoreOrder)  
+  
+		END  
+  
+		ELSE  
+		BEGIN  
+  
+			SELECT OD.STOREORDERDETAILID,  
+			       OD.STOREORDER,  
+			       ST.STOREID,  
+			       ST.STORE_NM,  
+			       OS.STATUS_NM [ORDER_STATUS],  
+			       O.ORDER_DT,  
+			       O.SHIPMENT_DT,  
+			       P.CODE_NM [PRODUCT_CODE],   
+			       P.NAME_NM [PRODUCT_NAME],  
+			       OD.ORDERUNIT_QTY, 
+			       OD.ORDER_QTY,  
+			       OD.SHIPPED_QTY,
+				   OD.SHIPPED_QTY - OD.ORDER_QTY [QUANTITY_DIFFERENCE] 
+			  FROM WHS_STOREORDERDETAIL OD (NOLOCK)  
+			  JOIN WHS_STOREORDER O (NOLOCK) ON OD.STOREORDER = O.STOREORDERID  
+			  JOIN WHS_STOREORDERSTATUS OS ON O.STATUS = OS.STOREORDERSTATUSID  
+			  JOIN #stores ST  ON O.STORE = ST.STOREID    
+			  JOIN PRD_PRODUCT P ON OD.PRODUCT = P.PRODUCTID  
+			 WHERE OD.DELETED_FL = 'N'  
+			   AND O.DELETED_FL = 'N'  
+			   AND CAST(O.ORDER_DT AS DATE) >= @StartDate  
+			   AND CAST(O.ORDER_DT AS DATE) <= @EndDate  
+			   AND P.PRODUCTID = @Product  
+			   AND (@StoreOrder IS NULL OR OD.STOREORDER = @StoreOrder)  
+    
+		END  
+  
+	END  
+   
+	ELSE  
+	BEGIN  
+    
+		IF @Product IS NULL OR @Product = -1  
+		BEGIN  
+     
+			SELECT OD.STOREORDERDETAILID,  
+			       OD.STOREORDER,  
+			       ST.STOREID,  
+			       ST.STORE_NM,  
+			       OS.STATUS_NM [ORDER_STATUS],  
+			       O.ORDER_DT,  
+			       O.SHIPMENT_DT,  
+			       P.CODE_NM [PRODUCT_CODE],   
+			       P.NAME_NM [PRODUCT_NAME],  
+			       OD.ORDERUNIT_QTY, 
+			       OD.ORDER_QTY,  
+			       OD.SHIPPED_QTY,
+				   OD.SHIPPED_QTY - OD.ORDER_QTY [QUANTITY_DIFFERENCE] 
+			  FROM WHS_STOREORDERDETAIL OD (NOLOCK)  
+			  JOIN WHS_STOREORDER O (NOLOCK) ON OD.STOREORDER = O.STOREORDERID  
+			  JOIN WHS_STOREORDERSTATUS OS ON O.STATUS = OS.STOREORDERSTATUSID  
+			  JOIN #stores ST  ON O.STORE = ST.STOREID    
+			  JOIN PRD_PRODUCT P ON OD.PRODUCT = P.PRODUCTID  
+			 WHERE OD.DELETED_FL = 'N'  
+			   AND O.DELETED_FL = 'N'  
+			   AND CAST(O.ORDER_DT AS DATE) >= @StartDate  
+			   AND CAST(O.ORDER_DT AS DATE) <= @EndDate  
+			   AND ST.STOREID = @Store  
+			   AND (@StoreOrder IS NULL OR OD.STOREORDER = @StoreOrder)  
+  
+		END  
+  
+		ELSE  
+		BEGIN  
+  
+		  SELECT OD.STOREORDERDETAILID,  
+			     OD.STOREORDER,  
+			     ST.STOREID,  
+			     ST.STORE_NM,  
+			     OS.STATUS_NM [ORDER_STATUS],  
+			     O.ORDER_DT,  
+			     O.SHIPMENT_DT,  
+			     P.CODE_NM [PRODUCT_CODE],   
+			     P.NAME_NM [PRODUCT_NAME],  
+			     OD.ORDERUNIT_QTY, 
+			     OD.ORDER_QTY,  
+			     OD.SHIPPED_QTY,
+			     OD.SHIPPED_QTY - OD.ORDER_QTY [QUANTITY_DIFFERENCE] 
+		    FROM WHS_STOREORDERDETAIL OD (NOLOCK)  
+			JOIN WHS_STOREORDER O (NOLOCK) ON OD.STOREORDER = O.STOREORDERID  
+			JOIN WHS_STOREORDERSTATUS OS ON O.STATUS = OS.STOREORDERSTATUSID  
+			JOIN #stores ST  ON O.STORE = ST.STOREID    
+			JOIN PRD_PRODUCT P ON OD.PRODUCT = P.PRODUCTID  
+		   WHERE OD.DELETED_FL = 'N'  
+			 AND O.DELETED_FL = 'N'  
+			 AND CAST(O.ORDER_DT AS DATE) >= @StartDate  
+			 AND CAST(O.ORDER_DT AS DATE) <= @EndDate  
+			 AND ST.STOREID = @Store  
+			 AND P.PRODUCTID = @Product  
+			 AND (@StoreOrder IS NULL OR OD.STOREORDER = @StoreOrder)  
+  
+		END  
+  
+	END   
+  
+END;   

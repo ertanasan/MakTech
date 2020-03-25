@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="OverStoreScreenPropertyId" [caption]="'OverStore Screen Property Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Screen" [caption]="'Screen' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PropertyName" [caption]="'Property Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="PropertyValue" [caption]="'Property Value' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

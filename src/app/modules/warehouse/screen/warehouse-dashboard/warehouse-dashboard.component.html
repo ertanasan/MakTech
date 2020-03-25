@@ -1,0 +1,278 @@
+<div class="col-md-12 mt-2 mb-1">
+  <div class="row">
+    <div class="col-md-6">
+      <h4 class="mx-3" style="display: inline-block; vertical-align: sub">{{ 'Warehouse Dashboard' | translate }}</h4>
+      <ot-dashboard-router [activeDashboard]="'Warehouse Dashboard'"></ot-dashboard-router>
+    </div>
+    <div class="col-md-6">
+      <p class="refreshtime float-right mr-2">{{ 'Last Refresh Time' | translate }}: {{refreshTime | date : "dd.MM.yyyy HH:mm"}}</p>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="data" class="container-fluid">
+  <div class="row">
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          icon="fa fa-send"
+          caption="Sipariş (Eski Sipariş) / Sevk Sayısı"
+          text="{{dashboard.OrderCount}} ({{dashboard.OldOrderCount}}) / {{dashboard.ShippedOrderCount}}"
+          (click)="onWidgetClicked('Order')"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-check"
+          caption="Ağır : {{dashboard.HeavyOrderWeight | number:'1.0-0':'tr'}} / {{dashboard.HeavyGatheredWeight | number:'1.0-0':'tr'}}"
+          text="{{(dashboard.HeavyGatheredWeight * 1.0 / dashboard.HeavyOrderWeight) | percent: '1.2-2':'tr'}}"
+          (click)="onWidgetClicked('Heavy')"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-check"
+          caption="Hafif : {{dashboard.LightOrderWeight | number:'1.0-0':'tr'}} / {{dashboard.LightGatheredWeight | number:'1.0-0':'tr'}}"
+          text="{{(dashboard.LightGatheredWeight * 1.0 / dashboard.LightOrderWeight) | percent: '1.2-2':'tr'}}"
+          (click)="onWidgetClicked('Light')"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="warning"
+          icon="fa fa-certificate"
+          caption="Kontrol Edilen Palet Sayı"
+          text="{{dashboard.controlPalletCount | number:'1.0-0':'tr'}} / {{dashboard.controlledPalletCount | number:'1.0-0':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+  </div>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-6 col-xl-3">
+
+        <ot-panel caption="Toplama Saat">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="text-center">
+              <kendo-buttongroup class="col-md-2" [selection]="'single'">
+                <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="hourSelectionChange(1)">Ağır</button>
+                <button kendoButton [toggleable]="true" (selectedChange)="hourSelectionChange(2)">Hafif</button>
+              </kendo-buttongroup>
+            </div>
+          </div>
+        </div>
+
+        <kendo-chart class="mb-3" *ngIf = "hourHeavySelected && hourHeavyData">
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="hourArray">
+              </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="bar" [gap]="2" [spacing]=".25" [data]="heavyDataYesterday"> 
+              <kendo-chart-series-item-tooltip> 
+                <ng-template let-value="value">
+                  {{ value | number : '1.0-0'}}
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+            <kendo-chart-series-item type="bar" [data]="heavyDataToday"> 
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-value="value">
+                  {{ value | number : '1.0-0'}}
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+
+        <kendo-chart class="mb-3" *ngIf = "hourLightSelected && hourLightData">
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="hourArray">
+              </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="bar" [gap]="2" [spacing]=".25" [data]="lightDataYesterday"> 
+              <kendo-chart-series-item-tooltip> 
+                <ng-template let-value="value">
+                  {{ value | number : '1.0-0'}}
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+            <kendo-chart-series-item type="bar" [data]="lightDataToday"> 
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-value="value">
+                  {{ value | number : '1.0-0'}}
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+        </ot-panel>
+      </div>
+
+      <div class="col-md-12 col-lg-6 col-xl-3">
+
+        <kt-portlet [class]="'kt-portlet--height-fluid'">
+          <kt-portlet-header [title]="'Ağır Toplayıcılar'"> </kt-portlet-header>
+          <kt-portlet-body>
+            <kt-widget4 [data]="heavyGatheringList">
+              <ng-template #actionTemplate let-item="item">
+                <span class="kt-widget4__number" [ngClass]="item.valueColor">{{item.value}}</span>
+              </ng-template>
+            </kt-widget4>
+          </kt-portlet-body>
+        </kt-portlet>
+        
+
+      </div>
+
+      <div class="col-md-12 col-lg-6 col-xl-3">
+
+        <kt-portlet [class]="'kt-portlet--height-fluid'">
+          <kt-portlet-header [title]="'Hafif Toplayıcılar'"> </kt-portlet-header>
+          <kt-portlet-body>
+            <kt-widget4 [data]="lightGatheringList">
+              <ng-template #actionTemplate let-item="item">
+                <span class="kt-widget4__number" [ngClass]="item.valueColor">{{item.value}}</span>
+              </ng-template>
+            </kt-widget4>
+          </kt-portlet-body>
+        </kt-portlet>
+        
+
+      </div>
+
+      <div class="col-md-12 col-lg-6 col-xl-3">
+
+        <div class="row">
+          <div class="col-12">
+            <kt-portlet [class]="'kt-portlet--height-fluid'">
+              <kt-portlet-header [title]="'Ağır Kontrolcüler'"> </kt-portlet-header>
+              <kt-portlet-body>
+                <kt-widget4 [data]="heavyControlList">
+                  <ng-template #actionTemplate let-item="item">
+                    <span class="kt-widget4__number" [ngClass]="item.valueColor">{{item.value}}</span>
+                  </ng-template>
+                </kt-widget4>
+              </kt-portlet-body>
+            </kt-portlet>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <kt-portlet [class]="'kt-portlet--height-fluid'">
+              <kt-portlet-header [title]="'Hafif Kontrolcüler'"> </kt-portlet-header>
+              <kt-portlet-body>
+                <kt-widget4 [data]="lightControlList">
+                  <ng-template #actionTemplate let-item="item">
+                    <span class="kt-widget4__number" [ngClass]="item.valueColor">{{item.value}}</span>
+                  </ng-template>
+                </kt-widget4>
+              </kt-portlet-body>
+            </kt-portlet>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <ot-list-screen-container class="col-12" *ngIf="data" [header]="'Order List' | translate" >
+        <ng-container header-items>
+          <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'" class="mr-1">Excel</button>
+        </ng-container>
+        <kendo-grid #grid="kendoGrid" [data]="orderActiveList" [height]="475"
+          [sortable]= "true" [sort]="listParams.sort"
+          [filterable]="true" [filter]="listParams.filter" 
+          (dataStateChange)="handleDataStateChange($event)" [navigable]="true">
+      
+          <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+            <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+          </ng-template>
+          <kendo-grid-column field="StoreOrderId" [title]="'Order Id' | translate" width="80"></kendo-grid-column>
+          <kendo-grid-column field="Store" [title]="'Store' | translate" width="120">      
+            <ng-template kendoGridFilterCellTemplate let-dataItem>
+              <ot-dropdown-list-filter
+                [data]="storeService.completeList"
+                valueField="StoreId"
+                textField="Name"
+                memberField="Store"
+                [filter]="listParams.filter">
+              </ot-dropdown-list-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+            </ng-template>
+          </kendo-grid-column>
+      
+          <kendo-grid-column field="Status" [title]="'Status' | translate" width="120">
+            <ng-template kendoGridFilterCellTemplate let-dataItem>
+              <ot-dropdown-list-filter
+                [data]="orderStatusService.completeList"
+                valueField="StoreOrderStatusId"
+                textField="StatusName"
+                memberField="Status"
+                [filter]="listParams.filter">
+              </ot-dropdown-list-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.Status | getName:'StoreOrderStatusId':'StatusName':orderStatusService.completeList }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="OrderDate" [title]="'Order Date' | translate" width="100" filter="date" >
+            <ng-template kendoGridCellTemplate let-filter let-dataItem>
+              <div *ngIf="dataItem.OrderDate">{{dataItem.OrderDate | date:('dd.MM.yyyy')}}</div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="ShipmentDate" [title]="'Shipment Date' | translate" width="100" filter="date">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.ShipmentDate">{{dataItem.ShipmentDate | date:('dd.MM.yyyy')}}</div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="HeavyOrderWeight" [title]="'Heavy Order Weight' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.HeavyOrderWeight | number:'1.0-0':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="HeavyGatheredWeight" [title]="'Heavy Gathered Weight' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.HeavyGatheredWeight | number:'1.0-0':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="LightOrderWeight" [title]="'Light Order Weight' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.LightOrderWeight | number:'1.0-0':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="LightGatheredWeight" [title]="'Light Gathered Weight' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.LightGatheredWeight | number:'1.0-0':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="OrderPrice" [title]="'Order Value' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.OrderPrice | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-excel [fileName]="getxlsFileName()" [fetchData]="allData">
+            <kendo-excelexport-column field="StoreOrderId" title="Sipariş No"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="StoreName" title="Şube"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="OrderStatusName" title="Durum"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="OrderDate" title="Sipariş Tarihi"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="ShipmentDate" title="Sevk Tarihi"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="HeavyOrderWeight" title="Ağır Sipariş Tonaj"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="HeavyGatheredWeight" title="Ağır Toplanan Tonaj"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="LightOrderWeight" title="Hafif Sipariş Tonaj"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="LightGatheredWeight" title="Hafif Toplanan Tonaj"> </kendo-excelexport-column>
+            <kendo-excelexport-column field="OrderPrice" title="Sipariş Değeri"> </kendo-excelexport-column>
+          </kendo-grid-excel>
+        </kendo-grid>
+      </ot-list-screen-container>
+    </div>
+</div>
+

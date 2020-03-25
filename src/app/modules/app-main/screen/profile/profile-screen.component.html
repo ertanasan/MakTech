@@ -1,0 +1,10 @@
+<ot-list-screen-container header="ChangePassword" [breadcrumbItems]="breadcrumbItems">
+    <ot-panel caption="Change Password" class="col-md-6">
+        <form #form="ngForm" [formGroup]="changePasswordForm" (ngSubmit)="onUpdatePassword()" class="form-horizontal row">
+            <ot-alpha-entry formControlName="currentPassword" caption="{{'Current Password' | translate}}" [isPassword]="true" class="col-12"></ot-alpha-entry>
+            <ot-alpha-entry formControlName="newPassword" caption="{{'New Password' | translate}}" [isPassword]="true" class="col-12"></ot-alpha-entry>
+            <ot-alpha-entry formControlName="confirmPassword" caption="{{'Confirm Password' | translate}}" [isPassword]="true" class="col-12"></ot-alpha-entry>
+            <ot-button caption="{{'Save Changes' | translate}}" actionType="submit"></ot-button>
+        </form>
+    </ot-panel>
+</ot-list-screen-container>

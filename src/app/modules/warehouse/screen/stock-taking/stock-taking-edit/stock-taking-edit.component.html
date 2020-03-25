@@ -1,0 +1,14 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StockTakingId" [caption]="'Stock Taking Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ProductName" [isReadOnly]= "true" [caption]="'Product' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Zone" [isReadOnly]= "true" [caption]="'Zone' | translate" [items]="storageZoneService.zoneList" textField="ZoneName" valueField="StorageZonesId" usePrimitiveValue="true" class="col-12" [loading]="storageZoneService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry *ngIf="entryType === 1" formControlName="CountingValue" [caption]="'Counting Value' | translate" class="col-12"></ot-numeric-entry>    
+    <ot-numeric-entry *ngIf="entryType === 2" formControlName="Zone1" [caption]="zoneName1" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry *ngIf="entryType === 2" formControlName="Zone2" [caption]="zoneName2" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry *ngIf="entryType === 2" formControlName="Zone3" [caption]="zoneName3" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>
+<ot-input-dialog #valueErrorDialog (onAction)="onActionValueError($event)">
+Hatalı veri girmiş olabilirsiniz, veriler KG cinsinden girilmektedir. Girdiğiniz verinin doğru olduğundan eminseniz "Kaydet" düğmesine basınız. 
+</ot-input-dialog>

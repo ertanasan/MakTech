@@ -1,0 +1,10 @@
+<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+      <ot-alpha-entry formControlName="ActionId" [caption]="'Action Id' | translate" class="col-12" [ngClass]="{'ot-hidden': false}" [isReadOnly]="true"></ot-alpha-entry>
+      <ot-alpha-entry formControlName="ProcessDefinitionName" [caption]="'Process Definition Name' | translate" class="col-12" [isReadOnly]=true></ot-alpha-entry>
+      <ot-alpha-entry formControlName="ActivityName" [caption]="'Activity Name' | translate" class="col-12" [isReadOnly]=true></ot-alpha-entry>
+      <ot-dropdown-entry formControlName="Group" [caption]="'Delegate Group' | translate" [defaultItem]="defaultItemGroup" [items]="groupService.completeList" textField="Name" valueField="GroupId" (valueChange)="valueChange('group')" usePrimitiveValue="true" [required]="true" class="col-12"></ot-dropdown-entry>
+      <ot-dropdown-entry formControlName="User" [caption]="'Delegate User' | translate" [defaultItem]="defaultItemUser" [items]="userService.completeList" textField="Name" valueField="UserId" usePrimitiveValue="true" (valueChange)="valueChange('user')" [required]="true" class="col-12"></ot-dropdown-entry>
+      <ot-alpha-entry formControlName="Comment" [caption]="'Comment' | translate" [required]="true" [minlength]="2" class="col-12"></ot-alpha-entry>
+    </form>
+</ot-edit-screen-container>

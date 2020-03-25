@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="CardDistributionId" [caption]="'Card Distribution Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="CardGroupCode" [caption]="'Card Group Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="CardZetAmount" [caption]="'Card Zet Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="StoreRec" [caption]="'Store Rec' | translate" [items]="reconciliationService.completeList" textField="StoreReconciliationId" valueField="StoreReconciliationId" usePrimitiveValue="true" class="col-12" [loading]="reconciliationService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreScalesId" [caption]="'Store Scales Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Name" [caption]="'Name' | translate" class="col-12"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="container.MasterId ? [container.MasterObject] : storeService.completeList"
+      [isReadOnly]="container.MasterId" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+    <ot-dropdown-entry formControlName="ScaleModel" [caption]="'Scale Model' | translate" [items]="scaleModelService.completeList" textField="Name" valueField="ScaleModelId" usePrimitiveValue="true" class="col-12" [loading]="scaleModelService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="IpAdress" [caption]="'IP Address' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SerialNumber" [caption]="'Serial Number' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="SealValidDate" [caption]="'Seal Valid Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+
+    <ot-alpha-entry formControlName="PriceFilePath" [caption]="'Price File Path' | translate" rows="3" class="col-12"></ot-alpha-entry>
+    <ot-switch-entry formControlName="CreatePriceFileFlag" [caption]="'Create Price File Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

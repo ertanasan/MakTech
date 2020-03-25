@@ -1,0 +1,12 @@
+.container {
+    height: 300px;
+}
+.descriptionTextArea {
+    width: 100%;
+    border: none;
+    resize: none;
+}
+
+.descriptionTextArea:focus {
+    border: none;
+}

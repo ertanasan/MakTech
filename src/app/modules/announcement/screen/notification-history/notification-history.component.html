@@ -1,0 +1,34 @@
+<ot-list-screen-container [header]="'Notification History' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <ot-check-box id="includeSystemNotifications" [caption]="'Include System Notifications' | translate" color="primary" class="headerCheckBox text-right" 
+                  captionWidth=9 editorWidth=3
+                  [(value)]="isSystemNotificationsIncluded" (valueChange)="refreshList()">
+    </ot-check-box>
+  </ng-container>
+  <kendo-grid [data]="notificationService.userNotifications" [loading]="notificationService.loading" [height]="615"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column title="" [width]="60" locked="true">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-light-button color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showNotificationDialog(dataItem.NotificationText)"><i class="fa fa-search"></i></ot-light-button>
+      </ng-template>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="NotificationId" [title]="'NotificationId' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="CreateDate" [title]="'Create Date' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CreateDate">{{dataItem.CreateDate | date: 'dd.MM.yyyy HH:mm' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="NotificationText" [title]="'Notification Text' | translate"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+
+<ot-custom-dialog #notificationTextDialog [caption]="'Notification Text' | translate" size="lg">
+  <ot-text-entry [value]="selectedNotificationText" rows="10" class="col-12" editorWidth=12 captionWidth=0 [isReadOnly]="true"></ot-text-entry>
+  <ng-container dialog-actions>
+      <ot-button caption="{{'Close' | translate}}" (onClick)="notificationTextDialog.close($event)"></ot-button>
+  </ng-container>
+</ot-custom-dialog>

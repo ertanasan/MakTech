@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="SaleDailySummaryId" [caption]="'Sale Daily Summary Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry #storeID formControlName="StoreID" [caption]="'Store ID' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-date-entry formControlName="TransactionDate" [isReadOnly] = "true" [caption]="'Transaction Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="CashRegister" [caption]="'Cash Register' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="ZetNo" [caption]="'Zet No' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ReceiptCount" [caption]="'Receipt Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ReceiptTotal" [caption]="'Receipt Total' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="RefundCount" [caption]="'Refund Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="RefundAmount" [caption]="'Refund Amount' | translate" class="col-12"></ot-numeric-entry>
+    <!-- <ot-numeric-entry formControlName="CashAmount" [caption]="'Cash Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="CardAmount" [caption]="'Card Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-numeric-entry formControlName="SlpCount" [caption]="'SlpCount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="SlpTotal" [caption]="'SlpTotal' | translate" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

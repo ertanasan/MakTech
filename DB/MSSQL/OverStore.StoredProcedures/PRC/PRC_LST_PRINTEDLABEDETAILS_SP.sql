@@ -1,0 +1,31 @@
+﻿CREATE PROCEDURE [dbo].PRC_LST_PRINTEDLABEDETAILS_SP                               
+ @Store INT = -1,
+ @StartDate DATE = NULL,        
+ @EndDate DATE = NULL              
+AS                                  
+BEGIN                 
+ -- Initializing parameters                
+ IF @StartDate IS NULL        
+ SET @StartDate = DATEADD(DAY, -14, GETDATE());         
+ IF @EndDate IS NULL                
+ SET @EndDate = GETDATE();           
+       
+ -- Temp Tables      
+	IF OBJECT_ID('tempdb.dbo.#stores', 'U') IS NOT NULL  DROP TABLE #stores;      
+	--SELECT * into #stores FROM dbo.STR_GETUSERSTORES_FN();      
+	 SELECT * into #stores FROM STR_STORE WHERE @Store <= 0 OR @Store IS NULL OR STOREID = @Store ;      
+      
+	  -- MAIN QUERY
+	 SELECT CP.CURRENTPRICEID, CP.STORE, CP.PRODUCTCODE_NM, CP.PRODUCT_NM, CP.VERSION_TM
+	 FROM (
+		SELECT CP.CURRENTPRICEID, CP.STORE, CP.PRODUCTCODE_NM, CP.PRODUCT_NM, CP.VERSION_TM
+			, RANK() OVER(PARTITION BY STORE ORDER BY VERSION_TM DESC) RANKNO      
+		FROM PRC_CURRENTPRICE (NOLOCK) CP       
+		WHERE CP.VERSION_TM BETWEEN '2019-03-01' AND '2019-03-20' AND CP.GROUP_CD = 1  
+	) CP 
+	LEFT JOIN PRC_LABELPRINT (NOLOCK)  LX ON LX.CURRENTPRICE = CP.CURRENTPRICEID AND LX.CREATE_DT >= CP.VERSION_TM
+	JOIN #stores ST ON ST.STOREID = CP.STORE AND ST.DELETED_FL = 'N' AND ST.ACTIVE_FL = 'Y' 
+	WHERE CP.RANKNO = 1   AND LX.LABELPRINTID IS NULL
+	GROUP BY CP.CURRENTPRICEID, CP.STORE, CP.PRODUCTCODE_NM, CP.PRODUCT_NM, CP.VERSION_TM 
+                 
+END

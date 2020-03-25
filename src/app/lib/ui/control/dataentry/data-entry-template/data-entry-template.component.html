@@ -1,0 +1,14 @@
+<div class="{{ hasFormControl ? 'form-group' : '' }} row">
+  <label *ngIf="showCaption" [ngClass]="getCaptionClasses()" [for]="optionName">{{ caption }}</label>
+  <div [ngClass]="getEditorClasses()">
+    <div class="row">
+      <div class="col-12">
+        <ng-content select="[editor]"></ng-content>
+      </div>
+      <div class="col-12">
+        <ot-validation-messages *ngIf="hasError" [messages]="validationMessages"></ot-validation-messages>
+      </div>
+    </div>
+    <ng-content></ng-content>
+  </div>
+</div>

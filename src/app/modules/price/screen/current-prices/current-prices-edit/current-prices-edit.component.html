@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="CurrentPricesId" [caption]="'Current Prices Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="StoreID" [caption]="'Store ID' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="ProductCodeName" [caption]="'Product Code Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ProductName" [caption]="'Product Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Barcode" [caption]="'Barcode' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="ProductUnit" [caption]="'Product Unit' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="SalePrice" [caption]="'Sale Price' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="SaleVAT" [caption]="'Sale VAT' | translate" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="VersionTime" [caption]="'Version Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+  </form>
+</ot-edit-screen-container>

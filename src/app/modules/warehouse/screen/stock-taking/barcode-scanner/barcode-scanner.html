@@ -1,0 +1,132 @@
+<!-- <div (keyup)="onFormKey($event)"> -->
+<ot-list-screen-container [header]="selectedScheduleName" [breadcrumbItems]="breadcrumbItems">
+    <!-- <ng-container header-items>
+        <kendo-buttongroup [selection]="'multiple'" class="button-group-filter">
+            <button kendoButton [toggleable]="true" [selected]="false"
+                (selectedChange)="onCameraChanged()">{{'Open Camera' | translate}}</button>
+        </kendo-buttongroup>
+    </ng-container> -->
+    <ot-dropdown-entry *ngIf="screenNo === 1" [(value)]="scheduleId" [caption]="'Schedule' | translate"
+        [items]="schedules" [loading]="stockTakingScheduleService.loading" textField="ScheduleFullName"
+        valueField="StockTakingScheduleId" usePrimitiveValue="true" class="col-12"
+        (valueChange)="onScheduleSelected($event)">
+    </ot-dropdown-entry>
+
+    <div *ngIf="screenNo > 1">
+
+        <tr class = "row mb-2">
+            <th class="col-9">
+                <kendo-buttongroup [selection]="'single'">
+                    <button *ngFor="let zone of zones" kendoButton [toggleable]="true" class="mr-1 group1"
+                        (selectedChange)="onZoneChanged(zone.StorageZonesId)">{{zone.ZoneName}}</button>
+                </kendo-buttongroup>
+            </th>
+            <th class="col-3"></th>
+        </tr>
+        <tr class="row mt-1">
+            <th class="col-9">
+                <kendo-buttongroup [selection]="'single'">
+                    <button class="mr-1 group2" kendoButton [toggleable]="true"
+                        (selectedChange)="onReplaceChanged(1)">Üstüne
+                        Yaz</button>
+                    <button kendoButton class="group2" [toggleable]="true" [selected]="true"
+                        (selectedChange)="onReplaceChanged(2)">İlave
+                        Et</button>
+                </kendo-buttongroup>
+            </th>
+            <th class="col-3">
+                <kendo-buttongroup [selection]="'multiple'">
+                    <button kendoButton [toggleable]="true" [selected]="false" class="group3"
+                        (selectedChange)="onManualEntryChanged()">{{'Elle Giriş'}}</button>
+                </kendo-buttongroup>
+            </th>
+        </tr>
+    </div>
+    <ot-alpha-entry #barcodeTextEntry *ngIf="!isCameraOpen && screenNo > 1" [showCaption]="false"
+        (keyup)="onKey($event)" (keyup.Enter)="onKeyEnter(barcodetext)" [(value)]="barcodetext"
+        [placeholder]="'Barcode Text' | translate" class="col-md-12"></ot-alpha-entry>
+    <!-- <ot-alpha-entry [showCaption]="false" [(value)]="eventInfo" [placeholder]="'Event Info' | translate" class="col-md-12"></ot-alpha-entry> -->
+    <label *ngIf="barcodeCheckMessage && barcodeCheckMessage.length > 0" [ngStyle]="{ 'color': barcodeCheckLabelColor }"
+        class="col-md-9 offset-md-3"> {{ barcodeCheckMessage }}</label>
+    <br>
+    <!-- <ot-text-entry [caption]="'event'" rows="5" class="col-12" [value]="_keyEvent"></ot-text-entry> -->
+
+    <div *ngIf="screenNo > 1" class="smallerfontsize">
+        <kendo-grid [data]="readList" [height]="350" [navigable]="true">
+            <kendo-grid-column field="ProductName" [title]="'Ürün'" width="140"> </kendo-grid-column>
+            <kendo-grid-column field="ScannedValue" [title]="'Okutulan'" width="60">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span>{{ dataItem.ScannedValue | number:'1.0-3':'tr' }}</span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="FinalValue" [title]="'Son Durum'" width="80">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span>{{ dataItem.FinalValue | number:'1.0-3':'tr' }}</span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ScanTime" [title]="'İşlem Zamanı'" width="80">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span>{{ dataItem.ScanTime | date:'HH:mm:ss' }}</span>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
+    <!-- <barcode-scanner-livestream-overlay *ngIf="screenNo > 1"></barcode-scanner-livestream-overlay> -->
+    <!-- <barcode-scanner-livestream *ngIf="screenNo > 1" type="ean" (valueChanges)="onValueChanges($event.codeResult.code)">
+    </barcode-scanner-livestream> -->
+    <!-- <ot-button *ngIf="screenNo > 1" caption="SCAN" type="pill" size="lg" (onClick)="onScanClicked()"></ot-button> -->
+</ot-list-screen-container>
+
+<ot-input-dialog [size]="'lg'" #manualEntry (onAction)="onActionManualEntry()">
+    <form #form="ngForm" class="form-horizontal">
+        <tr class="row mb-2">
+            <th class="col-3">{{'Package Quantity' | translate}}</th>
+            <th class="col-6">
+                <ot-numeric-entry [value]="packageQuantity" [showCaption]="false" [isReadOnly]="true"
+                    [captionWidth]="0">
+                </ot-numeric-entry>
+            </th>
+            <th class="col-1"></th>
+            <th class="col-1"></th>
+        </tr>
+        <tr class="row mb-2">
+            <th class="col-3">{{'Unit' | translate}}</th>
+            <th class="col-6">
+                <ot-alpha-entry [value]="packageUnit" [isReadOnly]="true" [showCaption]="false" [captionWidth]="0">
+                </ot-alpha-entry>
+            </th>
+            <th class="col-1"></th>
+            <th class="col-1"></th>
+        </tr>
+
+        <tr class="row mb-2">
+            <th class="col-3">{{'Number of Packages' | translate}}</th>
+            <th class="col-6">
+                <ot-numeric-entry #numEntry_numberOfPackages [showCaption]="false" [(value)] = "numberOfPackages"
+                    (keyup)="onNumberofPackagesChange()" (keyup.Enter)="numEntry_totalWeight.focus()" [decimals] = 3
+                    [captionWidth]="0">
+                </ot-numeric-entry>
+            </th>
+            <th class="col-1 float-left">
+                <ot-button icon="fa fa-plus fa-fw" [block]="false" color="success" size="sm" (click)="onClickPlus()">
+                </ot-button>
+            </th>
+            <th class="col-1 float-left">
+                <ot-button icon="fa fa-minus fa-fw" [block]="false" color="danger" size="sm" (click)="onClickMinus()">
+                </ot-button>
+            </th>
+        </tr>
+        <tr class="row">
+            <th class="col-3">{{'Total Weight' | translate}}</th>
+            <th class="col-6">
+                <ot-numeric-entry #numEntry_totalWeight [showCaption]="false" [(value)] = "totalWeight"
+                    (keyup)="onTotalWeightChange()" (keyup.Enter)="onActionManualEntry()" [captionWidth]="0" [decimals] = 3>
+                </ot-numeric-entry>
+            </th>
+            <th class="col-1"></th>
+            <th class="col-1"></th>
+        </tr>
+    </form>
+</ot-input-dialog>
+
+<!-- </div> -->

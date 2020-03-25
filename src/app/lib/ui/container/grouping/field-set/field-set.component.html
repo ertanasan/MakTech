@@ -1,0 +1,10 @@
+<div class="card">
+  <div class="card-block">
+    <div [ngClass]="{'k-form': caption}">
+      <fieldset>
+        <legend *ngIf="caption">{{ caption }}</legend>
+        <ng-content></ng-content>
+      </fieldset>
+    </div>
+  </div>
+</div>

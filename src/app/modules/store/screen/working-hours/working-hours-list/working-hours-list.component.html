@@ -1,0 +1,90 @@
+﻿<ot-list-screen-container [header]="'Working Hours' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <table>
+      <tr>
+        <td>
+          <ot-button [caption]="'Load' | translate" color="primary" size="sm" (click)="fileInput.click()"> </ot-button>
+        </td>
+      </tr>
+    </table>
+  </ng-container>
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="615"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="StoreCode" [title]="'Store Code' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="StoreName" [title]="'Store Name In Report' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="OpeningTime" [title]="'Opening Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.OpeningTime">{{utilityService.toDate(dataItem.OpeningTime) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ClosingTime" [title]="'Closing Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ClosingTime">{{utilityService.toDate(dataItem.ClosingTime) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OpenUserName" [title]="'Open User Name In Report' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="CloseUserName" [title]="'Close User Name In Report' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeService.completeList"
+          valueField="StoreId"
+          textField="Name"
+          memberField="Store"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ng-container *ngIf="dataItem.Store">{{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}</ng-container>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OpenUser" [title]="'Open User' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="userService.completeList"
+          valueField="UserId"
+          textField="UserFullName"
+          memberField="OpenUser"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ng-container *ngIf="dataItem.OpenUser">{{ dataItem.OpenUser | getName:'UserId':'UserFullName':userService.completeList }}</ng-container>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CloseUser" [title]="'Close User' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="userService.completeList"
+          valueField="UserId"
+          textField="UserFullName"
+          memberField="CloseUser"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ng-container *ngIf="dataItem.CloseUser">{{ dataItem.CloseUser | getName:'UserId':'UserFullName':userService.completeList }}</ng-container>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Note" [title]="'Note' | translate" width="180"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<input [hidden]="true" #fileInput type="file" accept=".xlsx,.csv" (change)="onFileSelected($event)" />
+<ot-working-hours-edit #editScreen screenName="ot-working-hours-edit"></ot-working-hours-edit>

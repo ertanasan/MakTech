@@ -1,0 +1,24 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth" 
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  [optionName]="optionName"
+  >
+      <label class="k-form-field right" >
+          <input
+              type="checkbox"
+              [id]="optionName"
+              class="k-checkbox"
+              [(ngModel)]="value"
+              [disabled]="disabled ? disabled : (ngControl ? ngControl.control.disabled : isDisabled)"
+              (click)="onOptionClick()"
+              [checked]="value"
+              (blur)="touch()"
+          />
+          <label class="k-checkbox-label" [for]="optionName">{{ label }}</label>
+      </label>
+</ot-data-entry-template>

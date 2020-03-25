@@ -1,0 +1,60 @@
+﻿<ot-edit-screen-container #container [childActions]="modeContext?modeContext.childActions:null">
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label>{{ ' ' }}</label>
+    </div>
+    <div class="col-md-9">
+
+      <kendo-buttongroup [disabled] = "eInvoiceFlag" [selection]="'single'" class="button-group-filter">
+        <button kendoButton [toggleable]="true" [selected]="eInvoiceFlag" (selectedChange)="onSelectedChange($event, 1)" >E-Fatura</button>
+        <button kendoButton [toggleable]="true" [selected]="!eInvoiceFlag" (selectedChange)="onSelectedChange($event, 2)">E-Arsiv</button>
+      </kendo-buttongroup>
+    </div>
+  </div>
+
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="SaleInvoiceId" [caption]="'Sale Invoice Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeList" textField="Name" valueField="StoreId" 
+    usePrimitiveValue="true" class="col-12" [(value)] = "selectedStore" (valueChange)="onStoreSelected()"></ot-dropdown-entry>
+
+    <!-- <ot-switch-entry formControlName="EInvoiceFlag" [caption]="'EInvoice Flag' | translate" color="primary" labelStyle="check" class="col-12" [isReadOnly] = "eInvoiceFlag"></ot-switch-entry> -->
+    <ot-alpha-entry limit-to="11" formControlName="CustomerIdNumber" [caption]="'Customer Id Number' | translate" class="col-12" 
+    [(value)] = "customerId" (keypress)="onlyDigit($event)"
+    (focusout) = "onCustomerIdChanged($event)"></ot-alpha-entry>
+        <p *ngIf="isHeadQuarter && !vknExists && invoice && invoice.StatusCode > 0" class="vknerror ml-3">
+          Vergi Numarası Mikro'da tanımlı değil 
+          <ot-button caption="{{'Create' | translate}}" (onClick)="onMikroCurrentAccount()"></ot-button>
+        </p>    
+    <ot-alpha-entry formControlName="Title" [caption]="'Title' | translate" class="col-12" [isReadOnly] = "eInvoiceFlag"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Email" [caption]="'Email' | translate" class="col-12" [isReadOnly] = "eMailReadOnly"></ot-alpha-entry>
+    <ot-masked-entry formControlName="PhoneNumber" [caption]="'Phone Number' | translate" class="col-12" [mask]="mask"></ot-masked-entry>
+    <ot-dropdown-entry formControlName="Sale" [caption]="'Sale' | translate" [items]="cancelSaleList" textField="TransactionRef" valueField="SalesId" 
+    usePrimitiveValue="true" class="col-12" (valueChange)="onSaleChanged($event)" [isReadOnly]="saleReadOnly"></ot-dropdown-entry>
+    <ot-text-entry formControlName="Address" [caption]="'Address' | translate" rows="4" class="col-12"></ot-text-entry>
+  </form>
+  <kendo-grid [data]="saleDetails" [height]="250">
+    <kendo-grid-column field="ProductCode" [title]="'Code' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="ProductName" [title]="'Name' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="KgQuantity" [title]="'Quantity' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="Price" [title]="'Price' | translate" width="80"></kendo-grid-column>
+  </kendo-grid>
+
+</ot-edit-screen-container>
+
+<ot-custom-dialog [caption]="'Kimlik Bilgileri'" #IdentityInfo>
+    <div *ngIf="identityInfo">
+      <ot-alpha-entry [caption]="'Identity No' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.IdentityNo"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Identity Name' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.IdentityName"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Tax Center Code' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.TaxCenterCode"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Tax Center Name' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.TaxCenterName"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Active Status' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.ActiveStatus"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Company Type' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.CompanyType"></ot-alpha-entry>
+      <ot-alpha-entry [caption]="'Identity Type' | translate" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.IdentityType"></ot-alpha-entry>
+      <ot-text-entry [caption]="'Profession' | translate" rows="2" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.Profession"></ot-text-entry>
+      <ot-text-entry [caption]="'Address' | translate" rows="4" class="col-12" [isReadOnly] = "true" [(value)]="identityInfo.Address"></ot-text-entry>
+    </div>
+    <ng-container dialog-actions>
+      <ot-button caption="{{'Close' | translate}}" (onClick)="onClose()"></ot-button>
+      <ot-button [caption]="'Mikro'" (onClick)="onMikro()" [block]="false" color="primary" ></ot-button>
+    </ng-container>
+</ot-custom-dialog>

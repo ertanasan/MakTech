@@ -1,0 +1,132 @@
+﻿<ot-list-screen-container [header]="'Store Order' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+      <table>
+        <tr>
+          <th>
+            <ot-check-box [caption]="'All' | translate" color="primary" size="sm" class="headerCheckBox" (valueChange)="revertCompletedFlag()"></ot-check-box>
+          </th>
+          <th>
+            <kendo-datepicker [(value)]="baseDate" captionWidth="0" format="dd.MM.yyyy"></kendo-datepicker>
+          </th>
+          <th><ot-button [caption]="' Refresh' | translate" icon="fa fa-refresh" color="primary" style.margin-right="10px" style.margin-left="10px" size="sm" (click)="refreshList()"></ot-button></th>
+          <!-- <th><ot-button [caption]="'Export' | translate" color="primary" size="sm" (click)="exportReportData()"></ot-button></th> -->
+          <th><ot-button *ngIf="!store" [caption]="'Sipariş Girmeyenler'" color="primary" size="sm" (click)="getNoOrderStoreList()"></ot-button></th>
+          <th><ot-button *ngIf="!store" [caption]="'Print' | translate" color="primary" size="sm" (click)="getPrintData()"></ot-button></th>
+          <th><ot-button *ngIf="!store" [caption]="'Kontrol'" color="primary" size="sm" (click)="updatetoControlStatus()"></ot-button></th>
+        </tr>
+      </table> 
+  </ng-container>
+
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="615"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+    [selectable]="selectableSettings"
+    [kendoGridSelectBy]="'StoreOrderId'"
+    [selectedKeys]="orderSelection"
+    (selectedKeysChange)="onSelectedKeysChange($event)">
+    
+    <kendo-grid-checkbox-column *ngIf = "!store" width="30" showSelectAll="true"></kendo-grid-checkbox-column>
+    <kendo-grid-command-column title="" [width]="150" locked="true">
+      <ng-container *ngIf="newEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button (onClick)="onNew()" color="primary" icon="fas fa-plus"></ot-light-button>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </ng-container>
+      <ng-container>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <!-- <ot-light-button [disabled] = "!dataItem.ApproveEnabled" color="primary" otTooltip="{{ 'Approve' | translate }}" ><i class="fa fa-check"></i></ot-light-button> -->
+          <ot-light-button color="primary" otTooltip="{{ 'History' | translate }}" (onClick)="showDialog(historyScreen, 'Read', dataItem)" icon="fas fa-search"></ot-light-button>
+          <ot-light-button [disabled] = "!dataItem.EditDetailsEnabled" otTooltip="{{ 'Edit Details' | translate }}" [routerLink]="['/Warehouse/StoreOrderDetail', dataItem.StoreOrderId, store?'store':'head']" color="primary" icon="fas fa-ellipsis-h"></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"> </ot-light-button>
+          <ot-light-button *ngIf="accessPhotoPrivilege" color="primary" otTooltip="{{ 'Photo' | translate }}" (onClick)="showDialog(editScreen, 'Photo', dataItem)" icon="fas fa-camera"> </ot-light-button>
+          <!-- <ot-light-button *ngIf="!store" [disabled] = "!dataItem.PrintEnabled" color="primary" otTooltip="{{ 'Print' | translate }}"><i class="fa fa-print"></i></ot-light-button> -->
+          <!-- <ot-light-button *ngIf="!store" [disabled] = "!dataItem.ShipmentEnabled" color="primary" otTooltip="{{ 'Dispatch' | translate }}"><i class="fa fa-truck"></i></ot-light-button> -->
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="120">      
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeService.userStores"
+          valueField="StoreId"
+          textField="Name"
+          memberField="Store"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.userStores }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OrderCode" [title]="'Order Code' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="Status" [title]="'Status' | translate" width="120">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="orderStatusService.completeList"
+          valueField="StoreOrderStatusId"
+          textField="StatusName"
+          memberField="Status"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Status | getName:'StoreOrderStatusId':'StatusName':orderStatusService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OrderDate" [title]="'Order Date' | translate" width="100" filter="date" >
+      <ng-template kendoGridCellTemplate let-filter let-dataItem>
+        <div *ngIf="dataItem.OrderDate">{{dataItem.OrderDate | date:('dd.MM.yyyy')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ShipmentDate" [title]="'Shipment Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ShipmentDate">{{utilityService.toDate(dataItem.ShipmentDate) | date:('dd.MM.yyyy')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="OrderValue" [title]="'OrderValue' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.OrderValue | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="FirstEntryUser" [title]="'Entry User' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="FirstEntryTime" [title]="'Entry Time' | translate" width="120" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.FirstEntryUser">{{utilityService.toDate(dataItem.FirstEntryTime) | date:('dd.MM.yyyy HH:mm')}}</div>
+      </ng-template>
+    </kendo-grid-column> -->
+    <kendo-grid-column field="LastApproveUser" [title]="'Approve User' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="LastApproveTime" [title]="'Approve Time' | translate" width="120" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.LastApproveUser">{{utilityService.toDate(dataItem.LastApproveTime) | date:('dd.MM.yyyy HH:mm')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="Controller" [title]="'Controller' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="ControlTime" [title]="'Control Time' | translate" width="120" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.Controller">{{utilityService.toDate(dataItem.ControlTime) | date:('dd.MM.yyyy HH:mm')}}</div>
+      </ng-template>
+    </kendo-grid-column> -->
+    <kendo-grid-column field="DispatchUser" [title]="'Dispatch User' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="DispatchTime" [title]="'Dispatch Time' | translate" width="120" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.DispatchUser">{{utilityService.toDate(dataItem.DispatchTime) | date:('dd.MM.yyyy HH:mm')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-excel [fileName]="getxlsFileName('storeOrderList')" [fetchData]="allZData"></kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+<div #orderPrint class="row" hidden="true">
+  <store-order-group-print class="col-12 mx-auto" [orderPrints]="orderDetailPrints"> </store-order-group-print>
+</div>
+<ot-store-order-edit #editScreen screenName="ot-store-order-edit"></ot-store-order-edit>
+<ot-store-order-history #historyScreen screenName="ot-store-order-history"></ot-store-order-history>
+<ot-pallet-photo #photoScreen screenName="ot-pallet-photo" calledFrom="STOREORDER"></ot-pallet-photo>
+
+<ot-custom-dialog #noOrderList>
+  <kendo-grid [data]="noOrderStoreList" [height]="200">
+    <kendo-grid-column field="Name" [title]="'Mağaza Adı'" width="180" > </kendo-grid-column>
+  </kendo-grid>
+</ot-custom-dialog>

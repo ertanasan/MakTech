@@ -1,0 +1,155 @@
+<ot-list-screen-container [header]="'Gathering Admin Panel' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <table>
+      <tr>
+        <th><kendo-datepicker [(value)]="shipmentDate" captionWidth="0" format="dd.MM.yyyy" ></kendo-datepicker></th>
+        <th><ot-button [caption]="'Filter' | translate" color="primary" size="sm" (click)="refreshList()"> </ot-button></th>
+      </tr>
+    </table>
+  </ng-container>
+
+  <kendo-grid [data]="gatheringControlActiveList" [loading]="gatheringService.loading" [height]="615"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event)">
+    <!-- <kendo-grid-command-column title="" width="40" locked="true">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-light-button *ngIf="updateEnabled" color="primary" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+      </ng-template>
+    </kendo-grid-command-column> -->
+    <kendo-grid-column field="OrderCodeName" [title]="'Store Order' | translate" width="200"></kendo-grid-column>
+    <kendo-grid-column field="ShipmentDate" [title]="'Shipment Date' | translate" width="80" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ShipmentDate">{{dataItem.ShipmentDate | date: 'dd.MM.yyyy' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProductCount" [title]="'Product Count' | translate" width="40" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="OrderPriceAmount" [title]="'Order Price Amount' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.OrderPriceAmount | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheringCompleteStatus" [title]="'Gathering Completion' | translate" width="70">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <i [ngClass]="dataItem.GatheringStatus > 10 ? 'text-success' : 'text-danger'" class="fas fa-circle fa-fw"></i>
+        {{dataItem.TypeCount}} / {{dataItem.GatheredTypeCount}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheredProductCount" [title]="'Gathered Product Count' | translate" width="40" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="GatheringPriceAmount" [title]="'Gathering Price Amount' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.GatheringPriceAmount | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ControlCompleteStatus" [title]="'Control Completion' | translate" width="70">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <i [ngClass]="dataItem.GatheringStatus > 20 ? 'text-success' : 'text-danger'" class="text-green fas fa-circle fa-fw"></i>
+          {{dataItem.PalletCount}} / {{dataItem.ControlledPalletCount}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ControlledProductCount" [title]="'Controlled Product Count' | translate" width="40" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ControlPriceAmount" [title]="'Control Price Amount' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.ControlPriceAmount | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheringStatus" [title]="'Status' | translate" width="120">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="orderGatheringStatusList"
+            valueField="value"
+            textField="text"
+            memberField="GatheringStatus"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.GatheringStatus | getName:'value':'text':orderGatheringStatusList }}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Transfer" [title]="'Transfer' | translate" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-button [caption]="'Transfer' | translate" color="primary" size="sm" 
+        (click)="onTransfer(dataItem)"> </ot-button>
+      </ng-template>
+    </kendo-grid-column>
+
+    
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-gathering-admin-edit #editScreen screenName="ot-gathering-admin-edit"></ot-gathering-admin-edit>
+
+<ot-custom-dialog #orderGathering [size]="'xl'">
+  <kendo-grid [data]="orderGatheringActiveList" [height]="525"
+  [pageable]="orderlistParams.pageable" [pageSize]="orderlistParams.take" [skip]="orderlistParams.skip"
+  [sortable]= "true" [sort]="orderlistParams.sort"
+  [filterable]="true" [filter]="orderlistParams.filter" (dataStateChange)="orderHandleDataStateChange($event)">
+    <kendo-grid-column field="ProductCodeName" [title]="'Product Code' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="180"> </kendo-grid-column>
+    <kendo-grid-column field="PalletNo" [title]="'Pallet' | translate" width="40" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="OrderQuantity" [title]="'Order Quantity' | translate" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.OrderQuantity | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheredQuantity" [title]="'Gathered Quantity' | translate" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.GatheredQuantity | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ControlQuantity" [title]="'Control Quantity' | translate" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.ControlQuantity | number: '1.2-2' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProcessStatus" [title]="'Process Status' | translate" width="120">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="processStatusList"
+            valueField="value"
+            textField="text"
+            memberField="ProcessStatus"
+            [filter]="orderlistParams.filter">
+          </ot-dropdown-list-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.ProcessStatus | getName:'value':'text':processStatusList }}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheringUserName" [title]="'Gathering User Name' | translate" width="150"></kendo-grid-column>
+    <kendo-grid-column field="GatheringTime" [title]="'Gathering Time' | translate" width="150" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.GatheringTime">{{dataItem.GatheringTime | date: 'dd.MM.yyyy HH:mm:ss' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ControlUserName" [title]="'Control User Name' | translate" width="150"></kendo-grid-column>
+    <kendo-grid-column field="ControlTime" [title]="'Control Time' | translate" width="150" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ControlTime">{{dataItem.ControlTime | date: 'dd.MM.yyyy HH:mm:ss' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+
+  <ng-container dialog-actions>
+    <ot-button caption="{{'Close' | translate}}" (onClick)="orderGathering.hide()"></ot-button>
+    <ot-button caption="{{'Waybill Print' | translate}}" icon="fa fa-print fa-fw"  color="primary" (onClick)="onPrintWaybill()"></ot-button>
+    <ot-button [caption]="'Dispatch' | translate" icon="fa fa-thumbs-up fa-fw" [disabled] = "dispatchDisable" (onClick)="onDispatch()" [block]="false" color="primary" ></ot-button>
+  </ng-container>
+</ot-custom-dialog>
+
+<div #waybillPrintout class="row" hidden="true">
+  <ot-waybill-printout #waybillPrintoutContent
+          [client]="selectedDataItem ? selectedDataItem.StoreName : ''"
+          [clientAddress]="selectedDataItem ? selectedDataItem.StoreAddress : ''"
+          [shipmentDate]="selectedDataItem ? selectedDataItem.ShipmentDate : null"
+          [billNo]="selectedDataItem ? selectedDataItem.StoreOrderId : 0"
+          [orderDetailList]="orderGatheringList"
+          [pageArray]="pageArray"
+          [productCountPerPage]="productCountPerPage"
+          [addressFieldLineLength]="addressFieldLineLength"
+          [spaceBeforeHeaderArr]="spaceBeforeHeaderArr"
+          [spaceAfterHeaderArr]="spaceAfterHeaderArr"
+          [headerTableColumnWidthArr]="headerTableColumnWidthArr"
+          [productTableColumnWidthArr]="productTableColumnWidthArr"
+  ></ot-waybill-printout>
+</div>

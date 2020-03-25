@@ -1,0 +1,49 @@
+<ot-data-entry-template *ngIf="!inGrid, else inGridTemplate"
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <input
+    [otNumberOnly]="isDigitOnly"
+    editor
+    kendoTextBox
+    kendoGridFocusable
+    #textbox
+    [ngClass]="getControlClasses()"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [(ngModel)]="value"
+    (blur)="touch()"
+    [attr.type]="isPassword ? 'password' : 'text'"
+    [attr.autocomplete]="autocomplete"
+    [placeholder]="placeholder ? placeholder : ''"
+    [maxlength]="maxlength"
+    [ngStyle]="otStyle"
+  >
+</ot-data-entry-template>
+
+<ng-template #inGridTemplate>
+  <input
+  [otNumberOnly]="isDigitOnly"
+  editor
+  kendoTextBox
+  #textbox
+  [ngClass]="getControlClasses()"
+  [readonly]="isReadOnly"
+  [disabled]="disabled ? disabled : (ngControl ? ngControl.control.disabled : isDisabled)"
+  [(ngModel)]="value"
+  (blur)="touch()"
+  [attr.type]="isPassword ? 'password' : 'text'"
+  [attr.autocomplete]="autocomplete"
+  [placeholder]="placeholder ? placeholder : ''"
+  style="width:100%!important;"
+  [maxlength]="maxlength"
+  [ngStyle]="otStyle"
+>
+</ng-template>

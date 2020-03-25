@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D7FA35AC-6B42-4CC3-83D1-D4B1D5F7AD91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Overtech.ServiceContracts.Warehouse</RootNamespace>
+    <AssemblyName>Overtech.ServiceContracts.Warehouse</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.63.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\CompareNETObjects.4.63.0\lib\net47\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.1.0.0\lib\Overtech.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Cache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Cache.1.0.0\lib\Overtech.Core.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Contract.1.0.0\lib\Overtech.Core.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Data.1.0.0\lib\Overtech.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.DependencyInjection.1.0.0\lib\Overtech.Core.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.2.6.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\StackExchange.Redis.StrongName.1.2.6\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Configuration.ConfigurationManager.4.4.1\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=3.3.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.2.5.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.8.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.5.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.1.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.1.9.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ServiceLocation, Version=2.1.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.ServiceLocation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IConsignmentGoodPurchaseService.cs" />
+    <Compile Include="IConstraintExceptionService.cs" />
+    <Compile Include="ICountingStatusService.cs" />
+    <Compile Include="ICountingTypeService.cs" />
+    <Compile Include="IDrillProductService.cs" />
+    <Compile Include="IFakeOrderService.cs" />
+    <Compile Include="IGatheringDetailService.cs" />
+    <Compile Include="IGatheringPalletPhotoService.cs" />
+    <Compile Include="IGatheringPalletService.cs" />
+    <Compile Include="IGatheringPalletStatusService.cs" />
+    <Compile Include="IGatheringService.cs" />
+    <Compile Include="IGatheringStatusService.cs" />
+    <Compile Include="IGatheringTypeService.cs" />
+    <Compile Include="IIntakeStatusService.cs" />
+    <Compile Include="IIntakeStatusTypeService.cs" />
+    <Compile Include="IMaterialCategoryService.cs" />
+    <Compile Include="IMaterialInfoService.cs" />
+    <Compile Include="IMaterialOrderDetailService.cs" />
+    <Compile Include="IMaterialOrderService.cs" />
+    <Compile Include="IMaterialService.cs" />
+    <Compile Include="IOrderStatusHistoryService.cs" />
+    <Compile Include="IProductionContentService.cs" />
+    <Compile Include="IProductionOrderService.cs" />
+    <Compile Include="IProductionService.cs" />
+    <Compile Include="IProductReturnReasonService.cs" />
+    <Compile Include="IProductReturnService.cs" />
+    <Compile Include="IProductShipmentUnitService.cs" />
+    <Compile Include="IReturnDestinationService.cs" />
+    <Compile Include="IReturnOrderService.cs" />
+    <Compile Include="IReturnReasonService.cs" />
+    <Compile Include="IReturnStatusService.cs" />
+    <Compile Include="IShipmentPackageTypeService.cs" />
+    <Compile Include="IShipmentScheduleService.cs" />
+    <Compile Include="IShipmentTypeService.cs" />
+    <Compile Include="IShipmentUnitService.cs" />
+    <Compile Include="IStockTakingScheduleService.cs" />
+    <Compile Include="IStockTakingService.cs" />
+    <Compile Include="IStorageZonesService.cs" />
+    <Compile Include="IStoreOrderDetailService.cs" />
+    <Compile Include="IStoreOrderHistoryService.cs" />
+    <Compile Include="IStoreOrderService.cs" />
+    <Compile Include="IStoreOrderStatusService.cs" />
+    <Compile Include="ISupplierService.cs" />
+    <Compile Include="ISupplierTypeService.cs" />
+    <Compile Include="ITransferProductDetailService.cs" />
+    <Compile Include="ITransferProductService.cs" />
+    <Compile Include="ITransferProductStatusService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Product\Overtech.DataModels.Product.csproj">
+      <Project>{EAE506B0-D025-4D69-A19D-C98C3227817B}</Project>
+      <Name>Overtech.DataModels.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Store\Overtech.DataModels.Store.csproj">
+      <Project>{18AE6D76-58B0-46F9-875C-B4A1FAE75DE8}</Project>
+      <Name>Overtech.DataModels.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Warehouse\Overtech.DataModels.Warehouse.csproj">
+      <Project>{7D4C2ABB-8A3C-4C60-8C4D-5AE31BE94A06}</Project>
+      <Name>Overtech.DataModels.Warehouse</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <!-- Setting AutoUnifyAssemblyReferences to false will allow the ResolveAssemblyReferences task to 
+    create warnings when detecting version missmatches among references.
+    -->
+    <AutoUnifyAssemblyReferences>false</AutoUnifyAssemblyReferences>
+  </PropertyGroup>
+</Project>

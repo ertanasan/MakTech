@@ -1,0 +1,32 @@
+﻿CREATE PROCEDURE [dbo].[WHS_LST_GATHERINGBYDATE_SP]
+	@ShipmentStartDate Date,
+	@ShipmentEndDate Date
+AS
+	SELECT
+           G.GATHERINGID,
+           G.EVENT,
+           G.ORGANIZATION,
+           G.DELETED_FL,
+           G.CREATE_DT,
+           G.UPDATE_DT,
+           G.CREATEUSER,
+           G.UPDATEUSER,
+           G.CREATECHANNEL,
+           G.CREATEBRANCH,
+           G.CREATESCREEN,
+           G.STOREORDER,
+           G.GATHERINGUSER,
+           G.CONTROLLERUSER,
+           G.GATHERINGSTART_TM,
+           G.GATHERINGEND_TM,
+           G.CONTROLSTART_TM,
+           G.CONTROLEND_TM,
+           G.GATHERINGSTATUS,
+           G.GATHERINGTYPE,
+           G.PRIORITY_NO,
+		   ST.STORE_NM STORENAME
+      FROM WHS_GATHERING G (NOLOCK)
+	  JOIN WHS_STOREORDER O (NOLOCK) ON O.STOREORDERID = G.STOREORDER
+	  JOIN STR_STORE ST (NOLOCK) ON ST.STOREID = O.STORE
+     WHERE O.SHIPMENT_DT BETWEEN @ShipmentStartDate AND @ShipmentEndDate
+	   AND G.DELETED_FL = 'N'

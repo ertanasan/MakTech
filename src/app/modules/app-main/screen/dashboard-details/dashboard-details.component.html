@@ -1,0 +1,791 @@
+<ot-list-screen-container [header]="'Dashboard details' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+
+  <div *ngIf = "storeDetails && !isStore" class="row">
+
+  <!-- <div class="col-md-6">
+  <ot-panel caption="Mağaza Sayıları">
+    <kendo-chart [seriesColors]="chartColors"
+                   [categoryAxis]="{ labels: { rotation: 'auto'} }">
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="line"
+                                    [data]="storeCountList"
+                                    field="STORECOUNT"
+                                    categoryField="TRANSACTION_DATE">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+  </ot-panel>
+  </div> -->
+
+  <div class="col-md-6">
+  <ot-panel [caption]="'Stores With Outdated Code' | translate">
+    <kendo-grid [data]="outdatedCodeActiveList" [loading]="outdatedCodeListLoading" [height]="400"
+    [pageable]="outdatedCodeStoreLP.pageable" [pageSize]="outdatedCodeStoreLP.take" [skip]="outdatedCodeStoreLP.skip"
+    [sortable]="true" [sort]="outdatedCodeStoreLP.sort" [filterable]="true" [filter]="outdatedCodeStoreLP.filter"
+    (dataStateChange)="outdatedCodeHandleDSC($event)" [navigable]="true">
+      <kendo-grid-column field="HOST_NM" [title]="'Terminal Name' | translate" width="150"></kendo-grid-column>
+      <kendo-grid-column field="HASH_TM" [title]="'Last Update Time' | translate" width="80" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span *ngIf="dataItem.HASH_TM">{{dataItem.HASH_TM | date: 'dd.MM.yyyy HH:mm' }}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STATUS_NM" [title]="'Status' | translate" width="80" ></kendo-grid-column>      
+    </kendo-grid>
+  </ot-panel>
+  </div>
+
+  <div class="col-md-6">
+  <ot-panel caption="Satışı Eksik Mağazalar">
+    <kendo-grid [data]="missingSaleStoreActiveList" [loading]="missingSaleStoreListLoading" [height]="400"
+      [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter" (sortChange)="handleSortChange($event)"
+      (dataStateChange)="handleDataStateChange($event)" 
+      [navigable]="true" >
+
+      <kendo-grid-column field="STOREID" [title]="'Mağaza Kodu'" width="80"></kendo-grid-column>
+      <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+      <kendo-grid-column field="TERMINAL" [title]="'Terminal'" width="80"></kendo-grid-column>
+      <kendo-grid-column field="TODAY"  [title]="'Bugün'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="LAST7DAYS" [title]="'Son 7 Gün'" width="80" filter="numeric"></kendo-grid-column>
+      
+    </kendo-grid>
+  </ot-panel>
+  </div>
+
+  </div>
+
+  <ot-list-screen-container *ngIf = "this.storeDetails"  [header]="'Z Raporu Karşılaştırma'" >
+      <ng-container header-items>
+        <!-- <div class="col-md-6 breadcrumb"> -->
+          <div class="row float-right m-auto">
+            <kendo-buttongroup [selection]="'multiple'" class="button-group-filter">
+              <button kendoButton [toggleable]="true" [selected]="false" (selectedChange)="onSelectedTimesChange()" >Zamanlar</button>
+            </kendo-buttongroup>
+            <kendo-buttongroup [selection]="'multiple'" class="button-group-filter">
+              <button kendoButton [toggleable]="true" [selected]="false" (selectedChange)="onSelectedDetailChange()" >Kasa Detaylı</button>
+            </kendo-buttongroup>
+            <kendo-buttongroup [selection]="'single'" class="button-group-filter">
+                <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="onSelectedChange($event, 1)" >Günlük</button>
+                <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 2)">Haftalık</button>
+                <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 3)" >Aylık</button>
+            </kendo-buttongroup>
+            <kendo-datepicker [(value)]="baseDate" captionWidth="0" format="dd.MM.yyyy" (blur)="onBaseDateChange()" ></kendo-datepicker>
+            <button kendoButton [primary]="true" (click)="showMissingZet()" [look]="'outline'">Eksik Z</button>
+            <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'">Excel</button>
+          </div>
+        <!-- </div> -->
+      </ng-container>
+    <kendo-grid #grid="kendoGrid" [data]="zComparisonActiveList" [loading]="zComparisonListLoading" [height]="500"
+      [pageable]="ZListParams.pageable" [pageSize]="ZListParams.take" [skip]="ZListParams.skip" (pageChange)="zHandlePageChange($event)"
+      [sortable]="true" [sort]="ZListParams.sort" [filterable]="true" [filter]="ZListParams.filter" (sortChange)="zHandleSortChange($event)"
+      (dataStateChange)="zHandleDataStateChange($event)" 
+      [navigable]="true" >
+
+      <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      </ng-template>
+      <!-- <kendo-grid-command-column width="40"> 
+      <ng-template kendoGridHeaderTemplate>
+        <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+      </ng-template>
+      </kendo-grid-command-column> -->
+      <kendo-grid-column field="STOREID" [title]="'Mağaza Kodu'" width="60"></kendo-grid-column>
+      <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+      <kendo-grid-column *ngIf="termDetail" field="CASHREGISTER" [title]="'POS Id'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="TERMINAL" [title]="'Terminal'" width="80"></kendo-grid-column>
+      <kendo-grid-column field="DATE_DT" [title]="'Gün'" width="80" > 
+          <!-- </kendo-grid-column>filter="date" format="{0:d}"> -->
+          <!-- <ng-template kendoGridFilterCellTemplate let-filter>  
+            <ot-date-entry [format] = "dd.MM.yyyy" [showCaption] = "false" (valueChange)="switchChange($event)"> </ot-date-entry> 
+          </ng-template> -->
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DATE_DT | date:'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REGIONMANAGER_NM" [title]="'Bölge Sorumlusu'" width="150"></kendo-grid-column>
+      <kendo-grid-column field="RECEIPT_AMT" [title]="'Fiş&Fatura Toplamı'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.RECEIPT_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REFUND_AMT" [title]="'İade Toplamı'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.REFUND_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ZETRECEIPT_AMT" [title]="'Z-Fiş&Fatura Toplamı'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.ZETRECEIPT_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ZETREFUND_AMT" [title]="'Z-İade Toplamı'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.ZETREFUND_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DIFF" [title]="'Z ile Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DIFF | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column *ngIf="!termDetail" field="STATUS" [title]="'Z Durum'" width="80"></kendo-grid-column>
+      <kendo-grid-column *ngIf="timesDetail" field="MINZET_TM" [title]="'İlk Z Zamanı'" width="100" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.MINZET_TM | date:'dd.MM.yyyy HH:mm'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column *ngIf="timesDetail" field="MAXZET_TM" [title]="'Son Z Zamanı'" width="100" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.MAXZET_TM | date:'dd.MM.yyyy HH:mm'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column *ngIf="timesDetail" field="MINCREATE_TM" [title]="'Maktech İlk Z Zamanı'" width="100" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.MINCREATE_TM | date:'dd.MM.yyyy HH:mm'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column *ngIf="timesDetail" field="MAXCREATE_TM" [title]="'Maktech Son Z Zamanı'" width="100" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.MAXCREATE_TM | date:'dd.MM.yyyy HH:mm'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-excel [fileName]="getxlsFileName('Z_Karsilastirma')" [fetchData]="allZData"></kendo-grid-excel>
+      
+    </kendo-grid>
+  </ot-list-screen-container>
+
+  <ot-panel *ngIf = "compareDetails && dashboardActiveList" caption="Karşılaştırma Detay">
+    <kendo-grid [data]="dashboardActiveList" [height]="500"
+      [pageable]="false" [pageSize]="1000" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="false" [filter]="listParams.filter" 
+      (dataStateChange)="handleDataStateChange($event)" [navigable]="true" >
+
+      <kendo-grid-command-column width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column field="storename" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+
+      <kendo-grid-column field="today" [title]="'Bugün'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.today | date:'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="t_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.t_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["t_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="t_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.t_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["t_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="t_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="t_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="t_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.t_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="lastweektoday" [title]="'Geçen Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lastweektoday | date:'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwt_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwt_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["lwt_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwt_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwt_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["lwt_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwt_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="lwt_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="lwt_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwt_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="daydiff" [title]="'Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.daydiff | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getxlsFileName('Gunluk_Karsilastirma')" ></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <ot-panel *ngIf = "compareWeeklyDetails && dashboardActiveList" caption="Haftalık Verileri Karşılaştırma Detay">
+    <kendo-grid [data]="dashboardActiveList" [height]="500"
+      [pageable]="false" [pageSize]="1000" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="false" [filter]="listParams.filter" 
+      (dataStateChange)="handleDataStateChange($event)" [navigable]="true" >
+
+      <kendo-grid-command-column width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column field="storename" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+
+      <kendo-grid-column field="weekno" [title]="'Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.weekno}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="weekly_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.weekly_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["weekly_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="weekly_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.weekly_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["weekly_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="weekly_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="weekly_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="weekly_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.weekly_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="prevweekno" [title]="'Geçen Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevweekno}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevweek_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevweek_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevweek_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevweek_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevweek_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevweek_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevweek_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevweek_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevweek_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevweek_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="weekdiff" [title]="'Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.weekdiff | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getxlsFileName('Haftalik_Karsilastirma')" ></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <ot-custom-dialog #missingZet size="lg">
+    <kendo-grid [data]="missingZetList" [height]="200">
+      <kendo-grid-column field="STOREID" [title]="'Mağaza No'" width="100" > </kendo-grid-column>
+      <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="180" > </kendo-grid-column>
+      <kendo-grid-column field="CASHREGISTERID" [title]="'Kasa Kodu'" width="100" > </kendo-grid-column>
+      <kendo-grid-column field="BRAND_NM" [title]="'Marka'" width="100" > </kendo-grid-column>
+      <kendo-grid-column field="TRANSACTION_DT" [title]="'Tarih'" width="180" >
+          <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.TRANSACTION_DT | date:'dd.MM.yyyy'}}
+          </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </ot-custom-dialog>
+
+  <ot-panel *ngIf = "compareMonthlyDetails && dashboardActiveList" caption="Aylık  Verileri Karşılaştırma Detay">
+    <kendo-grid [data]="dashboardActiveList" [height]="500"
+      [pageable]="false" [pageSize]="1000" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="false" [filter]="listParams.filter" 
+      (dataStateChange)="handleDataStateChange($event)" [navigable]="true" >
+
+      <kendo-grid-command-column width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column field="storename" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+
+      <kendo-grid-column field="yearmonth" [title]="'Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.yearmonth}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="monthly_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.monthly_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["monthly_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="monthly_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.monthly_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["monthly_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="monthly_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="monthly_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="monthly_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.monthly_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="prevyearmonth" [title]="'Geçen Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevyearmonth}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevmonth_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevmonth_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevmonth_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevmonth_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevmonth_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevmonth_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevmonth_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevmonth_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevmonth_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevmonth_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="monthdiff" [title]="'Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.monthdiff | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getxlsFileName('Aylik_Karsilastirma')" ></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <ot-list-screen-container *ngIf = "compareYearDetails && dashboardActiveList"  [header]="'Yıl Karşılaştırma Detay'" >
+    <ng-container header-items>
+        <div class="row float-right m-auto">
+          <button kendoButton [primary]="true" (click)="exportToExcel(gridYear)" [look]="'outline'">Excel</button>
+        </div>
+    </ng-container>
+    <kendo-grid #gridYear="kendoGrid" [data]="dashboardActiveList" [height]="500"
+      [pageable]="false" [pageSize]="1000" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="false" [filter]="listParams.filter" 
+      (dataStateChange)="handleDataStateChange($event)" 
+      [navigable]="true" >
+
+      <kendo-grid-command-column *ngIf = "false" width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column field="storename" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+
+      <kendo-grid-column field="yearno" [title]="'Bu Yıl'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.yearno}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="annual_daycount" [title]="'Gün Sayısı'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="annual_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.annual_amount | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["annual_amount"].sum | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="annual_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.annual_refund | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["annual_refund"].sum | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="annual_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="annual_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="annual_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.annual_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="prevyearno" [title]="'Geçen Yıl'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevyearno}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevyear_daycount" [title]="'Gün Sayısı'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevyear_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevyear_amount | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevyear_amount"].sum | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevyear_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevyear_refund | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["prevyear_refund"].sum | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="prevyear_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevyear_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="prevyear_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.prevyear_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="yeardiff" [title]="'Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.yeardiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="dailyIncrease" [title]="'Günlük Artış %'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.dailyIncrease | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getxlsFileName('Yıl_Karsilastirma')" ></kendo-grid-excel>
+    </kendo-grid>
+  </ot-list-screen-container>
+
+  <ot-panel *ngIf = "compareYesterdayDetails && dashboardActiveList" caption="Dünkü Verileri Karşılaştırma Detay">
+    <kendo-grid [data]="dashboardActiveList" [height]="500"
+      [pageable]="false" [pageSize]="1000" (pageChange)="handlePageChange($event)"
+      [sortable]="true" [sort]="listParams.sort" [filterable]="false" [filter]="listParams.filter" 
+      (dataStateChange)="handleDataStateChange($event)" 
+      [navigable]="true" >
+
+      <kendo-grid-command-column width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column field="storename" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+
+      <kendo-grid-column field="yesterday" [title]="'Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.yesterday | date: 'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="y_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.y_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["y_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="y_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.y_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["y_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="y_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="y_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="y_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.y_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="lastweekyesterday" [title]="'Geçen Hafta'" width="80" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lastweekyesterday | date : 'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwy_amount" [title]="'Satış'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwy_amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["lwy_amount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwy_refund" [title]="'İade'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwy_refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column="column"> {{total_c1["lwy_refund"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="lwy_sale" [title]="'Satış Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="lwy_refundcount" [title]="'İade Adet'" width="80" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="lwy_saleavg" [title]="'Sepet Ortalaması'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.lwy_saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="yesterdaydiff" [title]="'Fark'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{ dataItem.yesterdaydiff | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getxlsFileName('Dun_Karsilastirma')" ></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <!-- <ot-panel caption="Mağaza Sayıları">
+    <div class="row">
+      <label>Graph Type:</label>
+      <kendo-combobox [data]="typeOfGraphArray" (selectionChange)="selectionChange($event)">
+      </kendo-combobox>
+    </div>
+    <div *ngIf="typeOfGraph === 'bar_local'" >
+      <kendo-chart [seriesColors]="chartColors">
+        <kendo-chart-legend position="top"></kendo-chart-legend>            
+        <kendo-chart-series>
+          <kendo-chart-series-item type="bar"
+            [data]="monthlyStoreCount" 
+            field="storeCount"
+            categoryField="month">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>            
+        </kendo-chart-series>
+      </kendo-chart>
+    </div> 
+    <div *ngIf="typeOfGraph === 'line_local'">
+      <kendo-chart [seriesColors]="chartColors"
+                  [categoryAxis]="{ labels: { rotation: 'auto'} }">
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="line"
+            [data]="monthlyStoreCount"
+            field="storeCount"
+            categoryField="month">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <div *ngIf="typeOfGraph === 'lineMix_local'">
+      <kendo-chart [seriesColors]="chartColors">
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item name="storeCount_Axis"
+                                        [title]="{ text: 'Mağaza Sayısı' }"
+                                        [min]="75" [max]="150"
+                                        color="#20a8d8">
+          </kendo-chart-value-axis-item>
+          <kendo-chart-value-axis-item name="salePerStore_Axis"
+                                        [title]="{ text: 'Mağaza Başına Satış (TL)' }"
+                                        [min]="20000" [max]="40000">
+          </kendo-chart-value-axis-item>
+          </kendo-chart-value-axis>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item [categories]="month" [axisCrossingValue]="[0,13]">
+                <kendo-chart-category-axis-item-labels [rotation]="270">
+                </kendo-chart-category-axis-item-labels>
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line"
+                                    [data]="monthlyStoreCount"
+                                    field="storeCount"
+                                    axis="storeCount_Axis">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{category}}
+                  </div>
+                  <div class="row">
+                      <div class="col-12" style="text-align: center">
+                          {{ value }}
+                      </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          <kendo-chart-series-item type="bar"
+                                    [data]="monthlyStoreCount"
+                                    field="monthlySalePerStore"
+                                    categoryField="month"
+                                    axis="salePerStore_Axis">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <div *ngIf="typeOfGraph === 'bar_sql'">
+      <kendo-chart [seriesColors]="chartColors">
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="bar"
+                                  [data]="monthlyStoreCount1"
+                                  field="StoreCount"
+                                  categoryField="Year-Month">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <div *ngIf="typeOfGraph === 'line_Sql'">
+      <kendo-chart [seriesColors]="chartColors"
+                   [categoryAxis]="{ labels: { rotation: 'auto'} }">
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="line"
+                                    [data]="monthlyStoreCount1"
+                                    field="StoreCount"
+                                    categoryField="Year-Month">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{category}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        {{ value }}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <div *ngIf="typeOfGraph === 'lineMix_sql'">
+        <kendo-chart [seriesColors]="chartColors">
+          <kendo-chart-value-axis>
+            <kendo-chart-value-axis-item name="storeCount_Axis"
+                                          [title]="{ text: 'Mağaza Sayısı' }"
+                                          [min]="75" [max]="150"
+                                          color="#20a8d8">
+            </kendo-chart-value-axis-item>
+            <kendo-chart-value-axis-item name="salePerStore_Axis"
+                                          [title]="{ text: 'Mağaza Başına Satış (TL)' }"
+                                          [min]="20000" [max]="40000">
+            </kendo-chart-value-axis-item>
+            </kendo-chart-value-axis>
+            <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="Year-Month" [axisCrossingValue]="[0,13]">
+                  <kendo-chart-category-axis-item-labels [rotation]="270">
+                  </kendo-chart-category-axis-item-labels>
+              </kendo-chart-category-axis-item>
+            </kendo-chart-category-axis>
+            <kendo-chart-series>
+              <kendo-chart-series-item type="line"
+                                      [data]="monthlyStoreCount1"
+                                      field="StoreCount"
+                                      axis="storeCount_Axis">
+                <kendo-chart-series-item-tooltip>
+                  <ng-template let-category="category" let-value="value">
+                    <div class="header font-weight-bold">
+                      {{category}}
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="text-align: center">
+                            {{ value }}
+                        </div>
+                    </div>
+                  </ng-template>
+                </kendo-chart-series-item-tooltip>
+              </kendo-chart-series-item>
+            <kendo-chart-series-item type="bar"
+                                      [data]="monthlyStoreCount1"
+                                      field="SalesPerStore"
+                                      categoryField="Year-Month"
+                                      axis="salePerStore_Axis">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{category}}
+                  </div>
+                  <div class="row">
+                      <div class="col-12" style="text-align: center">
+                          {{ value }}
+                      </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </div>
+  </ot-panel>     -->
+  
+</ot-list-screen-container>

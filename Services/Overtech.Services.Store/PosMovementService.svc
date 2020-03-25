@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Overtech.Services.Store.PosMovementService" CodeBehind="PosMovementService.svc.cs" Factory="Overtech.Shared.Configuration.OTServiceHostFactory" %>

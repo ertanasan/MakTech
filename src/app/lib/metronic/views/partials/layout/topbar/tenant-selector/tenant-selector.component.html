@@ -1,0 +1,12 @@
+<div class="kt-header__topbar-item" *ngIf="tenantSelectionEnabled()">
+    <kendo-dropdownlist
+        textField="Name"
+        valueField="OrganizationId"
+        [data]="organizations"
+        [kendoDropDownFilter]="filterSettings"
+        [popupSettings]="{ popupClass: 'k-dropdown-popup' }"
+        (valueChange)="tenantSelected()"
+        [(ngModel)]="selectedTenant"
+        *ngIf="organizations.length > 0">
+    </kendo-dropdownlist>
+</div>

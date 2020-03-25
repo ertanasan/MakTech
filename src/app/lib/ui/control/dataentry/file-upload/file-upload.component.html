@@ -1,0 +1,18 @@
+<!-- <ot-data-entry-template caption="{{ caption }}" [showCaption]="showCaption" [editorWidth]="editorWidth" [captionWidth]="captionWidth">
+  <input class="invisible" [(ngModel)]="filePath">
+  <div editor>
+    <div *ngIf="showBrowse" class="input-group">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile" (change)="fileSelected($event.target.files[0])" >
+        <label class="custom-file-label" for="inputGroupFile">{{ value && value.isEmpty ? browsePrompt : value.fileName }}</label>
+      </div>
+    </div>
+    <div *ngIf="!showBrowse" class="input-group">
+      <input [attr.disabled]="true" type="text" class="form-control" [value]="filePath">
+      <span class="input-group-append">
+        <button *ngIf="showRead" class="btn btn-info btn-append" type="button" (click)="fileDownload()">Read</button>
+        <button *ngIf="showDelete" class="btn btn-danger btn-append" type="button" (click)="fileDeleted()">Delete</button>
+      </span>
+    </div>
+  </div>
+</ot-data-entry-template> -->

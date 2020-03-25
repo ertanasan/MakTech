@@ -1,0 +1,7 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ContractParameterId" [caption]="'Contract Parameter Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ParameterName" [caption]="'Parameter Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="Value" [caption]="'Value' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

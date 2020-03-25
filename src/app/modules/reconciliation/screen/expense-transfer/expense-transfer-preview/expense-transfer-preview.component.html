@@ -1,0 +1,25 @@
+<ot-custom-dialog #dialog [caption]="'Expense Transfer Preview' | translate" color="primary" size="lg">
+  <p> {{ previewText }} </p>
+  <kendo-grid [data]="activeList" [height]="400"[pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" (dataStateChange)="handleDataStateChange($event)"
+    >
+    <kendo-grid-column field="ExpenseTypeName" [title]="'Expense Type' | translate" width="250"> </kendo-grid-column>
+    <kendo-grid-column field="ExpenseDescription" [title]="'Expense Description' | translate" width="250"></kendo-grid-column>
+    <kendo-grid-column field="ExpenseAmount" [title]="'Expense Amount' | translate" width="120" filter="numeric" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        <span *ngIf="dataItem">{{ dataItem.ExpenseAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </span>
+      </ng-template>
+      <ng-template *ngIf="totalAmt" kendoGridFooterTemplate let-column="column"> 
+        <div class="text-right">{{ totalAmt }}</div> 
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+  <div class="row justify-content-end mt-3">
+    <div>
+      <ot-button [caption]="'Cancel' | translate" size="lg" (click)="onCancel()"> </ot-button>
+    </div>
+    <div class="ml-3 mr-3">
+      <ot-button [caption]="'Mikro' | translate" color="primary" size="lg" (click)="onMikroTransfer()"> </ot-button>  
+    </div>
+  </div>
+</ot-custom-dialog>

@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Overtech.Services.Accounting.AccountingDepartmentService" CodeBehind="AccountingDepartmentService.svc.cs" Factory="Overtech.Shared.Configuration.OTServiceHostFactory" %>

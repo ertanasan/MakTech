@@ -1,0 +1,27 @@
+<ot-custom-dialog #dialog [caption]="title" [size] = "'xl'">
+    <ot-alpha-entry [caption]="'Process Status' | translate" [value]="processStatus" isReadOnly="true"></ot-alpha-entry>
+    <br>
+    <kendo-grid [data]="historyData" [height]="400" [pageable]="false" [filterable]="false">
+        <!-- <kendo-grid-column field="ProcessDefinitionName" [title]="'Process' | translate"> </kendo-grid-column> -->
+        <kendo-grid-column field="ActivityName" [title]="'Activity' | translate" width="100"> </kendo-grid-column>
+        <kendo-grid-column field="TargetName" [title]="'Target' | translate" width="120"> </kendo-grid-column>
+        <kendo-grid-column field="StartTime" [title]="'Start Time' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.StartTime">{{ dataItem.StartTime | date:'dd.MM.yyyy HH:mm'}}</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="FinishTime" [title]="'Finish Time' | translate" width="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="isValidDate(dataItem.FinishTime)">{{ dataItem.FinishTime | date:'dd.MM.yyyy HH:mm'}}</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="PerformerName" [title]="'Performer' | translate" width="150"> </kendo-grid-column>
+        <kendo-grid-column field="ActionStatusCode" [title]="'Action Status' | translate" width="100">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.ActionStatusCode | getName:'value':'text':bpaActionStatus }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Choice" [title]="'Action' | translate" width="100"></kendo-grid-column>
+        <kendo-grid-column field="ActionComment" [title]="'Action Comment' | translate" width="350"></kendo-grid-column>
+    </kendo-grid>
+</ot-custom-dialog>

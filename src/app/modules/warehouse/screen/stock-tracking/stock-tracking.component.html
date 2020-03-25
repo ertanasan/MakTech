@@ -1,0 +1,99 @@
+<div class="row">
+  <ol class="col-md-6 breadcrumb">
+    <h4 class="ml-3">{{ '' }}</h4>
+  </ol>
+  <div class="col-md-6 breadcrumb">
+  </div>
+</div>
+
+  <div class="row">
+    <div class="mx-auto col-md-11 col-lg-11 col-xl-11">
+      <ot-panel *ngIf="dataService.stockTracking" [caption]="'Stock-Tracking' | translate">
+        <ng-container panel-header-tools>
+          <ot-button [caption]="'ShowData' | translate" (onClick)="onShowProductStockListDialog()" color="primary" size="sm"></ot-button>
+        </ng-container>
+
+        <kendo-chart [pannable]="true" [zoomable]="true" class="chart-container" 
+          (seriesClick)="onStockBubbleClick($event)">
+          <!-- <kendo-chart-title [text]="'Stock-Price-Sale Relation' | translate"></kendo-chart-title> -->
+          <kendo-chart-series>
+            <kendo-chart-series-item type="scatter" [data]="dataService.stockTracking.Data" xField="AVGDAILYSALE_AMT"
+              yField="STOCK" categoryField="CATEGORY_NM">
+              <kendo-chart-series-item-tooltip>
+                <ng-template kendoChartSeriesTooltipTemplate let-dataItem="dataItem">
+                  <div class="row">
+                    <div class="col-12 header font-weight-bold">{{ dataItem.PRODUCT }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 header font-weight-bold">{{ dataItem.CATEGORY }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ dataItem.NAME_NM }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ 'Ort.Mik.' }}:{{ dataItem.AVGDAILYSALE_QTY | number:'1.1-1':'tr' }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ 'Stok' }} :{{ dataItem.STOCK | number:'1.1-1':'tr' }}</div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+          <kendo-chart-x-axis>
+            <kendo-chart-x-axis-item [title]="{text: 'Average Daily Sale' | translate}" type="log">
+            </kendo-chart-x-axis-item>
+          </kendo-chart-x-axis>
+          <kendo-chart-y-axis>
+            <kendo-chart-y-axis-item [title]="{text:'Stock' | translate}" type="log">
+            </kendo-chart-y-axis-item>
+          </kendo-chart-y-axis>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="mx-auto col-md-11 col-lg-11 col-xl-11">
+
+    <ot-panel  caption="Ürün Stok Değişimi">
+        <ng-container class="col-md-6" panel-header-tools>
+                <ot-dropdown-entry [items]="productService.completeList" textField="Name" valueField="ProductId" 
+                usePrimitiveValue="true" [loading]="productService.loading" [(value)]="selectedProductId" 
+                (valueChange)="onProductChange($event)" ></ot-dropdown-entry>
+        </ng-container>
+      <kendo-chart *ngIf="dataService.stocktTackingProducts"
+        [categoryAxis]="{ labels:{rotation: 'auto',format: 'dd-MM-yyyy'}, type:'Date' , baseUnit:'days'}">
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="line" [data]="dataService.stocktTackingProducts.Data" field="STOCK"
+            categoryField="DATE_DT">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+
+                  {{ category | date:('dd.MM.yyyy') }}
+
+                </div>
+                <div class="row">
+                  <div class="col-12" style="text-align: center">
+                    {{ value }}
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </ot-panel>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<ot-stock-tracking-dialog></ot-stock-tracking-dialog>

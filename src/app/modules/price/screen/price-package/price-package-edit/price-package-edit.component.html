@@ -1,0 +1,14 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="PackageId" [caption]="'Package Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PackageName" [caption]="'Package Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="PackageType" [caption]="'Package Type' | translate" [items]="packageTypeService.completeListExceptGeneral" textField="PackageTypeName" valueField="PackageTypeId" usePrimitiveValue="true" class="col-12" [loading]="packageTypeService.loading" (ngModelChange)="typeChanged($event)" [isReadOnly]="container.actionName !== 'Create'"></ot-dropdown-entry>
+    <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-document-entry formControlName="ImageDocument" [extensions]="'.png, .jpg'" [deleteUrl]="deleteUrl" [readUrl]="downloadUrl"  [caption]="'Image' | translate" class="col-12" [isReadOnly]="container.actionName === 'Delete'"></ot-document-entry>
+  </form>
+  <span *ngIf="isCampaignGeneral">
+    <ot-date-entry #startTime [caption]="'Start Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    <ot-date-entry #endTime [caption]="'End Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    <ot-numeric-entry #priorityNumber [caption]="'Priority Number' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+  </span>
+</ot-edit-screen-container>

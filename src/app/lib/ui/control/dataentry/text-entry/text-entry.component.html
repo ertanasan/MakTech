@@ -1,0 +1,20 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth"
+  [hasFormControl]="ngControl"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+  >
+  <textarea
+    editor
+    [readonly]="isReadOnly"
+    class="form-control"
+    [(ngModel)]="value"
+    (blur)="touch()"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [rows]="rows"
+  ></textarea>
+</ot-data-entry-template>

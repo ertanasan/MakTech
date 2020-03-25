@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ExcelFileId" [caption]="'Excel File Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="TransferName" [caption]="'Transfer Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="SheetNo" [caption]="'Sheet No' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="RowStartNo" [caption]="'Row Start No' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ColumnStartNo" [caption]="'Column Start No' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="NumberOfColumns" [caption]="'Number Of Columns' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="RequestAdditionalInfoId" [caption]="'Request Additional Info Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Request" [caption]="'Request' | translate" [items]="container.MasterId ? [container.MasterObject] : helpdeskRequestService.completeList"
+      [isReadOnly]="container.MasterId" textField="RequestDefinition" valueField="HelpdeskRequestId" usePrimitiveValue="true" class="col-12" [loading]="helpdeskRequestService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="Cost" [caption]="'Cost' | translate" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="WarrantyDueDate" [caption]="'Warranty Due Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="Folder" [caption]="'Folder' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

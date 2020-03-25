@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8B09536-870C-4CF0-AC20-38D510DCEC44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Overtech.Mutual.Warehouse</RootNamespace>
+    <AssemblyName>Overtech.Mutual.Warehouse</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Overtech.Core.Data">
+      <HintPath>\\lotiis01\References\Overtech.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Data.Uni">
+      <HintPath>\\lotiis01\References\Overtech.Service.Data.Uni.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CountingOperations.cs" />
+    <Compile Include="MikroOperations.cs" />
+    <Compile Include="OrderOperations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Product\Overtech.DataModels.Product.csproj">
+      <Project>{EAE506B0-D025-4D69-A19D-C98C3227817B}</Project>
+      <Name>Overtech.DataModels.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Warehouse\Overtech.DataModels.Warehouse.csproj">
+      <Project>{7D4C2ABB-8A3C-4C60-8C4D-5AE31BE94A06}</Project>
+      <Name>Overtech.DataModels.Warehouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mutual\Overtech.Mutual.Accounting\Overtech.Mutual.Accounting.csproj">
+      <Project>{812E5232-9A67-4F72-B7A8-2E1717AFE8F4}</Project>
+      <Name>Overtech.Mutual.Accounting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mutual\Overtech.Mutual.Store\Overtech.Mutual.Store.csproj">
+      <Project>{D984108F-2BB3-4101-BA3E-D2E569DB3B7B}</Project>
+      <Name>Overtech.Mutual.Store</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

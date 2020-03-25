@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ExpenseId" [caption]="'Expense Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="ExpenseType" [caption]="'Expense Type' | translate" [items]="expenseTypeService.completeList" textField="ExpenseTypeName" valueField="ExpenseTypeId" usePrimitiveValue="true" class="col-12" [loading]="expenseTypeService.loading"></ot-dropdown-entry>
+    <ot-switch-entry *ngIf = "showRegionOrStore" formControlName="RegionOrStore" [isReadOnly]="storeReadOnly" [caption]="'Region Expense' | translate" [(value)]="regionExpense" color="primary" labelStyle="check" class="col-12" (valueChange)="onRegionOrStoreSwtiched($event)"></ot-switch-entry>
+    <ot-dropdown-entry *ngIf = "regionExpense" formControlName="RegionManager" [isReadOnly]="storeReadOnly" [caption]="'Region Manager' | translate" [items]="regionManagerList" textField="RegionManagerName" valueField="RegionManagersId" usePrimitiveValue="true" class="col-12" ></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf = "!regionExpense" formControlName="Store" [isReadOnly]="storeReadOnly" [caption]="'Store' | translate" [items]="storeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" ></ot-dropdown-entry>
+    <ot-date-entry formControlName="ExpenseDate" [isReadOnly]="!(authorization==='HQ')" [caption]="'Expense Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="ExpenseAmount" [caption]="'Expense Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-switch-entry *ngIf="authorized && showHasReceipt" formControlName="HasReceipt" [caption]="'Has Receipt' | translate" color="primary" labelStyle="check" class="col-12" (valueChange)="onHasReceiptSwtiched($event)"></ot-switch-entry>
+    <ot-alpha-entry *ngIf="hasReceipt" formControlName="ReceiptNo" [caption]="'ReceiptNo' | translate" class="col-12"></ot-alpha-entry>
+    <ot-switch-entry *ngIf="authorized && showOpenFlag" formControlName="OpenFlag" [caption]="openFlag?'Ödenmedi':'Ödendi'" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-date-entry *ngIf="authorized && showOpenFlag" formControlName="PayOffDate" [caption]="'PayOff Date' | translate" format="dd.MM.yyyy" class="col-12" [isReadOnly]="!(authorization==='HQ')" ></ot-date-entry>
+    <ot-text-entry formControlName="ExpenseDescription" [caption]="'Expense Description' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-dropdown-entry formControlName="VATRate" [isReadOnly]="!hasReceipt" [caption]="'VAT Rate' | translate" [items]="vatGroupService.completeList" textField="VatRate" valueField="VatRate" usePrimitiveValue="true" class="col-12" ></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

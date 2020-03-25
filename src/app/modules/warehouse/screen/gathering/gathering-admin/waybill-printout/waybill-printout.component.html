@@ -1,0 +1,77 @@
+<div *ngFor="let p of pageArray">
+    <table id="headerTable" class="waybillHeader" style="width: 100%">
+        <tr *ngFor="let i of spaceBeforeHeaderArr"><td>&nbsp;</td></tr>
+        <tr >
+            <td [ngStyle]="{'width': headerTableColumnWidthArr[0] }"></td>
+            <td [ngStyle]="{'width': headerTableColumnWidthArr[1] }"> {{ client }} </td>
+            <td [ngStyle]="{'width': headerTableColumnWidthArr[2] }" style="text-align: center" ></td>
+            <td [ngStyle]="{'width': headerTableColumnWidthArr[3] }"></td>
+            <td></td>
+        </tr>
+        <tr >
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> {{ billDate | date: "dd.MM.yyyy" }} </td>
+        </tr>
+        <tr >
+            <td></td>
+            <td> {{ clientAddressRow1 }} </td>
+            <td> {{ transactionDesc }} </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr >
+            <td></td>
+            <td> {{ clientAddressRow2 }} </td>
+            <td></td>
+            <td></td>
+            <td> {{ shipmentDate | date: "dd.MM.yyyy" }}</td>
+        </tr>
+        <tr >
+            <td></td>
+            <td> {{ taxOffice }} </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr >
+            <td></td>
+            <td> {{ taxId }} </td>
+            <td></td>
+            <td></td>
+            <td> {{ billNo.toString() }} </td>
+        </tr>
+        <tr *ngFor="let i of spaceAfterHeaderArr"><td>&nbsp;</td></tr>
+    </table>
+
+    <table [ngClass]= "(p < pageArray.length - 1)?'pagebreak':'nopagebreak'">
+        <tr *ngFor="let od of orderDetailList | slice:p*productCountPerPage: (p+1)*productCountPerPage; let i = index" style="height: 0; border-spacing: 0; border: none">
+            <td [ngStyle]="{'width': productTableColumnWidthArr[0] }"></td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[1] }">
+                {{ od.PalletNo }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[2] }">
+                {{ i + 1 }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[3] }">
+                {{ od.Barcode }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[4] }">
+                {{ od.ProductCodeName }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[5] }">
+                {{ od.ProductName }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[6] }" style="text-align: right">
+                {{ od.ShippedQuantity | number:"1.2-2":"tr" }} &nbsp;
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[7] }">
+                {{ od.UnitName }}
+            </td>
+            <td [ngStyle]="{'width': productTableColumnWidthArr[8] }"></td>
+        </tr>
+    </table>
+
+</div>

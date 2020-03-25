@@ -1,0 +1,14 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth" 
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <div class="rating rating2" #starDiv>
+    <a *ngFor="let item of [].constructor(starCount); let i = index" class="star"  [ngStyle]="getStyle(i+1)" (click)="setValueAndEmit(i+1)">★</a>   
+</div> 
+<input [(ngModel)]="value" style="display: none;">
+</ot-data-entry-template>

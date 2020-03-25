@@ -1,0 +1,6 @@
+<ot-custom-dialog [visible]="dialogVisible" [caption]="title" (onClose)="onClose($event)" [size]="size" [color]="color">
+  <ng-content></ng-content>
+  <ng-container dialog-actions>
+    <ot-button caption="Close" [disabled]="progressVisible ? true : null" (onClick)="onClose($event)"></ot-button>   
+  </ng-container>
+</ot-custom-dialog>

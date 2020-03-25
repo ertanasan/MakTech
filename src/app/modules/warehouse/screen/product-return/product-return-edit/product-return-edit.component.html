@@ -1,0 +1,76 @@
+﻿<ot-edit-screen-container #container size="lg" class="modal fade" [childActions]="modeContext?modeContext.childActions:null">
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ProductReturnId" [caption]="'Product Return Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry class="col-md-6" formControlName="Store" [caption]="'Store' | translate" 
+    [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" 
+    class="col-md-6" [loading]="storeService.loading" [isReadOnly]="container.actionName==='Review'" 
+    (valueChange)="onStoreProductChange($event)"></ot-dropdown-entry>
+    <ot-date-entry formControlName="ReturnDate" [caption]="'Return Date' | translate" format="dd.MM.yyyy" class="col-md-6" [isReadOnly]="true"></ot-date-entry>
+    <ot-date-entry *ngIf="container.actionName !== 'Create'" formControlName="WaybillDate" [caption]="'Waybill Date' | translate" format="dd.MM.yyyy" class="col-md-6" [isReadOnly]="!container.actionName==='Review'"></ot-date-entry>
+    <ot-alpha-entry *ngIf="container.actionName !== 'Create'" formControlName="WaybillText" [caption]="'Waybill No' | translate" class="col-md-6" [isReadOnly]="!container.actionName==='Review'"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="returnableProducts"
+    textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-md-6" [loading]="productService.loading" 
+    [isReadOnly]="container.actionName==='Review'"
+    (valueChange)="onStoreProductChange($event)"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="Supplier" [caption]="'Supplier' | translate" class="col-md-6" [isReadOnly]="container.actionName==='Review'"></ot-alpha-entry>
+    <ot-date-entry formControlName="ManufacturingDate" [caption]="'Manufacturing Date' | translate" format="dd.MM.yyyy" class="col-md-6" [isReadOnly]="container.actionName==='Review'"></ot-date-entry>
+    <ot-date-entry formControlName="ExpireDate" [caption]="'Expire Date' | translate" format="dd.MM.yyyy" class="col-md-6" [isReadOnly]="container.actionName==='Review'"></ot-date-entry>
+    
+    <div *ngIf="viewIntake" class="row ml-2 mt-2 col-md-12">
+        <div class="radio icheck-primary icheck-inline">
+          <input type="radio" id="reuseOpt1" name="reuseOpt1" [checked]="reusableFlag" (change)="onReuseClicked(true)"/>
+          <label for="reuseOpt1">{{ 'Reusable' | translate }}</label>
+        </div>
+        <div class="radio icheck-primary icheck-inline">
+          <input type="radio" id="reuseOpt2" name="reuseOpt2" [checked]="!reusableFlag" (change)="onReuseClicked(false)"/>
+          <label for="reuseOpt2">{{ 'Nonreusable' | translate }}</label>
+        </div>
+    </div>
+    <ot-numeric-entry *ngIf="viewIntake" formControlName="IntakeAmount" [caption]="'Intake' | translate" class="col-md-6" ></ot-numeric-entry>
+    <ot-dropdown-entry *ngIf="viewIntake" formControlName="ReturnDestination" [caption]="'Return Destination' | translate" 
+    [items]="returnDestinationService.completeList" textField="DestinationName" valueField="ReturnDestinationId" usePrimitiveValue="true" 
+    class="col-md-6" [loading]="returnDestinationService.loading"></ot-dropdown-entry>
+    <div class="row ml-2 mt-1 col-md-6">
+        <div class="radio icheck-primary icheck-inline">
+          <input type="radio" id="returnTypeOption1" name="returnTypeOption1" 
+          [checked]="isCustomerReturn" (change)="onRadioClicked(true)"
+          [disabled]="toView"/>
+          <label for="returnTypeOption1">{{ 'Customer Return' | translate }}</label>
+        </div>
+        <div class="radio icheck-primary icheck-inline">
+          <input type="radio" id="returnTypeOption2" name="returnTypeOption2" 
+          [checked]="!isCustomerReturn" (change)="onRadioClicked(false)"
+          [disabled]="toView"/>
+          <label for="returnTypeOption2">{{ 'Store Return' | translate }}</label>
+        </div>
+    </div>
+
+    <ot-dropdown-entry *ngIf="isCustomerReturn && !toView" formControlName="SaleDetailId" [caption]="'Customer Return' | translate" 
+    [items]="refundList" textField="RefundDescription" valueField="SaleDetailId" usePrimitiveValue="true" 
+    class="col-md-6" (valueChange)="onRefundSelected($event)"></ot-dropdown-entry>
+
+    <ot-alpha-entry formControlName="SaleDetailText" *ngIf="isCustomerReturn && toView" 
+    [caption]="'Customer Return' | translate" class="col-md-6" [isReadOnly]="toView"></ot-alpha-entry>    
+
+    <ot-dropdown-entry formControlName="PackageType" [caption]="'Package Type' | translate" (valueChange)="onPackageTypeChanged()"
+    [items]="shipmentPackageTypeService.shortList" textField="PackageTypeName" valueField="ShipmentPackageTypeId" 
+    usePrimitiveValue="true" class="col-md-6" [loading]="shipmentPackageTypeService.loading" [isReadOnly]="container.actionName==='Review' || isCustomerReturn"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="ReturnQuantity" [caption]="'Return Quantity' | translate" class="col-md-6" [isReadOnly]="container.actionName==='Review' || isCustomerReturn"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="ReturnReasonText" [caption]="'Return Reason Text' | translate" rows="7" class="col-12" [isReadOnly]="container.actionName==='Review'"></ot-alpha-entry>    
+    <kendo-treeview class="col-md-6"
+        [nodes]="reasonTreeView"
+        textField="text"
+        [hasChildren]="hasChildren"
+        [children]="fetchChildren"
+        [kendoTreeViewSelectable]="{ mode: 'multiple' }"
+        kendoTreeViewSelectable
+        kendoTreeViewExpandable
+        [kendoTreeViewCheckable]="checkableSettings"
+        [(checkedKeys)]="checkedKeys">
+    </kendo-treeview>
+    
+
+    <!-- <ot-alpha-entry formControlName="ReturnStatus" [caption]="'Return Status' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="ReturnDestination" [caption]="'Return Destination' | translate" class="col-12"></ot-alpha-entry> -->
+  </form>
+</ot-edit-screen-container>

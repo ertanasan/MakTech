@@ -1,0 +1,18 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth"
+  [hasFormControl]="ngControl"
+  >
+  <kendo-daterange>
+    <label>
+        <span class="label">{{'Start' | translate }}</span>
+        <kendo-dateinput kendoDateRangeStartInput [(value)]="start"></kendo-dateinput>
+    </label>
+    <label>
+        <span class="label">{{'End' | translate }}</span>
+        <kendo-dateinput kendoDateRangeEndInput [(value)]="end"></kendo-dateinput>
+    </label>
+</kendo-daterange>
+</ot-data-entry-template>

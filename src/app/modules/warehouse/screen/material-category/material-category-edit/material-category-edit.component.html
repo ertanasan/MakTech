@@ -1,0 +1,6 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="MaterialCategoryId" [caption]="'Material Category Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="CategoryName" [caption]="'Category Name' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

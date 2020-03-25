@@ -1,0 +1,11 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="FakeOrderId" [caption]="'Fake Order Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-date-entry formControlName="OrderDate" [caption]="'Order Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="container.actionName !== 'Create'" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="SentAmount" [caption]="'Sent Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-multi-select-entry *ngIf="!container.mainForm.get('AllStores').value && container.actionName === 'Create'" formControlName="StoreList" [caption]="'Stores' | translate"  [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-multi-select-entry>
+    <ot-switch-entry *ngIf="container.actionName === 'Create'" formControlName="AllStores" [caption]="'All Stores' | translate" color="primary" labelStyle="check" (touch)="onAllStoreBlur()" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="PosId" [caption]="'Pos Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry *ngIf = "storeVisible" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="PosCode" [caption]="'Pos Code' | translate" rows="7" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Bank" [caption]="'Bank' | translate" [items]="bankService.completeList" textField="BankName" valueField="BankId" usePrimitiveValue="true" class="col-12" [loading]="bankService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="CashRegisterCode" [caption]="'Cash Register Code' | translate" rows="7" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="BankCode" [caption]="'Bank Code' | translate" rows="7" class="col-12"></ot-alpha-entry> -->
+    <ot-switch-entry formControlName="MobilFlag" [caption]="'Mobil Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-alpha-entry formControlName="OKCNumber" [caption]="'OKC Number' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="Description" [caption]="'Description' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

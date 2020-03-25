@@ -1,0 +1,18 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="RentPaymentPlanId" [caption]="'Rent Payment Plan Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.actionName === 'Create'}" isReadOnly=true></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="RentPeriod" [caption]="'Rent Period' | translate" [items]="container.masterId ? [container.masterObject] : estateRentPeriodService.completeList"
+      [isReadOnly]="container.masterId" textField="PeriodOrder" valueField="EstateRentPeriodId" usePrimitiveValue="true" class="col-12" [loading]="estateRentPeriodService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="PaymentOrder" [caption]="'Payment Order' | translate" decimals=0 format="N0" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="DueDate" [caption]="'Due Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="PaymentAmount" [caption]="'Payment Amount' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="Currency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true" 
+                       showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+    </ot-dropdown-entry>
+    <ot-numeric-entry formControlName="AdditionalPaymentAmount" [caption]="'Additional Payment Amount' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="Currency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true" 
+                       showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+    </ot-dropdown-entry>
+    <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="5" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

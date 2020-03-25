@@ -1,0 +1,100 @@
+<br><br><br>
+
+<div *ngIf = "screenNo === 2" class="pb-3" style="background-color: white">
+  <div class="row text-center">
+    <div class="col-6 mt-1">
+      <span *ngIf="gatheringService.processingGatheringControl" >
+        <div class="row">
+          <div class="col-4 text-left text-nowrap captionInfo">
+            <span class="row ml-2"><u>{{ 'Sipariş' }}: </u></span>
+            <span class="row ml-2">{{ gatheringService.processingGatheringControl.StoreOrder }}</span>
+          </div>
+          <div class="col-8 text-left text-nowrap captionInfo">
+            <span class="row ml-2"><u>{{ 'STORE' | translate }}: </u></span>
+            <span class="row ml-2">{{ gatheringService.processingGatheringControl.StoreName }}</span>
+          </div>
+        </div>
+      </span>
+    </div>
+    <div class="col-6 text-right mt-1">
+      <span class="mr-3" *ngIf="gatheringService.processingGatheringControl">
+        <ot-button [caption]="'Abort' | translate" size="lg" color="secondary" shape="pill" class="text-left" (onClick)="onAbort()"></ot-button>
+        <ot-button [caption]="'Complete' | translate" size="lg" color="success" shape="pill" class="text-left" (onClick)="onComplete()"></ot-button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf = "screenNo === 1" class="row k-block" >
+<kendo-buttongroup *ngIf="gatheringTypeService.completeList" class="col-md-4 mx-3" [selection]="'single'" style="height: 60px;">
+    <button class="mr-1" kendoButton [toggleable]="true" [selected]="(selectedGatheringType===1)"
+      (selectedChange)="onTypeChanged($event, 1)">Ağır Paketli Ürünler</button>
+    <button class="mr-1" kendoButton [toggleable]="true" [selected]="(selectedGatheringType===2)"
+      (selectedChange)="onTypeChanged($event, 2)">Hafif Paketli Ürünler</button>        
+    <!-- <button *ngFor="let gatheringType of gatheringTypeService.completeList; let i = index" kendoButton [toggleable]="true" class="mr-1" [selected] = "(selectedGatheringType===i)"
+        (selectedChange)="onTypeChanged($event, gatheringType)">{{gatheringType.GatheringTypeName}}</button> -->
+</kendo-buttongroup>
+
+<!-- <kendo-buttongroup style="height: 60px;" [selection]="'multiple'" class="col-md-4"> -->
+  <div class="col-md-2 my-auto">
+  <ot-switch-entry class="my-auto" [(value)]="isCameraOpen" color="primary" [caption]="isCameraOpen ? 'Camera Off' : 'Camera On' | translate" [block]="true" captionWidth=8 editorWidth=4 size="lg" shape="pill"></ot-switch-entry>
+  </div>
+  <!-- <button kendoButton [toggleable]="true" [selected]="false"
+      (selectedChange)="onCameraChanged()">{{'QR Code' | translate}}</button> -->
+<!-- </kendo-buttongroup> -->
+<kendo-buttongroup class="col-md-5 ml-auto" [selection]="'single'" style="height: 60px;">
+    <button class="mr-1" kendoButton [toggleable]="true" [selected]="(selectedStatus===1)"
+        (selectedChange)="onStatusChanged($event, 1)">Bekliyor</button>
+    <button class="mr-1" kendoButton [toggleable]="true" [selected]="(selectedStatus===2)"
+        (selectedChange)="onStatusChanged($event, 2)">Çalışılıyor</button>
+    <button kendoButton [toggleable]="true" [selected]="(selectedStatus===9)"
+        (selectedChange)="onStatusChanged($event, 9)">Tamamlandı</button>
+</kendo-buttongroup>
+</div>
+
+<zxing-scanner #barcodeScanner *ngIf = "isCameraOpen" [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+    [formats]="formatsEnabled" [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)"
+    (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
+
+<p *ngIf="screenNo === 1" class="k-block">
+    <kendo-grid [data]="controlActiveList" [height]="560" [navigable]="true"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take"
+    (dataStateChange)="handleDataStateChange($event)">
+    <kendo-grid-column width="40" class="text-center">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton look="flat" [iconClass]="'fas fa-camera'" style="height: 100%; width: 100%; font-size: 200%; color: #5867DD" (click)="showPalletPhotoDialog(dataItem)"></button>
+      </ng-template>
+    </kendo-grid-column>
+        <kendo-grid-column field="StoreOrderName" [title]="'Sipariş'" width="140"> </kendo-grid-column>
+        <kendo-grid-column field="PalletNo" [title]="'Palet No'" width="40" class="text-center"> </kendo-grid-column>
+        <kendo-grid-column field="ControlUser" [title]="'User' | translate" width="140">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span *ngIf="dataItem.ControlUser">
+              {{ dataItem.ControlUser | getName:'UserId':'UserFullName': userService.completeList }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [title]="'Kontrole Başla'" width="50" class="text-center">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoButton look="flat" (click) = "onStartControlClick(dataItem)"
+              [iconClass]="'fa fa-arrow-right fa-fw'" style="height: 100%; width: 100%; font-size: 200%; color: #0ABB87"></button>
+            </ng-template>
+          </kendo-grid-column>        
+    </kendo-grid>
+    
+  </p>
+<ot-control-grid-entry #controlGridEntry *ngIf = "screenNo === 2"></ot-control-grid-entry>
+
+<ot-custom-dialog #getConsent>
+  <div>{{consentMessage}}</div>
+  <ng-container dialog-actions>
+      <ot-button caption="{{'Close' | translate}}" (onClick)="onCancelConsert()"></ot-button>
+      <ot-button [caption]="'Confirm' | translate" icon="fa fa-thumbs-up fa-fw" (onClick)="onConsent()" [block]="false" color="primary" ></ot-button>
+  </ng-container>
+</ot-custom-dialog>
+
+<ot-pallet-photo #palletPhotoDialog calledFrom="GATHERINGCONTROL"></ot-pallet-photo>
+
+

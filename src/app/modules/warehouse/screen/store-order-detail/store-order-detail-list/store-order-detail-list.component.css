@@ -1,0 +1,7 @@
+.k-grid .no-padding {
+    padding: 0;
+  }
+   .whole-cell {
+     display: block;
+     padding: 9px 9px; /* depends on theme */
+   }

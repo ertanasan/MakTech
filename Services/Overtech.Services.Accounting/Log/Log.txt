@@ -1,0 +1,135 @@
+2020-02-11 22:40:13,287 [26] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 22:40:13
+
+2020-02-11 22:42:12,624 [29] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 22:42:12
+
+2020-02-11 22:50:37,994 [26] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 22:50:37
+
+2020-02-11 22:54:22,636 [66] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 22:54:22
+
+2020-02-11 23:00:07,307 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 23:00:07
+
+2020-02-11 23:02:34,762 [48] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 23:02:34
+
+2020-02-12 16:46:27,530 [12] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:46:27
+
+2020-02-12 16:50:23,106 [32] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:50:23
+
+2020-02-12 16:51:20,727 [39] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:51:20
+
+2020-02-12 16:52:25,082 [42] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:52:25
+
+2020-02-12 16:54:54,605 [42] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:54:54
+
+2020-02-12 16:55:37,840 [42] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:55:37
+
+2020-02-12 16:58:16,556 [41] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 16:58:16
+
+2020-02-12 17:00:52,576 [15] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 17:00:52
+
+2020-02-12 17:04:48,354 [52] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 17:04:48
+
+2020-02-12 17:52:53,447 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 17:52:53
+
+2020-02-12 17:57:08,683 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 17:57:08
+
+2020-02-12 18:09:28,847 [3] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:09:28
+
+2020-02-12 18:10:39,767 [6] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:10:39
+
+2020-02-12 18:11:14,533 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:11:14
+
+2020-02-12 18:13:27,261 [4] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:13:27
+
+2020-02-12 18:13:42,946 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:13:42
+
+2020-02-12 18:15:53,002 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:15:52
+
+2020-02-12 18:16:08,393 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - File read to dataobject array : 18:16:08
+
+2020-02-12 18:16:08,446 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Data checked if transferred to Mikro no error : 18:16:08
+
+2020-02-12 18:16:08,550 [5] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Pos Transfer operation completed : 18:16:08
+
+2020-02-12 18:43:26,205 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 18:43:26
+
+2020-02-12 18:43:29,472 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - File read to dataobject array : 18:43:29
+
+2020-02-12 18:43:29,937 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Data checked if transferred to Mikro no error : 18:43:29
+
+2020-02-12 18:43:30,868 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Pos Transfer operation completed : 18:43:30
+
+2020-02-13 09:44:20,977 [26] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 09:44:20
+
+2020-02-13 10:17:24,528 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 10:17:24
+
+2020-02-13 10:29:46,830 [17] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 10:29:46
+
+2020-02-13 10:35:10,384 [13] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 10:35:10
+
+2020-02-13 10:35:47,533 [14] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 10:35:47
+
+2020-02-13 10:35:50,288 [14] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - File read to dataobject array : 10:35:50
+
+2020-02-13 10:35:56,887 [14] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Data checked if transferred to Mikro no error : 10:35:56
+
+2020-02-13 10:36:10,334 [14] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Pos Transfer operation completed : 10:36:10
+
+2020-02-13 10:39:02,926 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Ziraat Pos Transfer file read started : 10:39:02
+
+2020-02-13 10:39:03,847 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - File read to dataobject array : 10:39:03
+
+2020-02-13 10:39:10,282 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Data checked if transferred to Mikro no error : 10:39:10
+
+2020-02-13 10:39:23,700 [25] DEBUG Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeZiraatLoadBankPOSFile - Pos Transfer operation completed : 10:39:23
+
+2020-02-25 13:18:58,933 [8] ERROR Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeClearDate - serviceName : BankPosTransactionsService, methodName : ClearDate, BlockedDate : 25-Feb-20 00:00:00, Exception : Overtech.Core.OTException: Exception message for errorNo '24' has not been loaded yet. ---> System.Data.SqlClient.SqlException: Could not find stored procedure 'ACC_DEL_BANKPOSTRANDATE_SP'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   --- End of inner exception stack trace ---
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.SqlHelper.ExecuteNonQuery(IDALConfig dalConfig, IUniTransaction transaction, String commandText, IUniParameter[] commandParameters)
+   at Overtech.Service.Data.Uni.DAL.ExecuteNonQuery(String spName, IUniParameter[] parameters)
+   at Overtech.Services.Accounting.BankPosTransactionsService.ClearDate(DateTime BlockedDate) in C:\Overtech\Source\OverStore\OverStore\Services\Overtech.Services.Accounting\BankPosTransactionsService.svc.cs:line 318
+
+2020-02-25 14:20:33,847 [7] ERROR Overtech.Services.Accounting.BankPosTransactionsService SyncInvokeClearDate - serviceName : BankPosTransactionsService, methodName : ClearDate, BlockedDate : 25-Feb-20 00:00:00, Exception : Overtech.Core.OTException: Exception message for errorNo '24' has not been loaded yet. ---> System.Data.SqlClient.SqlException: Could not find stored procedure 'ACC_DEL_BANKPOSTRANDATE_SP'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   --- End of inner exception stack trace ---
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.SqlHelper.ExecuteNonQuery(IDALConfig dalConfig, IUniTransaction transaction, String commandText, IUniParameter[] commandParameters)
+   at Overtech.Service.Data.Uni.DAL.ExecuteNonQuery(String spName, IUniParameter[] parameters)
+   at Overtech.Services.Accounting.BankPosTransactionsService.ClearDate(DateTime BlockedDate) in C:\Overtech\Source\OverStore\OverStore\Services\Overtech.Services.Accounting\BankPosTransactionsService.svc.cs:line 318
+
+2020-03-10 11:24:54,077 [64] ERROR Overtech.Services.Accounting.BankPosTransactionsService ? - serviceName : LoomisService, methodName : ClearDate, SaleDate : 27-Aug-19 00:00:00, Exception : Overtech.Core.OTException: Exception message for errorNo '24' has not been loaded yet. ---> System.Data.SqlClient.SqlException: Could not find stored procedure 'ACC_DEL_LOOMISDATE_SP'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   --- End of inner exception stack trace ---
+   at Overtech.Service.Data.Uni.UniCommand.ExecuteNonQuery()
+   at Overtech.Service.Data.Uni.SqlHelper.ExecuteNonQuery(IDALConfig dalConfig, IUniTransaction transaction, String commandText, IUniParameter[] commandParameters)
+   at Overtech.Service.Data.Uni.DAL.ExecuteNonQuery(String spName, IUniParameter[] parameters)
+   at Overtech.Services.Accounting.LoomisService.ClearDate(DateTime SaleDate) in C:\Overtech\Source\OverStore\OverStore\Services\Overtech.Services.Accounting\LoomisService.svc.cs:line 224
+

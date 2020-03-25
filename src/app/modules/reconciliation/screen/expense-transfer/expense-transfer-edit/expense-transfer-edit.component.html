@@ -1,0 +1,14 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ExpenseId" [caption]="'Expense Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="ExpenseType" [caption]="'Expense Type' | translate" [items]="expenseTypeService.completeList" textField="ExpenseTypeName" valueField="ExpenseTypeId" usePrimitiveValue="true" class="col-12" [loading]="expenseTypeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Store" [isReadOnly]="true" [caption]="'Store' | translate" [items]="storeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" ></ot-dropdown-entry>
+    <ot-date-entry formControlName="ExpenseDate" [caption]="'Expense Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="ExpenseAmount" [isReadOnly]="true" [caption]="'Expense Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="ReceiptNo" [caption]="'ReceiptNo' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="ExpenseDescription" [isReadOnly]="true" [caption]="'Expense Description' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-numeric-entry formControlName="VATRate" [caption]="'VAT Rate' | translate" class="col-12"></ot-numeric-entry> 
+    <ot-switch-entry formControlName="StatusCode" [caption]="'Geçersiz Masraf'" color="primary" labelStyle="check" class="col-12" [(value)]="statusCode"></ot-switch-entry>
+    <ot-text-entry *ngIf="statusCode" formControlName="StatusText" [caption]="'Neden Geçersiz'" rows="2" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

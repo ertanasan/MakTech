@@ -1,0 +1,11 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-dropdown-entry formControlName="EstateRent" [caption]="'Estate Rent' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : estateRentService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="EstateName" valueField="EstateRentId" usePrimitiveValue="true" class="col-12" [loading]="estateRentService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Landlord" [caption]="'Landlord' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : landlordService.completeList"
+      [isReadOnly]="container.rightRelationId" textField="LandlordName" valueField="LandlordId" usePrimitiveValue="true" class="col-12" [loading]="landlordService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="OwnershipRate" [caption]="'Ownership Rate' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PaymentRate" [caption]="'Payment Rate' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="IBAN" [caption]="'IBAN' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

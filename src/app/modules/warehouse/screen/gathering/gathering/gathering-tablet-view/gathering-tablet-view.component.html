@@ -1,0 +1,86 @@
+<kendo-scrollview #scrollView *ngIf="gatheringService.processingGathering" [data]="gatheringDetailService.gatheringDetailList" width="100%" height="450px" [animate]="true" [arrows]="false" [pageable]="true" (itemChanged)="itemChanged($event.index, $event.item)">
+  <ng-template let-item="item">        
+    <div class="row tabletview-title-container">
+        <div class="col-sm-6 offset-sm-2 text-center align-self-center" [ngClass]="item.ProductName && item.ProductName.length < 25 ? 'product-title' : 'product-title-small'">
+          {{ item.ProductName }}
+        </div>
+        <div class="col-sm-4 text-right align-self-center">
+            <kendo-dropdownbutton [data]="gatheringDetailService.palletList"
+                                  primary=true
+                                  look="flat"
+                                  class="btn-lg btn-primary mr-2"
+                                  (itemClick)="gatheringDetailService.palletChange($event, scrollView.activeIndex)">
+                {{ 'Pallet' | translate }}-{{  item.PalletNo }}
+            </kendo-dropdownbutton>
+            <ot-button [caption]="'New Pallet' | translate" (onClick)="gatheringDetailService.palletChange()" color="primary" size="lg" icon="fa fa-cut fa-fw"></ot-button>
+        </div>
+    </div>
+
+    <div class="row tabletview-input-container mx-auto pt-3">
+      <div class="col-2 text-center  align-self-center">
+        <ot-button (onClick)="goToIndex(scrollView.activeIndex-1)"
+                   size="lg"
+                   color="danger"
+                   block=true
+                   icon="fa fa-arrow-left">
+        </ot-button>
+      </div>
+      <div class="col-sm-4 col-xs-11 align-center text-center">
+        <p>{{ 'Orderred Quantity' | translate }}</p>
+        <span *ngIf="isActualUnit">
+            <button (click)="gather(item, item.OrderQuantity * item.PackageUnit)" class="inputCircle btn mb-2 col-12">{{ item.OrderQuantity * item.PackageUnit | number:'1.0-3' }}</button>
+            <br>
+            <p class="h3">{{ item.OrderQuantity | number:'1.0-3':'tr' }} {{ 'Package' | translate }}</p>
+            <p class="h3">{{ item.OrderQuantity * item.PackageUnit | number:'1.0-3':'tr' }} {{ item.UnitName | translate }}</p>
+        </span>
+        <span *ngIf="!isActualUnit">
+            <button (click)="gather(item, item.OrderQuantity)" class="inputCircle btn mb-2 col-12">{{ item.OrderQuantity | number:'1.0-3':'tr' }}</button>
+            <br>
+            <p class="h3">{{ item.OrderQuantity | number:'1.0-3':'tr' }} {{ 'Package' | translate }}</p>
+            <p class="h3">{{ item.OrderQuantity * item.PackageUnit | number:'1.0-3':'tr' }} {{ item.UnitName | translate }}</p>
+            <br>
+        </span>
+      </div>
+      <div class="col-sm-4 col-xs-11 align-center text-center">
+        <p>{{ 'Gathered Quantity' | translate }}</p>
+        <span *ngIf="isActualUnit">
+            <input [value]="(item.GatheredQuantity || item.GatheredQuantity === 0) ? item.GatheredQuantity * item.PackageUnit : null | number:'1.2-3':'tr'" 
+                    (blur)="gather(item, $event.srcElement.value)" (keyup.enter)="gather(item, $event.srcElement.value)" 
+                    onClick="this.select();" type="number" [placeholder]="item.UnitName | translate" class="inputCircle mb-2 col-12">
+        </span>
+        <span *ngIf="!isActualUnit">
+            <input [value]="item.GatheredQuantity | number:'1.0-3':'tr'" 
+                    (blur)="gather(item, $event.srcElement.value)" (keyup.enter)="gather(item, $event.srcElement.value)" 
+                    onClick="this.select();" type="number" [placeholder]="'Package' | translate" class="inputCircle mb-2 col-12">
+        </span>
+        <br>
+        <ot-button [caption]="'None' | translate" color="danger" size="lg" icon="fa fa-ban fa-fw" (onClick)="gather(item, 0)"></ot-button>
+      </div>
+      <div class="col-2 text-center align-self-center activeIndex">
+        <!-- <span class="ml-1">{{ gatheringDetailService.gatheringDetailList.length - scrollView.activeIndex - 1 }}</span>   -->
+        <ot-button (onClick)="goToIndex(scrollView.activeIndex+1)"
+                     size="lg"
+                     color="success"
+                     block=true
+                     icon="fa fa-arrow-right">
+          </ot-button>
+      </div>
+    </div>
+    <div class="row tabletview-footer-container">
+      <div class="offset-1 col-2 text-left text-danger activeIndex">
+        <span class="ml-1"><i class="fa fa-caret-left fa-fw"></i>{{ scrollView.activeIndex }}</span>
+      </div>
+      <div class="offset-6 col-2 text-right">
+        <span class="mr-1 text-success activeIndex">{{ gatheringDetailService.gatheringDetailList.length - scrollView.activeIndex - 1 }}&nbsp;<i class="fa fa-caret-right fa-fw"></i></span>
+      </div>
+    </div>
+  </ng-template>
+</kendo-scrollview>
+
+<ot-custom-dialog #previewDialog color="primary" [caption]="'Gathering Preview' | translate" size="lg" (onClose)="onModify()">
+  <ot-gathering-grid-view></ot-gathering-grid-view>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'Modify' | translate" icon="fa fa-times fa-fw" (onClick)="onModify()" [block]="false" color="secondary" size="lg"></ot-button>
+    <ot-button [caption]="'Confirm' | translate" icon="fa fa-thumbs-up fa-fw" (onClick)="onConfirm()" [block]="false" color="primary" size="lg" [disabled]="gatheringService.gatheredProductsPercentage !== 100"></ot-button>
+  </ng-container> 
+</ot-custom-dialog>

@@ -1,0 +1,79 @@
+﻿<ot-list-screen-container [header]="'Sales' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  
+  <ng-container header-items>
+    <div class="row float-right m-auto">
+        <ot-dropdown-entry #stores class="col-md-5" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" 
+        usePrimitiveValue="true" [(value)]="storeId" [loading]="storeService.loading"></ot-dropdown-entry>
+      <kendo-datepicker class="col-md-5" [(value)]="transactionDate" format="dd.MM.yyyy" ></kendo-datepicker>
+      <ot-button class="col-md-2" [caption]="'Filter' | translate" color="primary" size="sm" (click)="getDateStoreList()"></ot-button>    
+    </div>
+  </ng-container>
+
+  <kendo-grid [data]="saleActiveList" [loading]="saleLoading" [height]="625"
+    [pageable]="true" [pageSize]="10" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable] = "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button otTooltip="{{ 'Edit Details' | translate }}" [routerLink]="['/Sale/SaleDetail', dataItem.SalesId]" color="primary"><i class="fa fa-ellipsis-h"></i></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="TransactionCode" [title]="'Transaction Code' | translate" width="180"></kendo-grid-column>
+    <!-- <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+      </ng-template>
+    </kendo-grid-column> -->
+    <!-- <kendo-grid-column field="CashierCode" [title]="'Cashier Code' | translate" width="180"></kendo-grid-column> -->
+    <kendo-grid-column field="CashRegister" [title]="'Cash Register' | translate" width="100"></kendo-grid-column>
+    <!-- <kendo-grid-column field="TransactionDate" [title]="'Transaction Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.TransactionDate">{{utilityService.toDate(dataItem.TransactionDate) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column> -->
+    <kendo-grid-column field="TransactionTime" [title]="'Transaction Time' | translate" width="120" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.TransactionTime | date:'HH:mm:ss'}}
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="VATAmount" [title]="'VAT Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="Total" [title]="'Total' | translate" width="120" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.Total | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="ProductDiscount" [title]="'Product Discount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="TotalDiscount" [title]="'Total Discount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="ProductCount" [title]="'Product Count' | translate" width="100" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ProcessDuration" [title]="'Process Duration' | translate" width="100" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="Cancelled" [title]="'Cancelled' | translate" width="108" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box [value]="dataItem.Cancelled" optionName="checkbox_{{ dataItem.Cancelled }}" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+          </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TransactionType" [title]="'Transaction Type' | translate" width="180">      
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="transactionTypeService.completeList"
+              valueField="TransactionTypeId"
+              textField="TransactionName"
+              memberField="TransactionType"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+          </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.TransactionType | getName:'TransactionTypeId':'TransactionName':transactionTypeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-sales-edit #editScreen screenName="ot-sales-edit"></ot-sales-edit>

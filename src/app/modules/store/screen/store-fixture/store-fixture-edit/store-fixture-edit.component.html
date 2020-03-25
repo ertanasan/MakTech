@@ -1,0 +1,22 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreFixtureId" [caption]="'Store Fixture Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry *ngIf="!container.masterId" formControlName="Store" [caption]="'Store' | translate" [items]="container.masterId ? [container.masterObject] : storeService.completeList"
+      [isReadOnly]="container.masterId" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="ProductFixture" [caption]="'Fixture' | translate" [items]="fixtureService.completeList" 
+    textField="FixtureName" valueField="FixtureId" usePrimitiveValue="true" class="col-12" [loading]="fixtureService.loading" 
+    (valueChange)="onFixtureChange($event)"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Brand" [caption]="'Brand' | translate" [items]="fixtureBrandService.completeList && brandFilteredList()" 
+    textField="BrandName" valueField="FixtureBrandId" usePrimitiveValue="true" class="col-12" 
+    (valueChange)="onBrandChange($event)"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Model" [caption]="'Model' | translate" [items]="fixtureModelService.completeList && modelFilteredList()" 
+    textField="ModelName" valueField="FixtureModelId" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="FixtureName" [caption]="'Fixture Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SerialNo" [caption]="'Serial No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="Quantity" [caption]="'Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="PurchaseDate" [caption]="'Purchase Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="EndOfGuaranteeDate" [caption]="'End Of Guarantee Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Supplier" [caption]="'Supplier' | translate" [items]="supplierService.completeList" 
+    textField="SupplierName" valueField="SupplierId" usePrimitiveValue="true" class="col-12" [loading]="supplierService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

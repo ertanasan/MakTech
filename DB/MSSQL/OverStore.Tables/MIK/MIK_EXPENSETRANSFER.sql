@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[MIK_EXPENSETRANSFER](
+	[EXPENSEID] [bigint] NULL,
+	[CREATEUSER] [int] NULL,
+	[CREATE_DT] [datetime] NULL,
+	[MIKRO] [numeric](9) NULL,
+	[STATUS] [int] NULL,
+	[STATUS_DSC] [varchar](1000) NULL
+) ON [PRIMARY]
+GO

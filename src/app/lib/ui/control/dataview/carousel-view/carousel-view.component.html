@@ -1,0 +1,11 @@
+<kendo-scrollview
+  [data]="items"
+  [width]="width"
+  [height]="height"
+  [arrows]="arrowsVisible"
+  [pageable]="pageable"
+  (itemChanged)="handleItemChange($event)">
+  <ng-template let-item="item">
+    <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: item}"></ng-container>
+  </ng-template>
+</kendo-scrollview>

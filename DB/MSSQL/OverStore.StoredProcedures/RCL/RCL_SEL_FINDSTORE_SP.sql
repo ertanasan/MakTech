@@ -1,0 +1,35 @@
+﻿CREATE PROCEDURE RCL_SEL_FINDSTORE_SP  @StoreReconciliationId BIGINT AS
+BEGIN
+    SELECT S.STORERECID,
+           S.EVENT,
+           S.ORGANIZATION,
+           S.DELETED_FL,
+           S.CREATE_DT,
+           S.UPDATE_DT,
+           S.CREATEUSER,
+           S.UPDATEUSER,
+           S.CREATECHANNEL,
+           S.CREATEBRANCH,
+           S.CREATESCREEN,
+           S.STORE,
+           S.RECONCILIATION_DT,
+           S.ZET_AMT,
+           S.DEFINEDADVANCE_AMT,
+           S.EXPENSE_AMT,
+           S.CASH_AMT,
+           S.CARD_AMT,
+           S.RECOVERED_AMT,
+           S.ADJUSTMENT_AMT,
+           S.NETOFF_AMT,
+           S.BANK_AMT,
+           S.CURRENTADVANCE_AMT,
+           S.EXPENSERETURN_AMT,
+           S.DIFFREASONCODES_TXT,
+           S.DIFFREASON_TXT,
+           S.LASTSTEP_NO,
+           S.COMPLETE_FL,
+           S.ADJUSTMENT_DSC,
+           S.DEFICITCYCLE_CNT
+      FROM RCL_STORE S (NOLOCK)
+     WHERE S.STORERECID = @StoreReconciliationId;
+END;

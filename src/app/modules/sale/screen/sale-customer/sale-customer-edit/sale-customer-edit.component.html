@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="SaleCustomerId" [caption]="'Sale Customer Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Sale" [caption]="'Sale' | translate" [items]="container.MasterId ? [container.MasterObject] : salesService.completeList"
+      [isReadOnly]="container.MasterId" textField="TransactionCode" valueField="SalesId" usePrimitiveValue="true" class="col-12" [loading]="salesService.loading"></ot-dropdown-entry>
+    <ot-switch-entry formControlName="EInvoiceFlag" [caption]="'EInvoice Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-alpha-entry formControlName="CustomerName" [caption]="'Customer Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="Address" [caption]="'Address' | translate" rows="7" class="col-12"></ot-text-entry>
+    <ot-alpha-entry formControlName="TaxCenterName" [caption]="'Tax Center Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="TaxIdentityNo" [caption]="'Tax Identity No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Email" [caption]="'Email' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PhoneNumber" [caption]="'Phone Number' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="FiscalSerial" [caption]="'Fiscal Serial' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="EInvoiceZetNumber" [caption]="'EInvoice Zet Number' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="EInvoiceReceiptNumber" [caption]="'EInvoice Receipt Number' | translate" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

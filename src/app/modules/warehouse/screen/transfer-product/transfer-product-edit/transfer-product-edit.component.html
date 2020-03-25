@@ -1,0 +1,19 @@
+﻿<ot-edit-screen-container #container size="lg" [childActions]="modeContext?modeContext.childActions:null">
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <ot-alpha-entry formControlName="TransferProductId" [caption]="'Transfer Product Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+        <ot-alpha-entry *ngIf="isWaybillNoVisible" formControlName="WaybillNo" [caption]="'Waybill No' | translate" class="col-12"></ot-alpha-entry>
+        <ot-dropdown-entry formControlName="SourceStore" [isReadOnly]="true" [caption]="'Source Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="DestinationStore" [isReadOnly]="modeContext||isDestReadOnly" [caption]="'Destination Store' | translate" [items]="storeService.storeListWithWarehouses" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+        <ot-alpha-entry *ngIf="container.actionName==='Read'" formControlName="ProcessInstance" [caption]="'Process Instance Id' | translate" class="col-12"></ot-alpha-entry>
+        <ot-alpha-entry *ngIf="container.actionName==='Read'" formControlName="ProcessStatus" [caption]="'Process Status' | translate" class="col-12"></ot-alpha-entry>
+        <!-- <ot-check-box formControlName="TransferToWarehouse" class="col-12" (ngModelChange)="onWarehouseChecked($event)" [caption]="'Send to Warehouse' | translate" [isReadOnly]="modeContext"></ot-check-box> -->
+        <ot-dropdown-entry *ngIf="isDestinationWarehouseVisible" formControlName="TargetWarehouse" [caption]="'Target Warehouse' | translate" 
+                            [items]="returnDestinationService.completeList" textField="DestinationName" valueField="ReturnDestinationId" usePrimitiveValue="true" 
+                            [loading]="returnDestinationService.loading" class="col-12"></ot-dropdown-entry>
+        <ot-text-entry *ngIf="isPreviousCommentVisible" formControlName="PreviousComment" [caption]="'Previous Note' | translate" rows=3 class="col-12" [isReadOnly]="true"></ot-text-entry>
+        <ot-text-entry *ngIf="modeContext" formControlName="actionComment" caption="Action Comment" rows=3 class="col-12"></ot-text-entry>
+        <!-- <ot-dropdown-entry formControlName="TransferStatus" [isReadOnly]="'true'" [caption]="'Transfer Status' | translate" [items]="transferProductStatusService.completeList" textField="ProductStatusName" valueField="TransferProductStatusId" usePrimitiveValue="true" class="col-12" [loading]="transferProductStatusService.loading"></ot-dropdown-entry> -->
+    </form>
+  <ot-transfer-product-detail-list #detail></ot-transfer-product-detail-list>
+  
+</ot-edit-screen-container>

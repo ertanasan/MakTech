@@ -1,0 +1,8 @@
+<a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">    
+  <i class="icon-list"></i><span class="badge badge-pill badge-warning">{{ numberOfTasks }}</span>
+</a>
+<div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+  <div class="dropdown-header text-center"><strong>{{ numberOfTasks }} {{'New Task' | translate}}</strong></div>
+  <a class="dropdown-item" routerLink="/{{mainModule}}/Inbox/Index" ><i class="fa fa-user"></i> {{'Tasks' | translate}}</a>
+  <!-- <a class="dropdown-item" routerLink="/{{mainModule}}/Workqueue/Index" ><i class="fa fa-wrench"></i> {{'Workqueue Operations' | translate}}</a> -->
+</div>

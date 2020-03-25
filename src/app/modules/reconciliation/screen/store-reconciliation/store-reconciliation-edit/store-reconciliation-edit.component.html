@@ -1,0 +1,18 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreReconciliationId" [caption]="'Store Reconciliation Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-date-entry formControlName="TransactionDate" [caption]="'Transaction Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="StoreID" [caption]="'Store ID' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="PreviousDayAmount" [caption]="'Previous Day Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="SaleTotal" [caption]="'Sale Total' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CashTotal" [caption]="'Cash Total' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CardTotal" [caption]="'Card Total' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ToBank" [caption]="'To Bank' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="Difference" [caption]="'Difference' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry formControlName="DifferenceExplanation" [caption]="'Difference Explanation' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-numeric-entry formControlName="Completed" [caption]="'Completed' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="EodAdvance" [caption]="'Eod Advance' | translate" class="col-12"></ot-numeric-entry>
+    <ot-switch-entry formControlName="Reconciliated" [caption]="'Reconciliated' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="Approved" [caption]="'Approved' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

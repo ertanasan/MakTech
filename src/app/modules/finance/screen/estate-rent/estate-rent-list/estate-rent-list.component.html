@@ -1,0 +1,95 @@
+﻿<ot-list-screen-container [header]="'Estate Rent' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="800"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="EstateRentId" [title]="'Estate Rent Id' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="CreateDate" [title]="'Create Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{utilityService.toDate(dataItem.CreateDate) | date:('dd.MM.yyyy HH.mm' | translate)}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ContractDraftVersion" [title]="'Contract Draft Version' | translate" width="100">
+<!--      <ng-template kendoGridFilterCellTemplate let-dataItem>-->
+<!--        <ot-dropdown-list-filter  [data]="contractDraftVersionService.completeList"-->
+<!--                                  valueField="ContractDraftVersionId"-->
+<!--                                  textField="ContractDraftVersionId"-->
+<!--                                  memberField="ContractDraftVersion"-->
+<!--                                  [filter]="listParams.filter">-->
+<!--        </ot-dropdown-list-filter>-->
+<!--      </ng-template>-->
+    </kendo-grid-column>
+    <kendo-grid-column field="EstateAddress" [title]="'Estate Address' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="RentPurpose" [title]="'Rent Purpose' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="ContractStartDate" [title]="'Contract Start Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ContractStartDate">{{utilityService.toDate(dataItem.ContractStartDate) | date:'dd.MM.yyyy' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ContractEndDate" [title]="'Contract End Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ContractEndDate">{{utilityService.toDate(dataItem.ContractEndDate) | date:'dd.MM.yyyy' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="EstateName" [title]="'Estate Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="Comment" [title]="'Comment' | translate"></kendo-grid-column>
+<!--    <kendo-grid-column field="Deposit" [title]="'Deposit' | translate" width="180" filter="numeric">-->
+<!--        <ng-template kendoGridCellTemplate let-dataItem>-->
+<!--            <span *ngIf="dataItem.Deposit">-->
+<!--              {{ dataItem.Deposit | currency:dataItem.DepositCurrency:'symbol-narrow':'1.2-2' }}-->
+<!--            </span>-->
+<!--        </ng-template>-->
+<!--    </kendo-grid-column>-->
+<!--    <kendo-grid-column field="DepositDetails" [title]="'Deposit Details' | translate" width="180"></kendo-grid-column>-->
+<!--    <kendo-grid-column field="AgentFee" [title]="'Agent Fee' | translate" width="180" filter="numeric">-->
+<!--        <ng-template kendoGridCellTemplate let-dataItem>-->
+<!--            <span *ngIf="dataItem.AgentFee">-->
+<!--              {{ dataItem.AgentFee | currency:dataItem.AgentFeeCurrency:'symbol-narrow':'1.2-2' }}-->
+<!--            </span>-->
+<!--        </ng-template>-->
+<!--    </kendo-grid-column>-->
+<!--    <kendo-grid-column field="AgentFeeDetail" [title]="'Agent Fee Detail' | translate" width="180"></kendo-grid-column>-->
+<!--    <kendo-grid-column field="KeyMoney" [title]="'Key Money' | translate" width="180" filter="numeric">-->
+<!--        <ng-template kendoGridCellTemplate let-dataItem>-->
+<!--            <span *ngIf="dataItem.KeyMoney">-->
+<!--              {{ dataItem.KeyMoney | currency:dataItem.KeyMoneyCurrency:'symbol-narrow':'1.2-2' }}-->
+<!--            </span>-->
+<!--        </ng-template>-->
+<!--    </kendo-grid-column>-->
+<!--    <kendo-grid-column field="KeyMoneyDetail" [title]="'Key Money Detail' | translate" width="180"></kendo-grid-column>-->
+<!--    <kendo-grid-column field="NonrefundableCost" [title]="'Nonrefundable Cost' | translate" width="180" filter="numeric">-->
+<!--        <ng-template kendoGridCellTemplate let-dataItem>-->
+<!--            <span *ngIf="dataItem.NonrefundableCost">-->
+<!--              {{ dataItem.NonrefundableCost | currency:dataItem.NonrefundableCurrency:'symbol-narrow':'1.2-2' }}-->
+<!--            </span>-->
+<!--        </ng-template>-->
+<!--    </kendo-grid-column>-->
+<!--    <kendo-grid-column field="NonrefundableCostDetail" [title]="'Nonrefundable Cost Detail' | translate" width="180"></kendo-grid-column>-->
+    <ng-template kendoGridDetailTemplate let-dataItem>
+      <ot-tab-strip>
+        <ot-tab-page [title]="'Estate Landlords' | translate" active="true">
+          <ot-estate-landlord-list [isEmbedded]="true" [leftRelationId]="dataItem.EstateRentId" [leftRelationObject]="dataItem"></ot-estate-landlord-list>
+        </ot-tab-page>
+        <ot-tab-page [title]="'Periods' | translate">
+          <ot-estate-rent-period-list [isEmbedded]="true" [masterId]="dataItem.EstateRentId" [masterObject]="dataItem"></ot-estate-rent-period-list>
+        </ot-tab-page>
+      </ot-tab-strip>
+    </ng-template>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-estate-rent-edit #editScreen screenName="ot-estate-rent-edit"></ot-estate-rent-edit>

@@ -1,0 +1,16 @@
+<ot-data-entry-template 
+  caption="{{ caption }}"
+  [showCaption]="showCaption"
+  [captionBS]="captionBS"
+  [captionWidth]="captionWidth"
+  [editorWidth]="editorWidth"
+  [editorBS]="editorBS"
+  [hasFormControl]="ngControl"
+  >
+  <ng-container editor>
+    <ng-template ngFor let-item let-index="index" [ngForOf]="items">
+        <input type="radio" class="k-radio" id="{{ optionName }}_{{ item[valueField] }}" [name]="optionName" [checked]="item[valueField] === choice" (click)="onOptionClick(item)" />
+        <label class="k-radio-label" for="{{ optionName }}_{{ item[valueField] }}">{{ item[textField] | translate }}</label>
+    </ng-template>
+  </ng-container>
+</ot-data-entry-template>

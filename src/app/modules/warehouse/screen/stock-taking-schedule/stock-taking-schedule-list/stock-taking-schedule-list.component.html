@@ -1,0 +1,92 @@
+﻿<ot-list-screen-container [header]="'StockTaking Schedule' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [filterable]="true" [filter]="listParams.filter"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="120" locked="true">
+      <ng-container *ngIf="createEnabled && !store">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <!-- <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button> -->
+          <ot-light-button *ngIf="updateEnabled" otTooltip="{{ 'Stock Taking Details' | translate }}" [routerLink]="['/Warehouse/StockTaking', dataItem.StockTakingScheduleId, store?'store':'head']" color="primary" icon="fas fa-ellipsis-h" ></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled && !store" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled && !store" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="ScheduleName" [title]="'Schedule Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">    
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeService.userStores"
+          valueField="StoreId"
+          textField="Name"
+          memberField="Store"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>  
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.userStores }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CountingType" [title]="'Counting Type' | translate" width="180">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="countingTypeService.completeList"
+              valueField="CountingTypeId"
+              textField="CountingTypeName"
+              memberField="CountingType"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.CountingType | getName:'CountingTypeId':'CountingTypeName':countingTypeService.completeList }}
+        </ng-template>
+    </kendo-grid-column>
+
+
+    <kendo-grid-column field="TakingUser" [title]="'Taking User' | translate" width="180">
+      <!--<ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.CountingType | getName:'CountingTypeId':'CountingTypeName':countingTypeService.completeList }}
+      </ng-template>-->
+  </kendo-grid-column>
+
+    <kendo-grid-column field="PlannedDate" [title]="'Planned Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.PlannedDate">{{dataItem.PlannedDate | date:('dd.MM.yyyy')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ActualDate" [title]="'Actual Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ActualDate">{{dataItem.ActualDate | date:('dd.MM.yyyy')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CountingStatus" [title]="'Counting Status' | translate" width="180">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="countingStatusService.completeList"
+              valueField="CountingStatusId"
+              textField="CountingStatusName"
+              memberField="CountingStatus"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.CountingStatus | getName:'CountingStatusId':'CountingStatusName':countingStatusService.completeList }}
+        </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-stock-taking-schedule-edit #editScreen screenName="ot-stock-taking-schedule-edit"></ot-stock-taking-schedule-edit>

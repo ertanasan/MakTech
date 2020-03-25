@@ -1,0 +1,62 @@
+﻿CREATE PROCEDURE [dbo].[RCL_LST_RECONCILIATIONS_SP]
+	@StoreID INT = NULL,
+	@TransactionDate DATETIME AS
+BEGIN
+ 
+	DECLARE @ZetCount INT;
+	DECLARE @Organization INT;
+
+
+    SELECT @Organization = dbo.SYS_GETCURRENTORGANIZATION_FN();
+    IF dbo.SYS_ISSYSTEMORGANIZATION_FN() = 1
+    BEGIN
+      SET @Organization = null;
+    END
+	SET @TransactionDate = CAST(@TransactionDate AS DATE)
+
+	SELECT @ZetCount = COUNT(1) 
+	FROM SLS_SALEZET Z 
+	WHERE Z.TRANSACTION_DT = @TransactionDate 
+		AND Z.STORE=@StoreID;
+
+  SELECT  
+		   R.RECONCILIATIONID,
+           R.EVENT,
+           R.ORGANIZATION,
+           R.DELETED_FL,
+           R.CREATE_DT,
+           R.UPDATE_DT,
+           R.CREATEUSER,
+           R.UPDATEUSER,
+           R.CREATECHANNEL,
+           R.CREATEBRANCH,
+           R.CREATESCREEN,
+           R.TRANSACTION_DT,
+           ST.STOREID STORE,
+           R.PREVIOUSDAYADVANCE_AMT,
+           R.SALETOTAL_AMT,
+           R.CASHTOTAL_AMT,
+           R.CARDTOTAL_AMT,
+           R.TOBANK_AMT,
+           R.DIFFERENCE_AMT,
+           R.DIFFERENCE_DSC,
+           R.COMPLETED_AMT,
+           R.EODADVANCE_AMT,
+		   ISNULL(r.RECONCILIATED_FL, 'N') RECONCILIATED_FL,
+		   ISNULL(r.APPROVED_FL, 'N') APPROVED_FL,
+		   @ZetCount ZET_CNT,
+		   u.USERFULL_NM,
+		   st.STORE_NM
+  FROM STR_STORE ST (NOLOCK)
+	  LEFT JOIN RCL_RECONCILIATION R (NOLOCK) ON ST.STOREID = R.STORE 
+			AND R.DELETED_FL = 'N'
+			AND R.TRANSACTION_DT = @TransactionDate
+	  LEFT JOIN SEC_USER U ON R.CREATEUSER = U.USERID 
+	  JOIN dbo.STR_GETUSERSTORES_FN() F ON ST.STOREID = F.STOREID
+     WHERE (@Organization IS NULL OR st.ORGANIZATION = @Organization)
+		AND ST.ACTIVE_FL = 'Y'
+					--AND st.STOREID = 1
+
+ORDER BY r.RECONCILIATED_FL DESC;
+
+END;

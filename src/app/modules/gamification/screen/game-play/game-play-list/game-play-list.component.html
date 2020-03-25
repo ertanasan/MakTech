@@ -1,0 +1,161 @@
+﻿<ot-list-screen-container [header]="gameCaption" [breadcrumbItems]="breadcrumbItems">
+
+  <div *ngIf="screenNo === 1">
+
+    <div class="mx-auto text-center mb-3">
+      <div class="card-body p-4">
+          <div *ngIf = "!gamer" class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input autocomplete="username" [readonly]="true" class="form-control" placeholder="Username" [value] = "contextInfo.User.Name" required="" type="text">
+          </div>
+          <div *ngIf = "gamer" class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input autocomplete="username" [readonly]="false" class="form-control" [(ngModel)] = "playerName" required="" type="text">
+          </div>
+          <div *ngIf = "!gamer" class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-organization"></i></span></div>
+              <input class="form-control" [readonly]="true" [value] = "contextInfo.Organization.Name" placeholder="Organization" required="" type="text">
+          </div>
+          <div *ngIf = "gamer" class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-organization"></i></span></div>
+              <kendo-dropdownlist [data]="branchService.completeList" 
+                [textField]="'Name'"
+                [valueField]="'BranchId'"
+                [(value)]="playerBranchId"> 
+              </kendo-dropdownlist>
+          </div>
+          <button class="btn btn-block btn-pill btn-warning btn-lg" type="button" (click)="onStart()">{{'Start' | translate}}</button>
+      </div>
+      
+      <div *ngIf = "dayChamps" class="card">
+        <div class="card-header"> <i class="fa fa-align-justify"></i> Gün Şampiyonları </div>
+        <div class="card-body">
+          <table class="table">
+            <thead><tr><th>Birim</th><th>Oyuncu</th><th>Skor</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let c of dayChamps.data">
+                <td>{{c.BranchName}}</td>
+                <td>{{c.PlayerName}}</td>
+                <td>{{c.MaxScore}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf = "monthChamps" class="card">
+        <div class="card-header"> <i class="fa fa-align-justify"></i> Ay Şampiyonları </div>
+        <div class="card-body">
+          <table class="table">
+            <thead><tr><th>Birim</th><th>Oyuncu</th><th>Skor</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let c of monthChamps.data">
+                <td>{{c.BranchName}}</td>
+                <td>{{c.PlayerName}}</td>
+                <td>{{c.MaxScore}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- <div class="card"><div class="card-header"> Gün Şampiyonları </div>
+        <div class="card-body"> 
+          <kendo-grid [data]="dayChamps" [height]="150" >
+            <kendo-grid-column field="BranchName" [title]="'Branch Name' | translate" width="100"> </kendo-grid-column>
+            <kendo-grid-column field="PlayerName" [title]="'Player Name' | translate" width="100"> </kendo-grid-column>
+            <kendo-grid-column field="MaxScore" [title]="'Max Score' | translate" width="80"> </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+      
+      <div class="card"><div class="card-header"> Ay Şampiyonları </div>
+        <div class="card-body"> 
+          <kendo-grid [data]="monthChamps" [height]="150" >
+            <kendo-grid-column field="BranchName" [title]="'Branch Name' | translate" width="100"> </kendo-grid-column>
+            <kendo-grid-column field="PlayerName" [title]="'Player Name' | translate" width="100"> </kendo-grid-column>
+            <kendo-grid-column field="MaxScore" [title]="'Max Score' | translate" width="80"> </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div> -->
+
+    </div>
+
+  </div>
+
+  <div *ngIf="screenNo === 2">
+
+    <div class="row">
+      <div class="col-6">
+        <ot-simple-widget [padding]="0" icon="bell" caption="Süre" text="{{gameTimer}}"></ot-simple-widget>
+      </div>
+      <div class="col-6">
+        <ot-simple-widget [padding]="0" color="danger" icon="star" caption="Skor" text="{{gameScore}}">
+        </ot-simple-widget>
+      </div>
+    </div>
+
+    <div class="card text-white bg-primary text-center">
+      <div class="card-body">
+        <blockquote class="card-bodyquote">
+          <p>{{questionList[levelQuestionNo].QuestionText}}</p>
+        </blockquote>
+      </div>
+    </div>
+
+    <button [ngClass]="class1" type="button" [disabled]="choice1disable" (click)="onSelected(choice1, 1)">{{choice1.ChoiceText}}</button>
+    <button [ngClass]="class2" type="button" [disabled]="choice2disable" (click)="onSelected(choice2, 2)">{{choice2.ChoiceText}}</button>
+    <button [ngClass]="class3" type="button" [disabled]="choice3disable" (click)="onSelected(choice3, 3)">{{choice3.ChoiceText}}</button>
+    <button [ngClass]="class4" type="button" [disabled]="choice4disable" (click)="onSelected(choice4, 4)">{{choice4.ChoiceText}}</button>
+
+    <div class="row mt-3 mb-1">
+      <div class="col-6">
+        <ot-simple-widget [padding]="0" icon="heart" color="danger" caption="Can"
+          text="{{gameErrorCount}}"></ot-simple-widget>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="screenNo === 3">
+    <div class="row mt-3 mb-1 insidevalue">
+      <div class="col-12">
+        <ot-simple-widget [padding]="0" icon="star" color="success" caption="Gün Sıranız"
+          text="{{dayRank}}" (click)="onScoreClicked(1)"></ot-simple-widget>
+      </div>
+    </div>
+    <div class="row mt-3 mb-1">
+      <div class="col-12">
+        <ot-simple-widget [padding]="0" icon="star" color="success" caption="Hafta Sıranız"
+          text="{{weekRank}}" (click)="onScoreClicked(2)"></ot-simple-widget>
+      </div>
+    </div>
+    <div class="row mt-3 mb-1">
+      <div class="col-12">
+        <ot-simple-widget [padding]="0" icon="star" color="success" caption="Ay Sıranız"
+          text="{{monthRank}}" (click)="onScoreClicked(3)"></ot-simple-widget>
+      </div>
+    </div>
+    <button class="btn btn-block btn-pill btn-primary btn-lg" type="button" (click)="onOK()">{{'OK' | translate}}</button>
+  </div>
+
+  <div *ngIf="screenNo === 4">
+      <kendo-grid [data]="rankList" [height]="350" >
+        <kendo-grid-column field="BranchName" [title]="'Branch Name' | translate" width="100"> </kendo-grid-column>
+        <kendo-grid-column field="PlayerName" [title]="'Player Name' | translate" width="100"> </kendo-grid-column>
+        <kendo-grid-column field="RowNumber" [title]="'Rank' | translate" width="50"> </kendo-grid-column>
+        <kendo-grid-column field="MaxScore" [title]="'Max Score' | translate" width="80"> </kendo-grid-column>
+        <kendo-grid-column field="GameCount" [title]="'Game Count' | translate" width="80"> </kendo-grid-column>
+        <kendo-grid-column field="QuestionCount" [title]="'Question Count' | translate" width="80"> </kendo-grid-column>
+        <kendo-grid-column field="AvgScore" [title]="'Avg Score' | translate" width="80"> </kendo-grid-column>
+        <kendo-grid-column field="MaxLevel" [title]="'Max Level' | translate" width="80"> </kendo-grid-column>
+      </kendo-grid>
+      <button class="mt-3 btn btn-block btn-pill btn-primary btn-lg" type="button" (click)="onBack()">{{'Back' | translate}}</button>
+
+  </div>
+</ot-list-screen-container>

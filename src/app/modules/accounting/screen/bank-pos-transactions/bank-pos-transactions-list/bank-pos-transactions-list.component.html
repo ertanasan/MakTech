@@ -1,0 +1,140 @@
+﻿<ot-list-screen-container [header]="'Bank Pos Transactions' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+      <table>
+          <tr>
+            <th class="col-md-5">
+              <kendo-datepicker [(value)]="selectedDay" format="dd.MM.yyyy" ></kendo-datepicker>
+            </th>
+            <th>
+              <kendo-combobox [data]="bankService.completeList" textField="BankName" valueField="BankId" [(value)] = "selectedBank" >
+              </kendo-combobox>
+                <!-- <ot-dropdown-entry [items]="bankService.completeList" textField="BankName" valueField="BankId" [(value)] = "selectedBank" 
+                usePrimitiveValue="true" [loading]="bankService.loading" class="col-md-6"></ot-dropdown-entry> -->
+            </th> 
+            <th>
+              <ot-button class="col-md-2" [caption]="'Filter' | translate" color="primary" size="sm" (click)="getDateList()"></ot-button>  
+            </th>               
+            <th>
+              <ot-button [caption]="'Load' | translate" color="primary" size="sm" (click)="fileInput.click()"> </ot-button>
+            </th>
+            <th>
+              <ot-button [caption]="'Delete' | translate" color="primary" size="sm" (click)="onDeleteDay()"> </ot-button>
+            </th>
+            <th>
+              <kendo-dropdownbutton [primary]="true" size="sm" [data]="settings" (itemClick)="onMikro($event)"> Mikro </kendo-dropdownbutton>
+              <!-- <ot-button [caption]="'Mikro' | translate" color="primary" size="sm" (click)="onMikro()"> </ot-button> -->
+            </th>
+          </tr>
+      </table>
+  </ng-container>
+  <kendo-grid [data]="posActiveList" [loading]="dataService.loading" [height]="615"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+    [kendoGridSelectBy]="'BankPosTransactionsId'" [selectable]="{checkboxOnly: true}" [selectedKeys]="checkedList"
+    (selectedKeysChange)="onSelectedKeysChange($event)"
+  >
+    <kendo-grid-checkbox-column showSelectAll="true" 
+    field="BankPosTransactionsId" 
+    width="50" filter="boolean">
+    </kendo-grid-checkbox-column>
+    <!-- <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true"> -->
+      <!-- <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'Load' | translate" icon="fa fa-plus fa-fw" (onClick)="fileInput.click()" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container> -->
+      <!-- <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container> -->
+    <!-- </kendo-grid-command-column> -->
+    <!-- <kendo-grid-column field="Bank" [title]="'Bank' | translate" width="180">      
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="bankService.completeList"
+          valueField="BankId"
+          textField="BankName"
+          memberField="Bank"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Bank | getName:'BankId':'BankName':bankService.completeList }}
+      </ng-template>
+    </kendo-grid-column> -->
+    <!-- <kendo-grid-column field="StoreRef" [title]="'StoreRef' | translate" width="120"></kendo-grid-column> -->
+    <kendo-grid-column field="PosRef" [title]="'PosRef' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="BlockedDate" [title]="'Blocked Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.BlockedDate">{{utilityService.toDate(dataItem.BlockedDate) | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ValueDate" [title]="'Value Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ValueDate">{{utilityService.toDate(dataItem.ValueDate) | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Quantity" [title]="'Quantity' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" 
+    field="CreditAmount" [title]="'Credit Amount' | translate" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.CreditAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="DebitAmount" [title]="'Debit Amount' | translate" width="100" filter="numeric" 
+    [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.DebitAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CommissionAmount" [title]="'Commission Amount' | translate" width="100" filter="numeric" 
+    [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.CommissionAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="StoreName" [title]="'Store Name' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="ReconciliationCardAmount" [title]="'Recon Card Amount' | translate" width="100" filter="numeric" 
+    [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ReconciliationCardAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ControlCode" [title]="'Control Status' | translate" width="120">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="controlStatusList"
+            valueField="value"
+            textField="text"
+            memberField="ControlCode"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.ControlCode | getName:'value':'text':controlStatusList }}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MikroTransferTime" [title]="'Mikro Transfer Time' | translate" width="120" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.MikroTransferTime">{{utilityService.toDate(dataItem.MikroTransferTime) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MikroStatusCode" [title]="'Mikro Status Code' | translate" width="60"></kendo-grid-column>
+    <kendo-grid-column field="MikroTransactionCode" [title]="'Mikro Transaction Code' | translate" width="100"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<input [hidden]="true" #fileInput type="file" accept=".xlsx,.csv" (change)="onFileSelected($event)" />
+<ot-bank-pos-transactions-edit #editScreen screenName="ot-bank-pos-transactions-edit"></ot-bank-pos-transactions-edit>
+
+<ot-custom-dialog #approveConfirm size="sm">
+  <p>{{localeDString}} Onaylıyor musunuz?</p>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'Cancel' | translate" (onClick)="approveConfirm.hide()"></ot-button>
+    <ot-button [caption]="'Confirm' | translate" color="primary" (onClick)="approveOnClicked()"></ot-button>
+  </ng-container>
+</ot-custom-dialog>

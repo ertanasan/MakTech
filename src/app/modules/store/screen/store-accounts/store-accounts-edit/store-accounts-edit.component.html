@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreAccountsId" [caption]="'Store Accounts Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry *ngIf = "storeVisible" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="AccountType" [caption]="'Account Type' | translate" [items]="storeAccountTypeService.completeList" textField="AccountTypeName" valueField="StoreAccountTypeId" usePrimitiveValue="true" class="col-12" [loading]="storeAccountTypeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Bank" [caption]="'Bank' | translate" [items]="bankService.completeList" textField="BankName" valueField="BankId" usePrimitiveValue="true" class="col-12" [loading]="bankService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="AccountText" [caption]="'Account Text' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="AccountDescription" [caption]="'Account Description' | translate" rows="3" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

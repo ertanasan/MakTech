@@ -1,0 +1,33 @@
+<ot-list-screen-container [header]="'Inbox Items' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="overStoreInboxItemService.activeList" [height]="560" [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" [sortable]="false" [sort]="listParams.sort" [filterable]="true"
+  [resizable]=true [selectable]="true" (selectionChange)="onSelection($event)"
+  [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event)" (dblclick)="onGridDoubleClick($event)" style="cursor: -webkit-grab; cursor: grab;">
+    <kendo-grid-command-column title="" [width]="70" locked="true" class="text-center">
+      <ng-container>
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'Refresh' | translate" (onClick)="refreshList()" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>        
+      <ng-container>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button color="primary" (onClick)="showReviewDialog(dataItem)" icon="fas fa-cogs"></ot-light-button>
+          <!-- <ot-light-button color="primary"><i class="fa fa-cogs"></i></ot-light-button> -->
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="InstanceReference" [title]="'Instance Reference' | translate" width="90"></kendo-grid-column>
+    <kendo-grid-column field="ActionStartDate" [title]="'Action Start Date' | translate" filter="date" editor="date" width="130">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ActionStartDate">{{ dataItem.ActionStartDate | date: 'dd.MM.yyyy  HH:mm'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProcessDefinitionName" [title]="'Process' | translate" width="130"></kendo-grid-column>
+    <kendo-grid-column field="ActivityName" [title]="'Activity' | translate" width="130"></kendo-grid-column>
+    <kendo-grid-column field="CreateUserName" [title]="'Creator Name' | translate" width="130"></kendo-grid-column>
+    <kendo-grid-column field="CreateBranchName" [title]="'Branch Name' | translate" width="130"></kendo-grid-column>
+    <kendo-grid-column field="CreateDepartmentName" [title]="'Department' | translate" width="130"></kendo-grid-column>
+    <kendo-grid-column field="Description" [title]="'Description' | translate" width="200"></kendo-grid-column>
+    <kendo-grid-column field="Priority" [title]="'Priority' | translate" width="130"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ng-template #reviewComponent></ng-template>

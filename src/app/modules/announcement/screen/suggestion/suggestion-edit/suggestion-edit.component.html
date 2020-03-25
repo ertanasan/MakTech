@@ -1,0 +1,16 @@
+﻿<ot-edit-screen-container #container size="lg" [childActions]="modeContext?modeContext.childActions:null">
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <ot-alpha-entry formControlName="SuggestionId" [caption]="'Suggestion Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+        <ot-dropdown-entry formControlName="CreateUser" [caption]="'Suggestion User' | translate" class="col-12" [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" [isReadOnly]="true"></ot-dropdown-entry>
+        <ot-alpha-entry *ngIf="suggestionRatingOnlyVisible || suggestionRatingEditable" formControlName="BranchName" [caption]="'Department' | translate" class="col-12" [isReadOnly]="true"></ot-alpha-entry>
+        <ot-text-entry formControlName="SuggestionText" [caption]="'Suggestion Text' | translate" rows="14" class="col-12" [isReadOnly]="!suggestionTextEditable"></ot-text-entry>
+        <!-- <ot-alpha-entry formControlName="ProcessInstance" [caption]="'Process Instance' | translate" class="col-12"></ot-alpha-entry> -->
+        <ot-dropdown-entry *ngIf="suggestionStatusVisible" formControlName="Status" [caption]="'Status' | translate" [items]="suggestionStatusService.completeList" textField="StatusName" valueField="SuggestionStatusId" usePrimitiveValue="true" class="col-12" [loading]="suggestionTypeService.loading" isReadOnly=true></ot-dropdown-entry>
+        <ot-text-entry *ngIf="suggestionPreviousCommentVisible" formControlName="PreviousActionComment" [caption]="previousActionCommentCaption | translate" rows="2" class="col-12" isReadOnly=true></ot-text-entry>
+        <ot-text-entry *ngIf="suggestionActionCommentEnable" formControlName="ActionComment" [caption]="'Comment' | translate" rows="2" class="col-12"></ot-text-entry>
+        <ot-dropdown-entry *ngIf="suggestionTypeEditable" formControlName="Type" [caption]="'Type' | translate" [items]="suggestionTypeService.completeList" textField="SuggestionTypeName" valueField="SuggestionTypeId" usePrimitiveValue="true" class="col-12" [loading]="suggestionTypeService.loading"></ot-dropdown-entry>
+        <ot-rating-entry *ngIf="suggestionRatingOnlyVisible || suggestionRatingEditable" formControlName="InnovativenessRating" [caption]="'Innovativeness Rating' | translate" class="col-12" [isReadOnly]="!suggestionRatingEditable"></ot-rating-entry>
+        <ot-rating-entry *ngIf="suggestionRatingOnlyVisible || suggestionRatingEditable" formControlName="FeasibilityRating" [caption]="'Feasibility Rating' | translate" class="col-12" [isReadOnly]="!suggestionRatingEditable"></ot-rating-entry>
+        <ot-rating-entry *ngIf="suggestionRatingOnlyVisible || suggestionRatingEditable" formControlName="AddedValueRating" [caption]="'Added Value Rating' | translate" class="col-12" [isReadOnly]="!suggestionRatingEditable"></ot-rating-entry>
+    </form>
+</ot-edit-screen-container>

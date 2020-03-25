@@ -1,0 +1,107 @@
+﻿<ot-list-screen-container [header]="'Price Label' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <ot-button color="primary" [caption]="'İşaretleri Kaldır' " (click)="selectedProducts.splice(0)"></ot-button>
+    <ot-button color="primary" [caption]="'Print Labels' | translate " (click)="showPrintDialog()"></ot-button>
+  </ng-container>
+  <div class="row">
+    <ot-panel class="col" caption="{{ 'Label Size' | translate }}">
+      <ot-radio-entry [(value)]="labelSize" optionName="printSize" [items]="[{value: 'Small', text: 'Küçük Etiket'}, {value: 'Large', text: 'Büyük Etiket'}]" [showCaption]="false" (valueChange)="selectedChange()"  #radio></ot-radio-entry>
+    </ot-panel>
+  </div>
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="500"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event)"
+    [selectable]="{enabled: true, checkboxOnly: true }"
+    [kendoGridSelectBy]="'ProductID'"
+    [selectedKeys]="selectedProducts"
+  >
+    <!-- <kendo-grid-checkbox-column title="Print"></kendo-grid-checkbox-column> -->
+    <kendo-grid-checkbox-column showSelectAll="true" field="ProductID" width="30" filter="boolean"></kendo-grid-checkbox-column>
+    <!-- <kendo-grid-column field="ProductID" [title]="'Product ID' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="Code" [title]="'Code' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Name' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="Barcode" [title]="'Barcode' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="TopPrice" [title]="'Top Price' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="Price" [title]="'Price' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="PriceChangeDate" [title]="'Price Cahange' | translate" width="80" filter="date" format='dd.MM.yyyy'></kendo-grid-column> -->
+    <kendo-grid-column field="PriceChangeDate" [title]="'Price Changed' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.PriceChangeDate">{{utilityService.toDate(dataItem.PriceChangeDate) | date:('dd.MM.yyyy hh:mm:ss')}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="Print" [title]="'Print' | translate" filter="boolean" width="80" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem> 
+            <ot-check-box [(value)]="dataItem.Print"></ot-check-box>
+          </ng-template>
+    </kendo-grid-column> -->
+  </kendo-grid>
+</ot-list-screen-container>
+
+<div #priceLabelPrint class="row" hidden="true">
+  <price-label-print *ngFor="let item of getSelectedProducts(); let i = index;" 
+    [productID]="item.ProductID"
+    [Code]="item.Code" 
+    [name]="item.Name" 
+    [saleVAT]="item.SaleVAT" 
+    [unitName]="item.UnitName"
+    [barcodeType]="item.BarcodeType"
+    [barcode]="item.Barcode"
+    [privateLabel]="item.PrivateLabel"
+    [eTrade]="item.eTrade"
+    [shortName]="item.ShortName"
+    [domestic]="item.Domestic"
+    [country]="item.Country"
+    [content]="item.Content"
+    [warning]="item.Warning"
+    [storageCondition]="item.StorageCondition"
+    [expiresIn]="item.ExpiresIn"
+    [shelfLife]="item.ShelfLife"
+    [price]="item.Price"
+    [topPrice]="item.TopPrice"
+    [priceChangeDate]="item.PriceChangeDate"
+    [isLastLabel]="selectedProducts && (i + 1) === selectedProducts.length"
+    [campaign]="item.Campaign"
+    [unitPrice]="item.UnitPrice"
+    [weightUnitName]="item.WeightUnitName"
+    [package]="item.Package"
+    [imageContent]="item.ImageContent"
+    [imageFileName]="item.ImageFileName"
+    class="col-12 mx-auto">
+  </price-label-print>    
+</div>
+
+
+<div #priceLabelBigPrint class="row" hidden="true">
+  <price-label-print-big *ngFor="let item of getSelectedProducts(); let i = index;"
+    [productID]="item.ProductID"
+    [Code]="item.Code" 
+    [name]="item.Name" 
+    [saleVAT]="item.SaleVAT" 
+    [unitName]="item.UnitName"
+    [barcodeType]="item.BarcodeType"
+    [barcode]="item.Barcode"
+    [privateLabel]="item.PrivateLabel"
+    [eTrade]="item.eTrade"
+    [shortName]="item.ShortName"
+    [domestic]="item.Domestic"
+    [country]="item.Country"
+    [content]="item.Content"
+    [warning]="item.Warning"
+    [storageCondition]="item.StorageCondition"
+    [expiresIn]="item.ExpiresIn"
+    [shelfLife]="item.ShelfLife"
+    [price]="item.Price"
+    [topPrice]="item.TopPrice"
+    [priceChangeDate]="item.PriceChangeDate"
+    [isLastLabel]="selectedProducts && (i + 1) === selectedProducts.length"
+    [campaign]="item.Campaign"
+    [unitPrice]="item.UnitPrice"
+    [weightUnitName]="item.WeightUnitName"
+    [package]="item.Package"
+    [imageContent]="item.ImageContent"
+    [imageFileName]="item.ImageFileName"
+    [productInfoUrl]="item.ProductInfoUrl"
+    class="col-12 mx-auto">
+  </price-label-print-big>    
+</div>

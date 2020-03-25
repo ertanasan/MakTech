@@ -1,0 +1,37 @@
+.insidevalue
+{
+    cursor: pointer;
+}
+
+.k-grid tr.highlyCritical {
+    background-color: red;
+}
+
+.k-grid tr.slightlyCritical {
+    background-color: yellow;
+}
+
+.chartLoadingContainer {
+    text-align: center;
+    min-height: 400px;
+}
+
+.chartLoadingIcon {
+    font-size: 100px;
+    color: gray;
+    vertical-align: middle;
+}
+
+.parent-container {
+    /*overflow-y: scroll; */
+    width: 100%;
+}
+
+.chart-container {
+    overflow: auto; 
+    width: inherit;
+}
+
+.badge {
+    background-color: gray;
+}

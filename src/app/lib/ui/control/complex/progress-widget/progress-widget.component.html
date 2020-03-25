@@ -1,0 +1,41 @@
+<!-- <div class="card">
+  <div class="card-body" [ngClass]="getCardClasses()">
+    <div class="text-value">{{ progressPercent }}</div>
+    <div>{{ title }}</div>
+    <div class="progress progress-xs my-2">
+    <div class="progress-bar" [ngClass]="getProgressClasses()" role="progressbar" [style.width.%]="calculatePercent()"></div>
+    </div>
+    <small class="text-muted">{{ description }}</small>
+  </div>
+</div> -->
+
+<kt-portlet class="kt-portlet--border-bottom-{{ color }}">
+  <kt-portlet-body>
+    <div class="kt-widget24">
+      <div class="kt-widget24__details">
+          <div class="kt-widget24__info">
+              <h4 class="kt-widget24__title kt-font-{{ coloredTitle ? color : '' }}">
+                {{ title }}
+              </h4>
+              <h4 *ngIf="hasAlternativeTitle()" class="kt-widget24__title kt-font-{{ coloredTitleAlternative ? color : '' }}">
+                {{ titleAlternative }}
+              </h4>
+              <span class="kt-widget24__desc">
+                  {{ description }}
+              </span>
+          </div>
+          <span class="kt-widget24__stats kt-font-{{ color }}">
+            {{ progressPercent }}
+          </span>
+      </div>
+      <div class="progress progress--sm">
+        <div class="progress-bar kt-bg-{{ color }}" role="progressbar" [style.width.%]="calculatePercent()"></div>
+      </div>
+      <div class="kt-widget24__action">
+        <span class="kt-widget24__change">
+          
+        </span>
+      </div>
+  </div>
+  </kt-portlet-body>
+</kt-portlet>

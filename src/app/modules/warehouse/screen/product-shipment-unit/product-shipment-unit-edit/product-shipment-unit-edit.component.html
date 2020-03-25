@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ProductShipmentUnitId" [caption]="'Product Shipment Unit Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="ShipmentType" [caption]="'Shipment Type' | translate" [items]="shipmentTypeService.completeList" textField="ShipmentTypeName" valueField="ShipmentTypeId" usePrimitiveValue="true" class="col-12" [loading]="shipmentTypeService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="PackageQuantity" [caption]="'Package Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="PackageType" [caption]="'Package Type' | translate" [items]="shipmentPackageTypeService.completeList" textField="PackageTypeName" valueField="ShipmentPackageTypeId" usePrimitiveValue="true" class="col-12" [loading]="shipmentPackageTypeService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="WarehouseLocation" [caption]="'Warehouse Location' | translate" class="col-12"></ot-alpha-entry> -->
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,15 @@
+﻿-- Created by OverGenerator
+/*Section="Main"*/
+CREATE PROCEDURE WHS_LST_TRANSFERPRODUCTSTATUS_SP
+AS
+BEGIN
+    /*Section="Query"*/
+    -- Select all
+    SELECT
+           T.TRANSFERPRODUCTSTATUSID,
+           T.PRODUCTSTATUS_NM
+      FROM WHS_TRANSFERPRODUCTSTATUS T (NOLOCK)
+     ORDER BY TRANSFERPRODUCTSTATUSID;
+
+/*Section="End"*/
+END;

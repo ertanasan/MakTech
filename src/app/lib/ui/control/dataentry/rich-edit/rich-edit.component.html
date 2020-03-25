@@ -1,0 +1,14 @@
+<ot-data-entry-template
+  caption="{{ caption }}"
+  [showCaption]="showCaption"
+  [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth" 
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <ckeditor
+    #editor
+    [editor]="Editor"
+    [(ngModel)]="value"
+  ></ckeditor>
+</ot-data-entry-template>

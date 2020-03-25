@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="AttributeChoiceId" [caption]="'Attribute Choice Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry formControlName="Attribute" [caption]="'Attribute' | translate" [items]="container.MasterId ? [container.MasterObject] : requestAttributeService.completeList"
+      [isReadOnly]="container.MasterId" textField="AttributeName" valueField="RequestAttributeId" usePrimitiveValue="true" class="col-12" [loading]="requestAttributeService.loading"></ot-dropdown-entry> -->
+    <ot-alpha-entry formControlName="ChoiceName" [caption]="'Choice Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="DisplayOrder" [caption]="'Display Order' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PriorityPoint" [caption]="'Priority' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

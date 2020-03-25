@@ -1,0 +1,81 @@
+
+<ot-list-screen-container [header]="'Current Stock' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded" [hasCustomHeader]="true" >
+  <ng-container header-items>
+      <div class="ml-md-auto col-md-4 mx-xs-auto col-sm-12">
+          <ot-dropdown-entry [items]="storeList" textField="Name" valueField="StoreId" 
+          usePrimitiveValue="true" [loading]="storeListLoading" [(value)]="selectedStoreId" 
+          (valueChange)="onStoreChange($event)" ></ot-dropdown-entry>
+      </div>
+  </ng-container>
+
+  <ot-panel [caption]="getProductCaption()">
+    <kendo-grid [data]="productDataActiveList" [loading]="productDataLoading" [height]="400"
+      [pageable]="false" [pageSize]="1000" [sortable]="true" [sort]="lpProductData.sort" 
+      [filterable]="true" [filter]="lpProductData.filter" (dataStateChange)="handleStateChange($event, 1)" 
+      [navigable]="true" [selectable]="selectableSettings" [kendoGridSelectBy]="'PRODUCTID'"
+      [selectedKeys]="productSelection" (selectedKeysChange)="onSelectedKeysChange($event)">
+      <kendo-grid-checkbox-column width="60">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-checkbox-column>
+      <kendo-grid-column field="CATEGORY_NM" [title]="'Kategori'" width="120"></kendo-grid-column>
+      <kendo-grid-column field="PRODUCT_NM" [title]="'Ürün Adı'" width="150"></kendo-grid-column>
+      <kendo-grid-column field="COUNTING_DT"  [title]="'Sayım Günü'" width="90" filter="date">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.COUNTING_DT | date:'dd.MM.yyyy'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="COUNTINGVALUE_AMT" [title]="'Sayım Miktar'" width="120" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.COUNTINGVALUE_AMT | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STOCK"  [title]="'Stok'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      
+      <kendo-grid-excel [fileName]="getProductFileName()"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <ot-panel *ngIf="tranData" [caption]="getStoreCaption()">
+    <kendo-grid [data]="tranDataActiveList" [loading]="tranDataLoading" [height]="400"
+      [pageable]="false" [pageSize]="1000" [sortable]="true" [sort]="lpTranData.sort" 
+      [filterable]="true" [filter]="lpTranData.filter" (dataStateChange)="handleStateChange($event, 2)" 
+      [navigable]="true" >
+      <kendo-grid-command-column width="40"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+      <kendo-grid-column field="TRANSACTION_DT" [title]="'Tarih'" width="80" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.TRANSACTION_DT | date:'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TRANSACTIONTYPE_NM" [title]="'İşlem Tipi'" width="150"></kendo-grid-column>
+      <kendo-grid-column field="QUANTITY_QTY" [title]="'İşlem'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.QUANTITY_QTY | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STOCK"  [title]="'Stok'" width="90" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DRILLCOUNT_AMT"  [title]="'Sondaj Sayım'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.DRILLCOUNT_AMT | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-excel [fileName]="getStoreFileName()"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+    
+
+</ot-list-screen-container>
+

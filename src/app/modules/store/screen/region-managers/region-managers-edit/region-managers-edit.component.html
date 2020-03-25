@@ -1,0 +1,11 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="RegionManagersId" [caption]="'Region Managers Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="RegionManagerName" [caption]="'Region Manager Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="TelNo" [caption]="'TelNo' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Email" [caption]="'Email' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="RegionUser" [caption]="'Region User' | translate" [items]="userService.completeList" textField="Name" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="ExpenseAccountCode" [caption]="'Expense Account Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MikroProjectCode" [caption]="'Mikro Project Code' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

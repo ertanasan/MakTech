@@ -1,0 +1,36 @@
+<div class="row text-center">
+  <!-- <div id="dummyParagraphContainer" class="col-md-12 col-lg-6 offset-lg-3"> -->
+  <!-- <div #dummyParagraphContainer class="col-md-12 col-lg-6 offset-lg-3">
+    <p class="ssArea"></p>
+  </div> -->
+  <div [hidden]="cameraStatus !== 1" class="col-md-12 col-lg-6 offset-lg-3">
+    <video #video autoplay playsinline [height]="photoArea.height" class="screenShot"></video>
+    <br>
+    <div class="text-center">
+      <ot-button  color="primary"(click)="capture()" size="lg" shape="pill" icon="fa fa-camera"></ot-button>
+    </div>
+  </div>
+  <div [hidden]="cameraStatus !== 2" class="col-md-12">
+    <div class="row justify-content-lg-center">
+      <div class="col-md-12 col-lg-6">
+        <canvas #canvas id="canvas" [height]="photoArea.height" class="screenShot ssArea"></canvas>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-lg-center">
+      <div class="col-md-12 col-lg-6 text center">
+        <ot-dropdown-entry [caption]="'Cash Register' | translate" [(value)]="selectedCashRegisterId" [items]="cashRegisterService.activeList.data" 
+                          textField="StoreCashRegisterId" valueField="StoreCashRegisterId" usePrimitiveValue="true" [loading]="cashRegisterService.loading"
+                          editorWidth=9 captionWidth=3>
+        </ot-dropdown-entry>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-lg-center">
+      <div class="col-md-12 col-lg-6 text-center">
+        <ot-button caption="{{'Retake' | translate}}" color="secondary" icon="fa fa-refresh" (onClick)="openCamera()"></ot-button>   
+        <ot-button caption="{{'Upload' | translate}}" color="success" icon="fa fa-upload" (onClick)="uploadPhoto()" [disabled]="!selectedCashRegisterId"></ot-button>
+      </div>
+    </div>
+  </div>
+</div>

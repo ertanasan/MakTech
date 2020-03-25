@@ -1,0 +1,27 @@
+﻿<ot-list-screen-container [header]="'Game Play Answer' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="Play" [title]="'Play' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="Question" [title]="'Question' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="AnswerChoice" [title]="'Answer Choice' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="ResultFlag" [title]="'Result Flag' | translate" width="108" filter="boolean"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-game-play-answer-edit #editScreen screenName="ot-game-play-answer-edit"></ot-game-play-answer-edit>

@@ -1,0 +1,40 @@
+﻿<ot-edit-screen-container [size] = "'xl'" #container [childActions]="modeContext?modeContext.childActions:null">
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="HelpdeskRequestId" [caption]="'Helpdesk Request Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores"
+      textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading" [isReadOnly]="container.actionName==='Review'">
+    </ot-dropdown-entry>
+    <ot-masked-entry formControlName="ContactPhoneNumber" [caption]="'Phone Number' | translate" class="col-12" [mask]="mask"></ot-masked-entry>
+    <ot-dropdown-entry formControlName="RequestGroup" [caption]="'Request Group' | translate" [items]="reqGroupList"
+      textField="RequestGroupName" valueField="RequestGroupId" usePrimitiveValue="true" class="col-12" [loading]="requestGroupService.loading"
+      (valueChange) = "onReqGroupChange($event)" [isReadOnly]="container.actionName==='Review'">
+    </ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="RequestDefinition" [caption]="'Request Definition' | translate" [items]="reqDefList"
+      textField="RequestDefinitionName" valueField="RequestDefinitionId" usePrimitiveValue="true" class="col-12"
+      (valueChange) = "onReqDefChange($event)" [isReadOnly]="container.actionName==='Review'">
+    </ot-dropdown-entry>
+    <div *ngIf="InfoList" class="col-12">
+      <!-- <div> {{InfoList | json}}</div> -->
+      <div *ngFor="let info of InfoList"  >
+        <ot-alpha-entry *ngIf="info.type === 1" [formControlName]="info.control" [caption]="info.text" [isReadOnly]="container.actionName==='Review'"></ot-alpha-entry>  
+        <ot-numeric-entry *ngIf="info.type === 2" [formControlName]="info.control" [caption]="info.text" [isReadOnly]="container.actionName==='Review'"></ot-numeric-entry>  
+        <ot-dropdown-entry *ngIf="info.type === 3" [formControlName]="info.control" [caption]="info.text" [items]="info.dropdownlist"
+          textField="ChoiceName" valueField="AttributeChoiceId" usePrimitiveValue="true" [isReadOnly]="container.actionName==='Review'">
+        </ot-dropdown-entry>
+        <ot-date-entry *ngIf="info.type === 4" [formControlName]="info.control" [caption]="info.text"  format="dd.MM.yyyy" [isReadOnly]="container.actionName==='Review'"></ot-date-entry>  
+        <ot-dropdown-entry *ngIf="info.type === 5" [formControlName]="info.control" [caption]="info.text" [items]="scaleService.userScale"
+          textField="ScaleLongName" valueField="StoreScalesId" usePrimitiveValue="true" [isReadOnly]="container.actionName==='Review'">
+        </ot-dropdown-entry>
+        <ot-dropdown-entry *ngIf="info.type === 6" [formControlName]="info.control" [caption]="info.text" [items]="cashregisterService.userCashRegister"
+          textField="CashRegisterLongName" valueField="StoreCashRegisterId" usePrimitiveValue="true" [isReadOnly]="container.actionName==='Review'">
+        </ot-dropdown-entry>
+        <ot-dropdown-entry *ngIf="info.type === 7" [formControlName]="info.control" [caption]="info.text" [items]="fixtureService.userFixture"
+          textField="FixtureLongName" valueField="StoreFixtureId" usePrimitiveValue="true" [isReadOnly]="container.actionName==='Review'">
+        </ot-dropdown-entry>
+      </div>
+    </div>
+    <ot-text-entry formControlName="RequestDescription" [caption]="'Request Description' | translate" rows="3" class="col-12" [isReadOnly]="container.actionName==='Review'"></ot-text-entry>
+    <ot-text-entry *ngIf="modeContext" formControlName="actionComment" caption="Action Comment" rows=3 class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

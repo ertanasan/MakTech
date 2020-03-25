@@ -1,0 +1,105 @@
+﻿<ot-edit-screen-container #container [size]="'lg'"> 
+  <form *ngIf="toUpdate" #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreReconciliationId" [caption]="'Store Reconciliation Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+    <!-- <ot-date-entry formControlName="ReconciliationDate" [caption]="'Reconciliation Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry> -->
+    <!-- <ot-numeric-entry formControlName="ZetAmount" [caption]="'Zet Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="DefinedAdvance" [caption]="'Defined Advance' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="ExpenseAmount" [caption]="'Expense Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-numeric-entry formControlName="CashAmount" [caption]="'Cash Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CardAmount" [caption]="'Card Amount' | translate" class="col-12"></ot-numeric-entry>
+    <!-- <ot-numeric-entry formControlName="RecoveredAmount" [caption]="'Recovered Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-numeric-entry formControlName="AdjustmentAmount" [caption]="'Adjustment Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry formControlName="AdjustmentReason" [caption]="'Adjustment Reason' | translate" class="col-12"></ot-text-entry>
+    <!-- <ot-numeric-entry formControlName="NetoffAmount" [caption]="'Netoff Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="BankAmount" [caption]="'Bank Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="CurrentAdvance" [caption]="'Current Advance' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="ExpenseReturn" [caption]="'Expense Return' | translate" class="col-12"></ot-numeric-entry> -->
+  </form>
+  <div *ngIf="toRead">
+      <kendo-grid [data]="cashDist" [height]="300">
+          <kendo-grid-column field="BanknoteAmount" [title]="'Banknot / Madeni Para'" width="180" >
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.BanknoteAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Quantity1" [title]="'Sayılan'" width="70" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.Quantity1 | number:'1.0-0':'tr'}}
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Quantity2" [title]="'Banka'" width="70" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.Quantity2 | number:'1.0-0':'tr'}}
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Quantity3" [title]="'Kalan'" width="70" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.Quantity3 | number:'1.0-0':'tr'}}
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Amount1" [title]="'Sayılan'" width="90" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.Amount1 | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+              <ng-template *ngIf="totals" kendoGridFooterTemplate let-column="column"> {{totals[0] | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Amount2" [title]="'Banka'" width="90" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.Amount2 | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+              <ng-template *ngIf="totals" kendoGridFooterTemplate let-column="column"> {{totals[1] | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Amount3" [title]="'Kalan'" width="90" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.Amount3 | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+              <ng-template *ngIf="totals" kendoGridFooterTemplate let-column="column"> {{totals[2] | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+          </kendo-grid-column>
+      </kendo-grid>
+
+      <kendo-grid class="mt-3" [data]="cardDist" [height]="200">
+          <kendo-grid-column field="CardGroupName" [title]="'Pos Cihazları'" width="180" > </kendo-grid-column>
+          <kendo-grid-column field="CardZetAmount" [title]="'Tutar'" width="180" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.CardZetAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+              <!-- <ng-template kendoGridFooterTemplate let-column="column"> {{rec.CardAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template> -->
+          </kendo-grid-column>
+      </kendo-grid>
+
+      <kendo-grid class="mt-3" [data]="recLog" [height]="150">
+        <kendo-grid-column field="LogDate" [title]="'Log Date' | translate" width="100" filter="date">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.LogDate">{{dataItem.LogDate | date:'dd.MM.yyyy HH:mm:ss'}}</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="LogUserName" [title]="'Log User Name' | translate" width="150" > </kendo-grid-column>
+        <kendo-grid-column field="StepText" [title]="'Step'| translate " width="180" > </kendo-grid-column>
+      </kendo-grid>
+
+      <kendo-grid class="mt-3" [data]="cancelReasons" [height]="150">
+            <kendo-grid-column field="SaleCashRegister" [title]="'Kasa Kodu'" width="80" ></kendo-grid-column>
+            <kendo-grid-column field="ProductName" [title]="'Ürün Adı'" width="150" ></kendo-grid-column>
+            <kendo-grid-column field="SaleTransactionTime" [title]="'İşlem Zamanı'" width="120" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.SaleTransactionTime | date:'dd.MM.yyyy HH:mm'}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Price" [title]="'İşlem Tutarı'" width="120" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.Price | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CashierName" [title]="'Kasiyer Adı'" width="100" ></kendo-grid-column>
+            <kendo-grid-column field="ReasonText" [title]="'Açıklama'" width="200" ></kendo-grid-column>
+      </kendo-grid>
+  </div>
+  <form *ngIf="toDelete" #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <!-- <ot-alpha-entry formControlName="StoreReconciliationId" [caption]="'Store Reconciliation Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry> -->
+    <p>Mutabakat silinecektir, Onaylıyor musunuz?</p>
+  </form>
+  <!-- <div *ngIf="toViewNotReconStores">
+
+  </div> -->
+</ot-edit-screen-container>

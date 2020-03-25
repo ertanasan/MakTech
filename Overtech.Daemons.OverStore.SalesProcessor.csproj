@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{57CC6F67-5474-4741-B88D-1528CA320EBE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Overtech.Daemons.OverStore.SalesProcessor</RootNamespace>
+    <AssemblyName>Overtech.Daemons.OverStore.SalesProcessor</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\CommonServiceLocator.2.0.4\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=4.63.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\CompareNETObjects.4.63.0\lib\net47\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Owin.Security.Cookies.4.0.0\lib\net451\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Owin.Security.OAuth.4.0.0\lib\net451\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.18.3, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Oracle.ManagedDataAccess.18.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.1.0.0\lib\Overtech.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Application.1.0.0\lib\Overtech.Core.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Cache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Cache.1.0.0\lib\Overtech.Core.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Compression, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Compression.1.0.0\lib\Overtech.Core.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Contract.1.0.0\lib\Overtech.Core.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Crypto, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Crypto.1.0.0\lib\Overtech.Core.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Daemon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Daemon.1.0.0\lib\Overtech.Core.Daemon.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Data.1.0.0\lib\Overtech.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Data.QueryBuilder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Data.QueryBuilder.1.0.0\lib\Overtech.Core.Data.QueryBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.DependencyInjection.1.0.0\lib\Overtech.Core.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Jwt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Jwt.1.0.0\lib\Overtech.Core.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Logger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Logger.1.0.0\lib\Overtech.Core.Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Serialization.1.0.0\lib\Overtech.Core.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Session, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Session.1.0.0\lib\Overtech.Core.Session.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Threading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Core.Threading.1.0.0\lib\Overtech.Core.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Document, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Document.1.0.0\lib\Overtech.DataModels.Document.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Organization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Organization.1.0.0\lib\Overtech.DataModels.Organization.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Parameter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Parameter.1.0.0\lib\Overtech.DataModels.Parameter.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Program, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Program.1.0.0\lib\Overtech.DataModels.Program.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Reporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Reporting.1.0.0\lib\Overtech.DataModels.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.DataModels.Security, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.DataModels.Security.1.0.0\lib\Overtech.DataModels.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Mutual.DocumentManagement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Mutual.DocumentManagement.1.0.0\lib\Overtech.Mutual.DocumentManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Mutual.Parameter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Mutual.Parameter.1.0.0\lib\Overtech.Mutual.Parameter.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.1.0.0\lib\Overtech.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.Authorization.1.0.0\lib\Overtech.Service.Authorization.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.Authorization.Mvc.1.0.0\lib\Overtech.Service.Authorization.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Data.Uni, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.Data.Uni.1.0.0\lib\Overtech.Service.Data.Uni.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Identity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.Identity.1.0.0\lib\Overtech.Service.Identity.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Service.Security.1.0.0\lib\Overtech.Service.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.ServiceContracts.Parameter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.ServiceContracts.Parameter.1.0.0\lib\Overtech.ServiceContracts.Parameter.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.ServiceContracts.Program, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.ServiceContracts.Program.1.0.0\lib\Overtech.ServiceContracts.Program.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.ServiceContracts.Reporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.ServiceContracts.Reporting.1.0.0\lib\Overtech.ServiceContracts.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.ServiceContracts.Security, Version=1.0.0.0, Culture=neutral, PublicKeyToken=45a760003f79edf2, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.ServiceContracts.Security.1.0.0\lib\Overtech.ServiceContracts.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Shared.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Shared.Configuration.1.0.0\lib\Overtech.Shared.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Shared.Parameter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Shared.Parameter.1.0.0\lib\Overtech.Shared.Parameter.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Shared.Reporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.Shared.Reporting.1.0.0\lib\Overtech.Shared.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.UI.Data.Annotations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Overtech.UI.Data.Annotations.1.0.0\lib\Overtech.UI.Data.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.4.2.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\RestSharp.106.4.2\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.2.6.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\StackExchange.Redis.StrongName.1.2.6\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Configuration.ConfigurationManager.4.5.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.HashFunction.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Data.HashFunction.Core.2.0.0\lib\net45\System.Data.HashFunction.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Interfaces, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Data.HashFunction.Interfaces.2.0.0\lib\net45\System.Data.HashFunction.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.xxHash, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Data.HashFunction.xxHash.2.0.0\lib\net45\System.Data.HashFunction.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.AccessControl, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Security.AccessControl.4.5.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Security.Permissions.4.5.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.Security.Principal.Windows.4.5.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebApi.WebHost.5.2.6\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.Mvc.5.2.6\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.Razor.3.2.6\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=3.3.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\Solution\packages\Unity.5.8.11\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.2.5.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.8.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.5.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.1.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mvc5, Version=1.3.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.Mvc5.1.3.0\lib\net45\Unity.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.1.9.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ServiceLocation, Version=2.1.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.5.8.11\lib\net47\Unity.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.WebApi, Version=5.3.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\Unity.WebAPI.5.3.0\lib\net45\Unity.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Solutions\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ServiceMain.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ServiceMain.Designer.cs">
+      <DependentUpon>ServiceMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesProcessorUnityConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Overtech.Core.OverStore\Overtech.Core.OverStore.csproj">
+      <Project>{e5ae11ec-3484-401a-8d8c-3804fc63fafb}</Project>
+      <Name>Overtech.Core.OverStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.StoreUpload\Overtech.DataModels.StoreUpload.csproj">
+      <Project>{07150556-ccc8-4678-a1de-6a053e0b9252}</Project>
+      <Name>Overtech.DataModels.StoreUpload</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Store\Overtech.DataModels.Store.csproj">
+      <Project>{5f56db2f-91b6-4d44-8f66-1160a616bc02}</Project>
+      <Name>Overtech.DataModels.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.StoreUpload\Overtech.ServiceContracts.StoreUpload.csproj">
+      <Project>{959e9f23-d57b-47ae-842d-5980e3c55e58}</Project>
+      <Name>Overtech.ServiceContracts.StoreUpload</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.Store\Overtech.ServiceContracts.Store.csproj">
+      <Project>{e7cd09f1-3db3-443b-887e-57f5a5131e75}</Project>
+      <Name>Overtech.ServiceContracts.Store</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\Overtech.Shared.Daemon.OverStore\Overtech.Shared.Daemon.OverStore.csproj">
+      <Project>{d3fef9bb-2107-49d7-92bb-a6a673ed63fd}</Project>
+      <Name>Overtech.Shared.Daemon.OverStore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

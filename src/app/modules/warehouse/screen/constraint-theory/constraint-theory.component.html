@@ -1,0 +1,213 @@
+<div class="row">
+  <ol class="col-12 breadcrumb">
+    <h4 class="ml-3">Kısıtlar Teorisi Simulasyon</h4>
+  </ol>
+</div>
+
+<div class="container">
+    <ot-list-screen-container [header]="'Simulasyon Parametreleri'">
+        <ng-container header-items>
+            <table>
+              <tr>
+                <th><ot-button [caption]="'Filter' | translate" color="primary" size="sm" (click)="onFilter()"></ot-button></th>
+              </tr>
+            </table>
+        </ng-container>
+      <div class="row">
+        <ot-dropdown-entry 
+        [(value)]="storeId" 
+        (valueChange)="onStoreValueChange($event)"
+        [caption]="'Store' | translate" 
+        [items]="storeService.completeList" 
+        textField="Name" 
+        valueField="StoreId" 
+        usePrimitiveValue="true" 
+        class="col-md-6" 
+        [loading]="storeService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry 
+        [(value)]="productId" 
+        (valueChange)="onProductValueChange($event)"
+        [caption]="'Product' | translate" 
+        [items]="productService.completeList" 
+        textField="Name" 
+        valueField="ProductId" 
+        usePrimitiveValue="true" 
+        class="col-md-6" 
+        [loading]="productService.loading"></ot-dropdown-entry>
+      </div>
+      <div class="row">
+        <ot-date-entry [(value)]="startDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+        <ot-date-entry [(value)]="endDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+      </div>
+      <div class="row">
+        <ot-numeric-entry [(value)]="startBuffer" [caption]="'Başlangıç Tampon'" class="col-md-6"></ot-numeric-entry>
+        <ot-numeric-entry [(value)]="shipmentUnit" [caption]="'Birim Sevk Miktarı'" class="col-md-6"></ot-numeric-entry>
+      </div>
+      <div class="row">
+        <ot-numeric-entry [(value)]="greenCycle" [caption]="'Yeşilde Geçen Süre'" class="col-md-6"></ot-numeric-entry>
+        <ot-numeric-entry [(value)]="bufferBandwith" [caption]="'Tampon Aralık Yüzdesi'" class="col-md-6"></ot-numeric-entry>
+      </div>
+      <div class="row">
+        <ot-switch-entry [(value)]="ceiling" [caption]="'Üste Yuvarla'" class="col-md-6"></ot-switch-entry>
+      </div>
+    </ot-list-screen-container>
+  
+  <ot-panel [caption]="'Özet Sonuçlar'">
+      <kendo-grid class="no-header" [data]="summaryResult" [loading]="resultDataLoading" [height]="400"
+        [pageable]="false" [pageSize]="1000" [sortable]="false" [navigable]="true">
+        <kendo-grid-column field="Measure" [title]="''" width="150"
+        [style]="{'background-color': '#888','color': '#fff'}"></kendo-grid-column>
+        <kendo-grid-column field="Value"  [title]="'Değer'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.Value | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+  </ot-panel>
+
+  <ot-panel *ngIf="resultData" [caption]="'Stok Satış Değişimi'">
+      <kendo-chart [seriesColors]="chartColors" >
+          <kendo-chart-area [margin]="0" [height]="200"> </kendo-chart-area>
+          <kendo-chart-legend position="top"></kendo-chart-legend>
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="resultData.TRANSACTIONDATE" baseUnit="fit" maxDateGroups="30" type="date"  >
+              </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line" [data]="resultData" field="SALE" categoryField="TRANSACTIONDATE">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-dataItem="dataItem">
+                  {{ dataItem.SALE | number:'1.2-2':'tr'}} 
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+            <kendo-chart-series-item type="line" [data]="resultData" field="STOCK" categoryField="TRANSACTIONDATE">
+                <kendo-chart-series-item-tooltip>
+                  <ng-template let-dataItem="dataItem">
+                    {{ dataItem.STOCK | number:'1.2-2':'tr'}} 
+                  </ng-template>
+                </kendo-chart-series-item-tooltip>
+              </kendo-chart-series-item>
+          </kendo-chart-series>            
+        </kendo-chart>
+  </ot-panel>
+
+  <ot-panel [caption]="'Sonuçlar Liste'">
+    <kendo-grid [data]="resultDataActiveList" [loading]="resultDataLoading" [height]="400"
+      [pageable]="false" [pageSize]="1000" [sortable]="true" [sort]="listParams.sort" 
+      [filterable]="false" (dataStateChange)="handleStateChange($event, 1)" 
+      [navigable]="true">
+      <kendo-grid-command-column width="60"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+      <kendo-grid-column field="ROWNO" [title]="'No'" width="80"></kendo-grid-column>
+      <kendo-grid-column field="TRANSACTIONDATE" [title]="'Tarih'" width="120">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.TRANSACTIONDATE | date:'dd.MM.yyyy'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TOPBUFFER"  [title]="'Yeşil'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.TOPBUFFER | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="YELLOWZONETOP"  [title]="'Sarı'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.YELLOWZONETOP | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REDZONETOP"  [title]="'Kırmızı'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.REDZONETOP | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REDDIFF" [title]="'Bakiye'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.REDDIFF | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="CURRENTBUFFER"  [title]="'Tampon'" width="90" filter="numeric" class="no-padding">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span class="whole-cell" 
+              [style.backgroundColor]="bgColorCode(dataItem.CURRENTBUFFER, dataItem.TOPBUFFER, dataItem.YELLOWZONETOP, dataItem.REDZONETOP)"
+              [style.color]="colorCode(dataItem.CURRENTBUFFER, dataItem.REDZONETOP)" >
+                {{dataItem.CURRENTBUFFER | number:'1.2-2':'tr'}}
+              </span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STOCK" [title]="'Stok'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="SALE" [title]="'Satış'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.SALE | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="INTAKE" [title]="'Giriş'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.INTAKE | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ORDERQTY" [title]="'Sipariş'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.ORDERQTY | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ENDOFDAYSTOCK" [title]="'Gün Sonu Stok'" width="90" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.ENDOFDAYSTOCK | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="BUFFERCHANGENUMBER" [title]="'Değişiklik No'" width="100"></kendo-grid-column>
+      <kendo-grid-excel [fileName]="getFileName()"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+
+  <ot-panel [caption]="'En yüksek satış günleri'">
+    <kendo-grid [data]="topDaysData" [loading]="topDaysDataLoading" [height]="400"
+      [pageable]="false" [pageSize]="1000" [sortable]="false" 
+      [filterable]="false" [navigable]="true" >
+      <kendo-grid-column field="YESTERDAY" [title]="'Gün1'" width="150">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.YESTERDAY | date:'dd.MM.yyyy'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TRANSACTION_DT" [title]="'Gün2'" width="150">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.TRANSACTION_DT | date:'dd.MM.yyyy'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TOMORROW" [title]="'Gün3'" width="150">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.TOMORROW | date:'dd.MM.yyyy'}}</span>
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="LAGQUANTITY" [title]="'Gün1 Miktar'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.LAGQUANTITY | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="QUANTITY" [title]="'Gün2 Miktar'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.QUANTITY | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="LEADQUANTITY" [title]="'Gün3 Miktar'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.LEADQUANTITY | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="TOTAL" [title]="'Toplam'" width="80" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.TOTAL | number:'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </ot-panel>
+    
+
+</div>

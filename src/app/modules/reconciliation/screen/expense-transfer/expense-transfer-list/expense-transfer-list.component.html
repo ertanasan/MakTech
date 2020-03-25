@@ -1,0 +1,66 @@
+﻿<ot-list-screen-container [header]="'Expense Mikro Transfer' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+    <ng-container header-items>
+        <table>
+            <tr>
+              <th>
+                <ot-dropdown-entry [caption]="'BS'" [(value)]="selectedRegionManager" [items]="regionManagersService.completeList" textField="RegionManagerName" valueField="RegionUser" usePrimitiveValue="true" [loading]="regionManagersService.loading" class="col-md-6"></ot-dropdown-entry>
+              </th>
+              <th>
+                  <ot-button [caption]="'Filter' | translate" color="primary" size="sm" (click)="onFilter()"> </ot-button>
+              </th>
+              <th>
+                <ot-button [caption]="'Mikro' | translate" color="primary" size="sm" (click)="onMikro()"> </ot-button>
+            </th>
+            </tr>
+        </table>
+    </ng-container>
+  <kendo-grid [data]="recActiveList" [loading]="recLoading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter"
+    [kendoGridSelectBy]="'ExpenseId'" [selectable]="{checkboxOnly: true}"
+    [selectedKeys]="expenseList"
+    (dataStateChange)="handleDataStateChange($event)"
+    (selectedKeysChange)="onSelectedKeysChange($event)"
+  >
+    <kendo-grid-checkbox-column showSelectAll="true" field="ExpenseId" width="50" filter="boolean"></kendo-grid-checkbox-column>
+
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="50" locked="true">
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="ExpenseId" [title]="'Expense ID' | translate" width="120"> </kendo-grid-column>
+    <kendo-grid-column field="ExpenseTypeName" [title]="'Expense Type' | translate" width="250"> </kendo-grid-column>
+
+    <kendo-grid-column field="StoreName" [title]="'Store / Region Manager' | translate" width="180"> </kendo-grid-column>
+
+    <kendo-grid-column field="ExpenseDate" [title]="'Expense Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ExpenseDate">{{dataItem.ExpenseDate | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ExpenseAmount" [title]="'Expense Amount' | translate" width="120" filter="numeric" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        <span *ngIf="dataItem.ExpenseAmount">{{ dataItem.ExpenseAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </span>
+      </ng-template>
+      <ng-template *ngIf="total_c1" kendoGridFooterTemplate let-column="column"> 
+        <div class="text-right">{{total_c1["ExpenseAmount"].sum | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="VATRate" [title]="'VAT Rate' | translate" width="100" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ReceiptNo" [title]="'ReceiptNo' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="PayOffDate" [title]="'PayOff Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.PayOffDate">{{dataItem.PayOffDate | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ExpenseDescription" [title]="'Expense Description' | translate" width="250"></kendo-grid-column>
+    <kendo-grid-column field="CreateUserName" [title]="'Create User Name' | translate" width="100"> </kendo-grid-column>
+    <kendo-grid-column field="UpdateUserName" [title]="'Update User Name' | translate" width="100"> </kendo-grid-column>
+
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-expense-transfer-edit #editScreen screenName="ot-expense-transfer-edit"></ot-expense-transfer-edit>
+<ot-expense-transfer-preview [regionManagerId]="selectedRegionManager"></ot-expense-transfer-preview>

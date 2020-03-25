@@ -1,0 +1,14 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="BankStatementId" [caption]="'Bank Statement Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Bank" [caption]="'Bank' | translate" [items]="bankService.completeList" textField="BankName" valueField="BankId" usePrimitiveValue="true" class="col-12" [loading]="bankService.loading"></ot-dropdown-entry>
+    <ot-date-entry formControlName="Date" [caption]="'Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-text-entry formControlName="Description" [caption]="'Description' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-numeric-entry formControlName="TransactionAmount" [caption]="'Transaction Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="Balance" [caption]="'Balance' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry formControlName="Channel" [caption]="'Channel' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-text-entry formControlName="Info1" [caption]="'Info 1' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-text-entry formControlName="Info2" [caption]="'Info 2' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-text-entry formControlName="Info3" [caption]="'Info 3' | translate" rows="3" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

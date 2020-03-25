@@ -1,0 +1,40 @@
+<ot-panel [caption]="'Product List' | translate">
+  <ng-container panel-header-tools class="pr-2">
+    <kendo-buttongroup [selection]="'single'" class="button-group-filter">
+      <button kendoButton [toggleable]="true" [selected]="isActualUnit" (selectedChange)="onKgPackageChanged(true)" >Kg-Adet</button>
+      <button kendoButton [toggleable]="true" [selected]="!isActualUnit" (selectedChange)="onKgPackageChanged(false)">Paket</button>
+    </kendo-buttongroup>
+  </ng-container>
+  <kendo-grid [data]="gatheringDetailService.gatheringDetailList" [loading]="gatheringDetailService.gatheringDetailLoading" height=420 [pageable]="false">
+    <kendo-grid-column [title]="'Proceed Flag' | translate" width="80" class="text-center">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <button class="btn btn-primary-outline" (click)="goToGatherIndexButtonClicked.next(rowIndex)">
+          <span *ngIf="dataItem.Proceed" class="k-icon k-i-check text-success" style="font-size: 200%;"></span>
+          <span *ngIf="!dataItem.Proceed" class="k-icon k-i-warning text-danger" style="font-size: 200%;"></span>
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProductCode" [title]="'Product Code' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="RevisedQuantity" [title]="'Orderred Package' | translate" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span *ngIf="!isActualUnit">{{ dataItem.OrderQuantity | number: '1.0-3':'tr' }}</span>
+        <span *ngIf="isActualUnit">{{ dataItem.OrderQuantity * dataItem.PackageUnit | number: '1.0-3':'tr' }}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="GatheredQuantity" [title]="'Gatherred Package' | translate" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span *ngIf="dataItem.Proceed && !isActualUnit">{{ dataItem.GatheredQuantity | number: '1.0-3':'tr' }}</span>
+        <span *ngIf="dataItem.Proceed && isActualUnit">{{ dataItem.GatheredQuantity * dataItem.PackageUnit | number: '1.0-3':'tr' }}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [title]="'Difference' | translate" width="80" class="text-center">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span *ngIf="dataItem.GatheredQuantity === dataItem.OrderQuantity" class="k-icon k-i-minus text-success" style="font-size: 200%;"></span>
+        <span *ngIf="dataItem.OrderQuantity > dataItem.GatheredQuantity" class="k-icon k-i-arrow-down text-warning" style="font-size: 200%;"></span>
+        <span *ngIf="dataItem.GatheredQuantity > dataItem.OrderQuantity" class="k-icon k-i-arrow-up text-warning" style="font-size: 200%;"></span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PalletNo" [title]="'Pallet No' | translate" width="100"></kendo-grid-column>
+  </kendo-grid>
+</ot-panel>

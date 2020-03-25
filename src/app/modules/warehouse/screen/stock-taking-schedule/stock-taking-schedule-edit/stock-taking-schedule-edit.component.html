@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StockTakingScheduleId" [caption]="'StockTaking Schedule Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ScheduleName" [caption]="'Schedule Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="CountingType" [caption]="'Counting Type' | translate" [items]="countingTypeService.completeList" textField="CountingTypeName" valueField="CountingTypeId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-date-entry formControlName="PlannedDate" [caption]="'Planned Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="ActualDate" [caption]="'Actual Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="CountingStatus" [caption]="'Counting Status' | translate" [items]="countingStatusService.completeList" 
+    [isReadOnly]="countingStatusReadOnly"
+    textField="CountingStatusName" valueField="CountingStatusId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,94 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth" 
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  *ngIf="!inGrid;else inGridTemplate">
+  <kendo-dropdownlist 
+    #input
+    editor
+    [ngClass]="getControlClasses()"
+    [readonly]="isReadOnly"
+    style="width: 100%;"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [data]="itemList"
+    [(value)]="value"
+    (blur)="touch()"
+    [textField]="textField"
+    [valueField]="valueField"
+    [valuePrimitive]="usePrimitiveValue"
+    [defaultItem]="defaultItem"
+    [disabled]="disabled"
+    [kendoDropDownFilter]="filterSettings">
+    <ng-template [ngIf]="useAsync">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        {{ textField ? ( dataItem[textField] == null ? (dataItem[valueField] ) : dataItem[textField]) : dataItem  }}
+      </ng-template>
+    </ng-template>
+    <ng-template [ngIf]="!useAsync">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        {{ textField ? ( dataItem[textField] == null ? (dataItem[valueField] ) : dataItem[textField] | translate) : dataItem  }}
+      </ng-template>
+      <ng-template kendoDropDownListValueTemplate let-dataItem>
+        {{ textField ? ( dataItem ? (dataItem[textField] | translate): '' )  : dataItem  }}
+      </ng-template>
+    </ng-template>
+    <ng-template kendoDropDownListNoDataTemplate>
+      <div *ngIf="loading;else noData" class="k-loading-mask" style="width:100%;height:100%">
+        <span class="k-loading-text">{{ loadingMessage | translate }}</span>
+        <div class="k-loading-image">
+          <div class="k-loading-color"></div>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-dropdownlist>
+</ot-data-entry-template>
+<ng-template #inGridTemplate>
+  <kendo-dropdownlist 
+    #input
+    editor
+    [ngClass]="getControlClasses()"
+    [readonly]="isReadOnly"
+    style="width: 100%;"
+    [disabled]="disabled ? disabled : (ngControl ? ngControl.control.disabled : isDisabled)"
+    [data]="itemList"
+    [(value)]="value"
+    (blur)="touch()"
+    [textField]="textField"
+    [valueField]="valueField"
+    [valuePrimitive]="usePrimitiveValue"
+    [defaultItem]="defaultItem"
+    [disabled]="disabled"
+    [kendoDropDownFilter]="filterSettings">
+    <ng-template [ngIf]="useAsync">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        {{ textField ? ( dataItem[textField] == null ? (dataItem[valueField] ) : dataItem[textField]) : dataItem  }}
+      </ng-template>
+    </ng-template>
+    <ng-template [ngIf]="!useAsync">
+      <ng-template kendoDropDownListItemTemplate let-dataItem>
+        {{ textField ? ( dataItem[textField] == null ? (dataItem[valueField] ) : (dataItem[textField]+'') | translate) : dataItem  }}
+      </ng-template>
+      <ng-template kendoDropDownListValueTemplate let-dataItem>
+        {{ textField ? ( dataItem ? (dataItem[textField] | translate): '' )  : dataItem  }}
+      </ng-template>
+      
+    </ng-template>
+    <ng-template kendoDropDownListNoDataTemplate>
+      <div *ngIf="loading;else noData" class="k-loading-mask" style="width:100%;height:100%">
+        <span class="k-loading-text">{{ loadingMessage | translate }}</span>
+        <div class="k-loading-image">
+          <div class="k-loading-color"></div>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-dropdownlist>
+</ng-template>
+<ng-template #noData>
+  <h4><span class="k-icon k-i-warning"></span><br /><br /> {{ 'No data found' | translate }}</h4>
+</ng-template>

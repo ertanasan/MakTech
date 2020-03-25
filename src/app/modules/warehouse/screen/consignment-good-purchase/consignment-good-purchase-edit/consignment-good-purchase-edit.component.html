@@ -1,0 +1,12 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-radio-entry *ngIf="container.actionName === 'Create'" formControlName="TransactionType" [caption]="'Transaction Type' | translate"  [items]="radioItems" [choice]="radioItems[0].value" class="col-12" ></ot-radio-entry>
+    <ot-alpha-entry *ngIf="container.actionName !== 'Create'" formControlName="TransactionType" [caption]="'Transaction Type' | translate" class="col-12" isReadOnly="true"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ConsignmentGoodPurchaseId" [caption]="'Consignment Good Purchase Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry *ngIf="storeService.userStores && storeService.userStores.length > 1" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.consignmentGoodList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading" (valueChange)="onProductChange($event)"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Supplier" [caption]="'Supplier' | translate" [items]="supplierService.completeList" textField="SupplierName" valueField="SupplierId" usePrimitiveValue="true" class="col-12" [loading]="supplierService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="Quantity" [caption]="'Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="UnitName" [caption]="'Unit' | translate" class="col-12" isReadOnly="true"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

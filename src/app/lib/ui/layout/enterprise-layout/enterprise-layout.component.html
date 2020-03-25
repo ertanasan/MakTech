@@ -1,0 +1,46 @@
+<!-- <app-header [fixed]="true" [navbarBrandFull]="{src: wideLogo, width: 128, alt: 'Wide Logo'}"
+  [navbarBrandMinimized]="{src: narrowLogo, width: 45, height: 30, alt: 'Narrow Logo'}" [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false" [mobileAsideMenuToggler]="false" routerLink="/Home/Dashboard/Index">
+  <ul class="nav navbar-nav d-md-down-none ot-header-menu">
+  </ul>
+  <ng-content select="[layoutHeader]">
+
+  </ng-content>
+  <ul class="nav navbar-nav ml-auto">
+    <ng-content select="[layoutToolbar]"> 
+
+    </ng-content>
+    <li class="nav-item dropdown ot-header-language" dropdown placement="bottom right">
+    </li>
+    <li class="nav-item dropdown ot-header-profile" dropdown placement="bottom right" [mainModule]="mainModule">
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="true" [display]="'lg'">
+    <div *ngIf="menuLoading" class="col-12">
+      <div class="sk-spinner sk-spinner-pulse" style="background-color: #fff;z-index: 100000;"></div>
+    </div>
+    <ot-sidebar-nav [navItems]="menuItems" [perfectScrollbar] [disabled]="sidebarMinimized"></ot-sidebar-nav>
+    <app-sidebar-minimizer></app-sidebar-minimizer>
+  </app-sidebar>
+
+  <main class="main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<div class="d-none d-md-block">
+  <app-footer [fixed]="true">
+    <span>&copy;{{ environment.application.copyrightYear }} - <a href="{{ environment.application.companyUrl }}">{{ environment.application.company }}</a></span>
+    <span class="ml-auto">
+      <ul class="list-inline my-0">
+        <li class="list-inline-item">{{ (contextState$ | async).Branch.Name }}</li>
+        <li class="list-inline-item">&bull; {{ (contextState$ | async).User.Name }}</li>
+        <li class="list-inline-item">&bull; {{ (contextState$ | async).Environment }}</li>
+        <li class="list-inline-item">&bull; {{ today | date:'dd MMMM yyyy EEEE':'':(contextState$ | async).UserLanguage }}</li>
+      </ul>
+    </span>
+  </app-footer>
+</div>
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container> -->

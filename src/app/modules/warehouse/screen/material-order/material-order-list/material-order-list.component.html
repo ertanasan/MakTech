@@ -1,0 +1,178 @@
+﻿<ot-list-screen-container [header]="'Material Order' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <table>
+        <tr>
+          <th class="col-md-5">
+            <kendo-datepicker [(value)]="selectedDay" format="dd.MM.yyyy" ></kendo-datepicker>
+          </th>
+          <th>
+            <ot-check-box [caption]="'All' | translate" color="primary" size="sm" class="headerCheckBox" [(value)]="allFlag"></ot-check-box>
+          </th>
+          <th>
+            <ot-button class="col-md-2" [caption]="'Filter' | translate" color="primary" size="sm" (click)="onOrderFilter()"></ot-button>  
+          </th>               
+          <th>
+            <ot-button *ngIf="showAction" [caption]="orderActionName" color="primary" size="sm" (click)="onOrderAction()" > </ot-button>
+          </th>
+          <th>
+            <ot-button *ngIf="showActionSplit" [caption]="'Split' | translate" color="primary" size="sm" (click)="onAction(1)"> </ot-button>
+          </th>
+          <th>
+            <ot-button *ngIf="showActionReject" [caption]="'Reject' | translate" color="primary" size="sm" (click)="onAction(2)"> </ot-button>
+          </th>
+          <th>
+            <ot-button *ngIf="showActionNone" [caption]="'None' | translate" color="primary" size="sm" (click)="onAction(3)"> </ot-button>
+          </th>
+          <th>
+            <ot-button *ngIf="showActionRefuse" [caption]="'Refuse' | translate" color="primary" size="sm" (click)="onAction(4)"> </ot-button>
+          </th>
+          <th>
+            <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'" class="mr-1">Excel</button>
+          </th>
+        </tr>
+    </table>
+  </ng-container>
+
+  <kendo-grid #grid="kendoGrid" [data]="orderActiveList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" [filterable]= "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)" [kendoGridSelectBy]="'MaterialOrderId'" [navigable]="true"
+    [selectable]="{checkboxOnly: true}" [selectedKeys]="checkedList" (selectedKeysChange)="onSelectedKeysChange($event)" 
+    (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" >
+
+    <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+    </ng-template>
+
+    <kendo-grid-checkbox-column showSelectAll="true" field="MaterialOrderId" width="50" filter="boolean"> </kendo-grid-checkbox-column>
+
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button *ngIf="!isDepot" [caption]="'New' | translate" icon="fas fa-plus" 
+          (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateControl(dataItem)" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="isHeadQuarter" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="OrderName" [title]="'Order Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="OrderDate" [title]="'Order Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.OrderDate">{{utilityService.toDate(dataItem.OrderDate) | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OrderStatusCode" [title]="'Order Status Code' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="StatusCodeList"
+          valueField="value"
+          textField="text"
+          memberField="OrderStatusCode"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.OrderStatusCode | getName:'value':'text':StatusCodeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeService.completeList"
+          valueField="StoreId"
+          textField="Name"
+          memberField="Store"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="MikroStatusCode" [title]="'Mikro Status Code' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="MikroReference" [title]="'Mikro Reference' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="MikroTime" [title]="'Mikro Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.MikroTime">{{utilityService.toDate(dataItem.MikroTime) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MikroUser" [title]="'Mikro User' | translate" width="180">      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.MikroUser | getName:'UserId':'Name':userService.completeList }}
+      </ng-template>
+    </kendo-grid-column> -->
+    <kendo-grid-column field="Material" [title]="'Material' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="materialService.completeList"
+          valueField="MaterialId"
+          textField="MaterialName"
+          memberField="Material"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Material | getName:'MaterialId':'MaterialName':materialService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="MaterialInfo" [title]="'Info' | translate" width="100">
+      <!-- <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="materialInfoService.completeList"
+          valueField="MaterialInfoId"
+          textField="ShortName"
+          memberField="MaterialInfo"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template> -->
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.MaterialInfo">
+          {{ dataItem.MaterialInfo | getName:'MaterialInfoId':'ShortName':materialInfoService.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="OrderQuantity" [title]="'Order Quantity' | translate" width="100" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="RevisedQuantity" [title]="'Revised Quantity' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.OrderStatusCode > 1">
+          {{ dataItem.RevisedQuantity }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ShippedQuantity" [title]="'Shipped Quantity' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.OrderStatusCode > 2">
+          {{ dataItem.ShippedQuantity }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="IntakeQuantity" [title]="'Intake Quantity' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.OrderStatusCode > 3">
+          {{ dataItem.IntakeQuantity }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Note" [title]="'Note' | translate" width="250"></kendo-grid-column>
+    <kendo-grid-excel [fileName]="getxlsFileName()" [fetchData]="allData">
+      <kendo-excelexport-column field="OrderName" title="Sipariş"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="OrderDate" title="Tarihi"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="OrderStatusName" title="Durum"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="StoreName" title="Şube"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="MaterialName" title="Malzeme"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="MaterialInfoName" title="Ek Bilgi"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="OrderQuantity" title="Sipariş M."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="RevisedQuantity" title="Revize M."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="ShippedQuantity" title="Sevk M."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="IntakeQuantity" title="Kabul M."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="Note" title="Not"> </kendo-excelexport-column>
+    </kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-material-order-edit #editScreen screenName="ot-material-order-edit"></ot-material-order-edit>

@@ -1,0 +1,209 @@
+<div class="col-md-12 mt-2 mb-1">
+  <div class="row">
+    <div class="col-md-6">
+      <h4 class="mx-3" style="display: inline-block; vertical-align: sub">{{ 'Helpdesk Dashboard' | translate }}</h4>
+      <ot-dashboard-router [activeDashboard]="'Helpdesk Dashboard'"></ot-dashboard-router>
+    </div>
+    <div class="col-md-6">
+      <p class="refreshtime float-right mr-2">{{ 'Last Refresh Time' | translate }}: {{refreshTime | date : "dd.MM.yyyy HH:mm"}}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data" class="container-fluid">
+  <div class="row">
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-bug"
+          caption="Açık Çağrı Sayısı (Grup / Tüm)"
+          text="{{dashboard.OpenTaskCountInGroup}} / {{dashboard.OpenTaskCount}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-clock"
+          caption="Açık Çağrı Ort. Süre (Grup / Tüm)"
+          text="{{dashboard.OpenTaskDurationInGroup | number: '1.0-0':'tr' }} / {{dashboard.OpenTaskDuration | number: '1.0-0':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-check"
+          caption="Son Ay Kapatılan Çağrı (Grup / Tüm)"
+          text="{{dashboard.CloseTaskInGroup}} / {{dashboard.CloseTask}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-check"
+          caption="Son Ay Çağrı Kapatma Süresi (Grup / Tüm)"
+          text="{{dashboard.CloseTaskDurationInGroup | number:'1.0-0':'tr'}} / {{dashboard.CloseTaskDuration | number:'1.0-0':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+  </div>
+
+  <div class="row">
+    <ot-list-screen-container class="col-12" *ngIf="data" [header]="'Açık Çağrılar'" >
+      <div class="row">
+
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <kendo-grid [data]="openTaskGroupList" [scrollable]="'scrollable'" [height]="200"
+        [kendoGridSelectBy]="'Name'" [selectable]="{checkboxOnly: true}" 
+        [selectedKeys]="groupCheckedList" (selectedKeysChange)="onSelectedKeysChange()">
+          <kendo-grid-column field="Name" [title]="'Grup'" width="120" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> 
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.Name !== 'null'">
+              {{dataItem.Name}}
+            </div>
+          </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Count" [title]="'Adet'" width="80" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+          <kendo-grid-checkbox-column field="Name"  width="50" filter="boolean"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+        </kendo-grid>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <kendo-grid [data]="openTaskDefGroupList" [scrollable]="'scrollable'" [height]="200"
+        [kendoGridSelectBy]="'Name'" [selectable]="{checkboxOnly: true}" 
+        [selectedKeys]="defGroupCheckedList" (selectedKeysChange)="onSelectedKeysChange()">
+          <kendo-grid-column field="Name" [title]="'Talep Tipi'" width="120" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> 
+          </kendo-grid-column>
+          <kendo-grid-column field="Count" [title]="'Adet'" width="80" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+          <kendo-grid-checkbox-column field="Name"  width="50" filter="boolean"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+        </kendo-grid>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <kendo-grid [data]="openTaskDurationList" [scrollable]="'scrollable'" [height]="200"
+        [kendoGridSelectBy]="'Name'" [selectable]="{checkboxOnly: true}" 
+        [selectedKeys]="durationCheckedList" (selectedKeysChange)="onSelectedKeysChange()">
+          <kendo-grid-column field="Name" [title]="'Yaşı' | translate" width="120" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> 
+          </kendo-grid-column>
+          <kendo-grid-column field="Count" [title]="'Adet' | translate" width="80" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+          <kendo-grid-checkbox-column field="Name"  width="50" filter="boolean"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+        </kendo-grid>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <kendo-grid [data]="openTaskUserList" [scrollable]="'scrollable'" [height]="200"
+        [kendoGridSelectBy]="'Name'" [selectable]="{checkboxOnly: true}" 
+        [selectedKeys]="userCheckedList" (selectedKeysChange)="onSelectedKeysChange()">
+          <kendo-grid-column field="Name" [title]="'Sorumlu' | translate" width="120" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> 
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.Name !== 'null'">
+              {{dataItem.Name}}
+            </div>
+          </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Count" [title]="'Adet' | translate" width="80" 
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+          <kendo-grid-checkbox-column field="Name"  width="50" filter="boolean"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+        </kendo-grid>
+      </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+        <kendo-grid [data]="taskFilteredList" [height]="400" [sortable]="true" [sort]="taskGridLP.sort"
+                    (dataStateChange)="taskGridHandleDSC($event)">
+      
+          <kendo-grid-command-column title="" [width]="60" locked="true"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <ot-light-button color="primary" otTooltip="{{ 'History' | translate }}" (onClick)="showHistory(dataItem.PROCESSINSTANCE_LNO)" icon="fas fa-history"></ot-light-button>
+              <ot-light-button *ngIf="dataItem.USERTASK_FL" color="primary" (onClick)="openTask(dataItem.PROCESSINSTANCE_LNO)" icon="fas fa-cogs"></ot-light-button>
+            </ng-template>
+          </kendo-grid-command-column>
+
+          <kendo-grid-column field="REQUESTID" [title]="'Id'" width="60"
+                             [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+                             [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+
+          <kendo-grid-column field="REQUEST_DSC" [title]="'Açıklama'" width="300"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+
+          <kendo-grid-column field="REQUESTDEF_NM" [title]="'Talep Tipi'" width="100"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+
+          <kendo-grid-column field="STORE_NM" [title]="'Şube'" width="100"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}"></kendo-grid-column>
+
+          <kendo-grid-column field="RESPONSIBLEUSER_NM" [title]="'Sorumlu'" width="100"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}">
+          </kendo-grid-column>
+          <kendo-grid-column [title]="" width="80"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.USERTASK_FL === 'Y' && dataItem.ADMIN_FL === 'Y'">
+                <ot-button [caption]="'Sorumlu Ata'" (onClick)="assignUser(dataItem)" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="CREATE_DT" [title]="'Tarih'" width="80" filter="date"
+          [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+          [style]="{'background-color': '#FFF','color': '#000'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.CREATE_DT">{{dataItem.CREATE_DT | date:('dd.MM.yyyy HH:mm')}}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="STATUS_NM" [title]="'Durum'" width="80"
+                             [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+                             [style]="{'background-color': '#FFF','color': '#000'}">
+          </kendo-grid-column>
+          
+          
+        </kendo-grid>
+        </div>
+      </div>
+    </ot-list-screen-container>
+  </div>
+</div>
+
+<ot-process-history #historyScreen></ot-process-history>
+<ng-template #reviewComponent></ng-template>
+
+<ot-custom-dialog #assignUserPanel size="sm">
+  <ot-dropdown-entry [caption]="'Sorumlu'" [items]="responsibleUserList" 
+  [(value)]="selectedResponsible"
+  textField="USERFULL_NM" valueField="USERID" usePrimitiveValue="true" >
+  </ot-dropdown-entry>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'Cancel' | translate" (onClick)="assignUserPanel.hide()"></ot-button>
+    <ot-button [caption]="'Assign' | translate" color="primary" (onClick)="assignResponsible()"></ot-button>
+  </ng-container>
+</ot-custom-dialog>

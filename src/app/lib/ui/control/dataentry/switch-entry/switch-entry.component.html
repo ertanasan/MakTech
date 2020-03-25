@@ -1,0 +1,17 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth" 
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <kendo-switch [(ngModel)]="value" [onLabel]="''" [offLabel]="''" 
+    [attr.disabled]="(ngControl && ngControl.control.disabled) || isReadOnly ? 'true' : null" (blur)="touch()" (valueChange)="switchValueChange()">
+  </kendo-switch>
+  <!-- <label editor [ngClass]="getSwitchLabelClasses()">
+    <input [(ngModel)]="value" class="switch-input" type="checkbox" checked="" [attr.disabled]="(ngControl && ngControl.control.disabled) || isReadOnly ? 'true' : null" (blur)="touch()">
+    <span class="switch-slider" [attr.data-checked]="dataChecked" [attr.data-unchecked]="dataUnchecked"></span>
+  </label> -->
+</ot-data-entry-template>

@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="MaterialId" [caption]="'Material Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MaterialName" [caption]="'Material Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MikroCode" [caption]="'Mikro Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="UnitCode" [caption]="'Unit Code' | translate" 
+                       [items]="UnitCodeList" textField="text" valueField="value" 
+                       usePrimitiveValue="true" class="col-12" >
+    </ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Category" [caption]="'Category' | translate" 
+                       [items]="materialCategoryService.completeList" textField="CategoryName" valueField="MaterialCategoryId" 
+                       usePrimitiveValue="true" class="col-12" [loading]="materialCategoryService.loading">
+    </ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

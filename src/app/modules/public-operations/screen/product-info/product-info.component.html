@@ -1,0 +1,53 @@
+<div class="container" style="background-color: white; min-height: 600px">
+    <div *ngIf="productInfoLoading" class="chartLoadingContainer col-12">
+        <span class="k-icon k-i-loading chartLoadingIcon"></span>
+    </div>
+    <div *ngIf="!productInfoLoading && product" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-sm-4 offset-sm-4 col-md-2 offset-md-5 text-center">
+                <img src="http://makbul.com.tr/wp-content/uploads/2017/03/makbulFrontend.png" alt="MAKBUL" style="display: inline-block; width: 80px; height:50px">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+<!--            <div class="col-12 text-center">-->
+<!--                <img [src]="product.Photo">-->
+<!--            </div>-->
+            <div class="col-md-6 col-sm-12">
+                <label class="col-4"><u>Ürün Adı</u>: </label>
+                <label class="col-8 h4">{{ product.Name }}</label>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <label class="col-4"><u>Üretim Yeri</u>: </label>
+                <label class="col-8">{{ product.Country | getName:'CountryId': 'CountryName': dataService.countryList }} </label>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <label class="col-4"><u>Ürün Raf Ömrü</u>: </label>
+                <label class="col-8">{{ product.ExpiresIn }} Gün</label>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <label class="col-4"><u>Alerjen Uyarısı</u>: </label>
+                <label *ngIf="product.Warning === 1" class="col-8 text-danger">Alerjen İçerir</label>
+                <label *ngIf="product.Warning === 2" class="col-8">Alerjen Değildir</label>
+            </div>
+            <div *ngIf="product.StorageCondition" class="col-md-6 col-sm-12" >
+                <label class="col-4"><u>Saklama Koşulları</u>: </label>
+                <label class="col-8">{{ product.StorageCondition | getName:"StorageConditionId":"Condition":dataService.storageConditionList }} </label>
+            </div>
+            <div *ngIf="scaleCode && scaleCode.length > 0" class="col-md-6 col-sm-12">
+                <label class="col-4"><u>Terazi Kodu</u>: </label>
+                <label class="col-8">{{ scaleCode }}</label>
+            </div>  
+            <div class="col-md-6 col-sm-12">
+                <label class="col-4" style="float: left;"><u>Ürün İçeriği</u>:</label>
+                <label class="col-8">{{ product.Content }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

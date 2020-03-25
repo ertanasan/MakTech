@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ProductBarcodeId" [caption]="'Product Barcode Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [isReadOnly]="container.masterId" [items]="container.masterId ? [container.masterObject] : productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="BarcodeType" [caption]="'Barcode Type' | translate" [items]="barcodeTypeService.completeList" textField="BarcodeTypeName" valueField="BarcodeTypeId" usePrimitiveValue="true" [loading]="barcodeTypeService.loading" class="col-12"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="BarcodeText" [caption]="'Barcode Text' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,49 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-dropdown-entry formControlName="Firm" [caption]="'Firm' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : firmService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="Name" valueField="FirmId" usePrimitiveValue="true" class="col-12" [loading]="firmService.loading"></ot-dropdown-entry>
+<!--    <ot-dropdown-entry formControlName="Contact" [caption]="'Contact' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : contactService.completeList"-->
+<!--      [isReadOnly]="container.rightRelationId" textField="ContactId" valueField="ContactId" usePrimitiveValue="true" class="col-12" [loading]="contactService.loading"></ot-dropdown-entry>-->
+    <ot-switch-entry formControlName="IsDefault" [caption]="'Is Default' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="IsActive" [caption]="'Is Active' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="IsPreferred" [caption]="'Is Preferred' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <span formGroupName="ContactObject" class="col-12">
+      <span *ngIf="activeContactType && activeContactType === 1" formGroupName="AddressContact" class="col-12">
+        <ot-dropdown-entry formControlName="SubContactType" [caption]="'Sub Contact Type' | translate" [items]="firmContactService.subContactTypePartialList[activeContactType -1]"
+                           [isReadOnly]="container.actionName !== 'Create'" textField="Name" valueField="SubContactTypeId" usePrimitiveValue="true"
+                           class="col-12" [loading]="firmContactService.subTypeLoading">
+        </ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Country" [caption]="'Country' | translate" [items]="firmContactService.countryCompleteList"
+                           textField="Name" valueField="CountryId" usePrimitiveValue="true" class="col-12" [loading]="firmContactService.countryLoading">
+        </ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="LocalCity" [caption]="'City' | translate" [items]="firmContactService.cityCompleteList"
+                           textField="Name" valueField="CityId" usePrimitiveValue="true" class="col-12" [loading]="firmContactService.cityLoading">
+        </ot-dropdown-entry>
+        <ot-alpha-entry formControlName="CitySubDivision" [caption]="'City Sub Division' | translate" class="col-12"></ot-alpha-entry>
+        <ot-text-entry formControlName="Street" [caption]="'Street' | translate" rows="2" class="col-12"></ot-text-entry>
+        <ot-alpha-entry formControlName="BuildingName" [caption]="'Building Name' | translate" class="col-12"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="BuildingNo" [caption]="'Building No' | translate" class="col-12"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="RoomNo" [caption]="'Room No' | translate" class="col-12"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="ZipCode" [caption]="'Zip Code' | translate" class="col-12"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="Region" [caption]="'Region' | translate" class="col-12"></ot-alpha-entry>
+      </span>
+      <span *ngIf="activeContactType && activeContactType === 2" formGroupName="PhoneContact" class="col-12">
+        <ot-dropdown-entry formControlName="SubContactType" [caption]="'Sub Contact Type' | translate" [items]="firmContactService.subContactTypePartialList[activeContactType -1]"
+                           [isReadOnly]="container.actionName !== 'Create'" textField="Name" valueField="SubContactTypeId" usePrimitiveValue="true"
+                           class="col-12" [loading]="firmContactService.subTypeLoading">
+        </ot-dropdown-entry>
+        <ot-masked-entry formControlName="PhoneNo" [caption]="'Phone No'|translate" class="col-md-12"
+                         [mask]="'\\0 (000) 000 0000'" [placeholder]="'Phone No'|translate">
+        </ot-masked-entry>
+      </span>
+      <span *ngIf="activeContactType && activeContactType === 3" formGroupName="WebContact" class="col-12">
+        <ot-dropdown-entry formControlName="SubContactType" [caption]="'Sub Contact Type' | translate" [items]="firmContactService.subContactTypePartialList[activeContactType -1]"
+                           [isReadOnly]="container.actionName !== 'Create'" textField="Name" valueField="SubContactTypeId" usePrimitiveValue="true"
+                           class="col-12" [loading]="firmContactService.subTypeLoading">
+        </ot-dropdown-entry>
+        <ot-alpha-entry formControlName="Address" [caption]="'Address' | translate" class="col-12"></ot-alpha-entry>
+      </span>
+      <ot-text-entry formControlName="Description" [caption]="'Explanation' | translate" rows="3" class="col-12"></ot-text-entry>
+    </span>
+  </form>
+</ot-edit-screen-container>

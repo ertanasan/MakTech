@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="LoomisId" [caption]="'Loomis Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-date-entry formControlName="SaleDate" [caption]="'Sale Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="SealNo" [caption]="'Seal No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="DeclaredAmount" [caption]="'Declared Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ActualAmount" [caption]="'Actual Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="FakeAmount" [caption]="'Fake Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry formControlName="Explanation" [caption]="'Explanation' | translate" rows="7" class="col-12"></ot-text-entry>
+    <ot-date-entry formControlName="MikroTime" [caption]="'Mikro Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="MikroStatusCode" [caption]="'Mikro Status Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MikroTransactionCode" [caption]="'Mikro Transaction Code' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

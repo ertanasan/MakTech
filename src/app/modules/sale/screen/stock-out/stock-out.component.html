@@ -1,0 +1,124 @@
+<div class="row">
+  <ol class="col-12 breadcrumb">
+    <h4 class="ml-3">Yok Satma Raporu</h4>
+  </ol>
+</div>
+
+<div class="container">
+    <ot-list-screen-container [header]="'Rapor Parametreleri'">
+        <ng-container header-items>
+            <table>
+              <tr>
+                <th><ot-button [caption]="'Temizle'" color="primary" size="sm" (click)="onClear()"></ot-button></th>
+                <th><ot-button [caption]="'Filtrele'" color="primary" size="sm" (click)="onFilter()"></ot-button></th>
+              </tr>
+            </table>
+        </ng-container>
+      <div class="row">
+        <ot-dropdown-entry 
+        #categorycomp
+        [(value)]="categoryId" 
+        [caption]="'Kategori'" 
+        [items]="categoryService.completeList" 
+        textField="Category" 
+        valueField="CategoryID" 
+        usePrimitiveValue="true" 
+        class="col-md-6" 
+        [loading]="categoryService.loading"></ot-dropdown-entry>
+
+        <ot-numeric-entry
+        class="col-md-6" 
+        [caption]="'Satılan Mağaza Sayısı'" 
+        format = "n0"
+        [(value)] = "storeCountSold"></ot-numeric-entry>
+      </div>
+      <div class="row">
+          <ot-date-entry [(value)]="startDate" [caption]="'Başlangıç'" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+          <ot-date-entry [(value)]="endDate" [caption]="'Bitiş'" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+      </div>      
+    </ot-list-screen-container>
+  
+
+    <div *ngIf = "resultData" class="row">
+      <div class="col-sm-6">
+        <div class="callout callout-info">
+          <small class="text-muted">Gün ve ürün sayısı toplamı</small><br><strong class="h4">{{totalDayProduct|number:'1.0-0'}}</strong>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="callout callout-danger">
+          <small class="text-muted">Muhtemel satış kaybı</small><br><strong class="h4">{{totalPrice|number:'1.2-2'}}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="parent-container">
+      <kendo-chart class="chart-container" *ngIf = "resultData" [seriesColors]="chartColors" (seriesClick)="onStoreSeriesClick($event)">
+          <kendo-chart-area [height]="300"> </kendo-chart-area>
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="resultData.STORE_NM" type="text">
+                  <kendo-chart-category-axis-item-labels [rotation]="300">
+                  </kendo-chart-category-axis-item-labels>
+              </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series> 
+              <kendo-chart-series-item  type="column" [stack]="false" [data]="resultData" field="DAYPRODUCT_CNT" categoryField="STORE_NM"> 
+                  <kendo-chart-series-item-tooltip>
+                    <ng-template let-dataItem="dataItem">
+                      {{ dataItem.DAYPRODUCT_CNT }} / {{ dataItem.TOTAL_AMT | number : '1.0-0'}}
+                    </ng-template>
+                  </kendo-chart-series-item-tooltip>
+              </kendo-chart-series-item>  
+          </kendo-chart-series>
+      </kendo-chart>
+    </div>
+
+    <div *ngIf = "detailDataActiveList" class="mt-3 row">
+        <div class="col-sm-6">
+          <div class="callout callout-info">
+            <small class="text-muted">{{detailCaption}} Gün ve ürün sayısı toplamı</small><br><strong class="h4">{{storeDayProductCount|number:'1.0-0'}}</strong>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="callout callout-danger">
+            <small class="text-muted">{{detailCaption}} Muhtemel satış kaybı</small><br><strong class="h4">{{storeTotalPrice|number:'1.2-2'}}</strong>
+          </div>
+        </div>
+    </div>
+
+    <!-- <ot-panel *ngIf = "detailDataActiveList" [caption]="getDetailCaption()" class="mt-1"> -->
+      <kendo-grid *ngIf = "detailDataActiveList" [data]="detailDataActiveList" [height]="500" [pageable]="false" [pageSize]="1000" [filterable]="true" 
+      [sortable]="true" [sort]="listParams.sort" [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event)" [navigable]="true" [loading]="detailDataLoading">
+          <kendo-grid-command-column width="60"> 
+              <ng-template kendoGridHeaderTemplate>
+                <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+              </ng-template>
+            </kendo-grid-command-column>
+        <kendo-grid-column field="ROWNO" [title]="'No'" width="40" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="TRANSACTIONDATE" [title]="'Tarih'" width="100" filter="date">
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.TRANSACTIONDATE | date:'dd.MM.yyyy'}} 
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CATEGORY" [title]="'Kategori'" width="150"></kendo-grid-column>
+        <kendo-grid-column field="PRODUCTCODE" [title]="'Ürün Kodu'" width="110"></kendo-grid-column>
+        <kendo-grid-column field="PRODUCTNAME" [title]="'Ürün Adı'" width="150"></kendo-grid-column>
+        <kendo-grid-column field="STORE_CNT" [title]="'Satılan Mağaza Sayısı'" width="80" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="DAILYSTORE_AVG" [title]="'Mağaza Ort.Satış'" width="80" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.DAILYSTORE_AVG | number:'1.2-2':'tr'}} 
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="TOTALSTORE_CNT" [title]="'Toplam Mağaza Sayısı'" width="80" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="TOTAL_AMT" [title]="'Satış Kaybı'" width="120" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.TOTAL_AMT | number:'1.2-2':'tr'}} 
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-excel [fileName]="getFileName()"></kendo-grid-excel>
+
+      </kendo-grid>
+    <!-- </ot-panel> -->
+
+      
+</div>

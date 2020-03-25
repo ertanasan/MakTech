@@ -1,0 +1,12 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ConstraintExceptionId" [caption]="'Constraint Exception Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-date-entry formControlName="StartDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="EndDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Category" [caption]="'Category' | translate" [items]="categoryService.completeList" textField="Category" valueField="CategoryId" usePrimitiveValue="true" class="col-12" [loading]="categoryService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="SubGroup" [caption]="'Subgroup' | translate" [items]="subGroupService.completeList" textField="SubgroupName" valueField="SubgroupID" usePrimitiveValue="true" class="col-12" [loading]="subGroupService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="Coefficient" [caption]="'Coefficient' | translate" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

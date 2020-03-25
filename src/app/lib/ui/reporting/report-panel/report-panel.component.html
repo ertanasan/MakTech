@@ -1,0 +1,34 @@
+<ot-panel *ngIf="showFrame;else panelContent" [caption]="panel ? (panel.additionalParameters?.Caption || panel.Name) : 'loading...'">
+  <ng-container panel-header-tools>
+    <ot-button *ngIf="reportPanel?.RawDataVisible" caption="Data" color="primary" size="sm" (click)="rawDataDialog.show()"></ot-button>
+    <ot-button *ngIf="reportPanel?.ExportEnabled" caption="Export" color="primary" size="sm" (click)="exportReportData()"></ot-button>
+    <ot-button caption="Reload" (onClick)="reloadData()" color="primary" size="sm"></ot-button>
+  </ng-container>
+  <ot-panel *ngIf="panel?.Filters.length > 0" caption="{{ 'Filters' | translate }}" class="col-12">
+    <div class="row">
+      <div class="col-6" *ngFor="let filter of panel.Filters; let i = index">
+        <div class="form-group">
+          <ot-report-filter [filter]="panel.Filters[i]"></ot-report-filter>
+        </div>
+      </div>
+    </div>
+    <ot-button caption="{{ 'Filter' | translate }}" color="primary" size="sm" class="float-right" (onClick)="refreshList()" style="margin-left: auto;"></ot-button>
+  </ot-panel>
+  <ng-container [ngTemplateOutlet]="panelContent"></ng-container>
+  <ng-template #gridReport>
+    <ot-grid-report 
+      [panel]="panel" 
+      [reportService]="genericReportService"
+      [container]="this"
+    ></ot-grid-report>
+  </ng-template>
+  <ng-template #chartReport>
+    <p>Chart report here!</p>
+  </ng-template>
+</ot-panel>
+<ot-message-dialog #rawDataDialog caption="{{ ('Data of ' + panel?.Name) | translate }}" size="xl">
+  <kendo-grid [data]="genericReportService.activeList.data" [loading]="genericReportService.loading"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" (pageChange)="handleRawPageChange($event)"
+    [sortable]= "true" [sort]="listParams.sort" (sortChange)="handleRawSortChange($event)">
+  </kendo-grid>
+</ot-message-dialog>

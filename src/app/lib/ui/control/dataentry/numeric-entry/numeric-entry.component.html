@@ -1,0 +1,52 @@
+<ot-data-entry-template
+  *ngIf="!inGrid"
+  caption="{{ caption }}"
+  [hasFormControl]="ngControl"
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+  [showCaption]="showCaption"
+  >
+  <kendo-numerictextbox 
+    #kendoInput
+    editor
+    [ngClass]="getControlClasses()"
+    (change)="onChangeHandler($event)"
+    [(ngModel)]="value"
+    (blur)="touch()"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [spinners]="buttonsVisible"
+    [format]="format"
+    [step]="step"
+    [min]="min"
+    [max]="max"
+    [autoCorrect]="autoCorrect"
+    [decimals]="decimals"
+  >
+  </kendo-numerictextbox>
+</ot-data-entry-template>
+
+<kendo-numerictextbox 
+  *ngIf="inGrid"
+  #inputInGrid
+  editor
+  class="col-12 my-0 py-0 ml-0 pl-0 bg-transparent border-0"
+  [ngClass]="getControlClasses()"
+  (change)="onChangeHandler($event)"
+  [(ngModel)]="value"
+  (blur)="touch()"
+  [readonly]="isReadOnly"
+  [disabled]="disabled ? disabled : (ngControl ? ngControl.control.disabled : isDisabled)"
+  [spinners]="buttonsVisible"
+  [format]="format"
+  [step]="step"
+  [min]="min"
+  [max]="max"
+  [autoCorrect]="autoCorrect"
+  [decimals]="decimals"
+>
+</kendo-numerictextbox>

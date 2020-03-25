@@ -1,0 +1,124 @@
+<ot-list-screen-container [header]="'Expense Report' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+
+  <ng-container header-items>
+    <table>
+        <tr>
+          <th>
+            Masraf Tarihi : 
+          </th>
+          <th>
+            <kendo-datepicker [(value)]="range.start" captionWidth="0" format="dd.MM.yyyy"></kendo-datepicker>
+          </th>
+          <th>
+            <kendo-datepicker [(value)]="range.end" captionWidth="0" format="dd.MM.yyyy"></kendo-datepicker>
+          </th>
+          <th>
+            <ot-button caption="{{ 'Filter' | translate }}" color="primary" size="sm" (onClick)="readDate()"></ot-button>
+          </th>
+          <th>
+            <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'">Excel</button>
+          </th>
+        </tr>
+    </table>
+  </ng-container>
+
+<div class="row">
+  <!-- <ol class="col-12 breadcrumb"> -->
+    <div class="ml-3 mt-1">
+      <h5>
+        {{ 'Toplam Masraf : '}}{{totalExpense | currency:'TRY':'symbol-narrow':'1.0-2':'tr'}}
+      </h5>
+    </div>
+  <!-- </ol> -->
+</div>
+<div class="row">
+
+  <div class="col-3">
+    <kendo-grid [data]="storeService.activeList" [loading]="storeService.loading" [height]="300"
+      [skip]="storeListParams.skip" [sortable]="true" [sort]="storeListParams.sort"
+      [selectable]="{ checkboxOnly: false, mode: 'multiple' }" [filterable]="true" [filter]="storeListParams.filter"
+      (dataStateChange)="handleDataStateChange($event,1)" [kendoGridSelectBy]="'StoreId'"
+      [selectedKeys]="storeSelection" (selectedKeysChange)="onSelectedKeysChange()">
+      <kendo-grid-checkbox-column width="50" showSelectAll="true" filter="boolean"></kendo-grid-checkbox-column>
+      <kendo-grid-column field="Name" [title]="'Store Name' | translate"></kendo-grid-column>
+      <!-- <kendo-grid-column field="CityName" [title]="'City' | translate" width="120"></kendo-grid-column> -->
+    </kendo-grid>
+
+    <kendo-grid [data]="managerService.activeList" [loading]="managerService.loading" [height]="300"
+      [skip]="manageListParams.skip" [sortable]="true" [sort]="manageListParams.sort"
+      [selectable]="{ checkboxOnly: false, mode: 'multiple' }" [filterable]="true" [filter]="manageListParams.filter"
+      (dataStateChange)="handleDataStateChange($event,2)" [kendoGridSelectBy]="'RegionManagersId'"
+      [selectedKeys]="managerSelection" (selectedKeysChange)="onSelectedKeysChange()">
+      <kendo-grid-checkbox-column width="50" showSelectAll="true" filter="boolean"></kendo-grid-checkbox-column>
+      <kendo-grid-column field="RegionManagerName" [title]="'Region Manager Name' | translate"></kendo-grid-column>
+    </kendo-grid>
+
+    <kendo-grid [data]="expenseTypeService.activeList" [loading]="expenseTypeService.loading" [height]="300"
+      [skip]="categoryListParams.skip" [sortable]="true" [sort]="categoryListParams.sort"
+      [selectable]="{ checkboxOnly: false, mode: 'multiple' }" [filterable]="true" [filter]="categoryListParams.filter"
+      (dataStateChange)="handleDataStateChange($event, 3)" [kendoGridSelectBy]="'ExpenseTypeId'"
+      [selectedKeys]="typeSelection" (selectedKeysChange)="onSelectedKeysChange()" >
+      <kendo-grid-checkbox-column width="50" showSelectAll="true" filter="boolean"></kendo-grid-checkbox-column>
+      <kendo-grid-column field="ExpenseTypeName" [title]="'Expense Type Name' | translate"></kendo-grid-column>
+    </kendo-grid>
+
+  </div>
+
+
+
+  <div class="col-9">
+    <kendo-grid #grid [data]="groupedListData" [loading]="dataService.loading" [height]="600" [pageable]="listParams.pageable"
+      [pageSize]="listParams.take" [skip]="listParams.skip" [sortable]="true" [sort]="listParams.sort"
+      [filterable]="true" [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event, 4)">
+       <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      </ng-template>
+
+      <kendo-grid-column field="ROWNO" [title]="'Order' | translate" width="180"> </kendo-grid-column>
+
+      <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="180"> </kendo-grid-column>
+      <kendo-grid-column field="MANAGER_NM" [title]="'Region Manager Name' | translate" width="180"></kendo-grid-column>
+
+      <!-- <kendo-grid-column field="EXPENSE_DT" [title]="'Expense Date' | translate" width="180" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.EXPENSE_DT | date:'dd.MM.yyyy'}}</span>
+        </ng-template>
+      </kendo-grid-column> -->
+
+      <kendo-grid-column field="EXPENSE_AMT" [title]="'Expense Total Amount' | translate" width="180" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.EXPENSE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column field="EXPENSETYPE_NM" [title]="'Expense Type' | translate" width="180"></kendo-grid-column>
+      <kendo-grid-excel [fileName]="getxlsFileName()"></kendo-grid-excel>
+    </kendo-grid>
+
+    <kendo-chart *ngIf="chartData" [seriesColors]="['red']" style="margin-top: 30px;">
+      <kendo-chart-area [height]="250"> </kendo-chart-area>
+      <kendo-chart-legend position="center"></kendo-chart-legend>
+      <kendo-chart-category-axis>
+        <kendo-chart-category-axis-item [categories]="chartData.EXPENSE_DT" baseUnit="fit" type="date"
+          maxDateGroups="31">
+        </kendo-chart-category-axis-item>
+      </kendo-chart-category-axis>
+      <kendo-chart-series>
+        <kendo-chart-series-item type="line" [data]="chartData" field="EXPENSE_AMT" categoryField="EXPENSE_DT">
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-category="EXPENSE_AMT" let-value="value">
+              <div class="row">
+                <div class="col-12" style="text-align: center">
+                  {{ value | number:'1.0-0':'tr'}}
+                </div>
+              </div>
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+      </kendo-chart-series>
+    </kendo-chart>
+
+  </div>
+</div>
+
+</ot-list-screen-container>

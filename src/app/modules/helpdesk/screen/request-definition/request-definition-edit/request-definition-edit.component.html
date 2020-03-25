@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="RequestDefinitionId" [caption]="'Request Definition Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="RequestDefinitionName" [caption]="'Request Definition Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="RequestGroup" [caption]="'Request Group' | translate" [items]="container.masterId ? [container.masterObject] : requestGroupService.completeList"
+      [isReadOnly]="!!container.masterId" textField="RequestGroupName" valueField="RequestGroupId" usePrimitiveValue="true" class="col-12" [loading]="requestGroupService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Process" [caption]="'Process' | translate" [items]="processDefinitionService.completeList"
+      textField="ProcessDefinitionName" valueField="ProcessDefinitionId" usePrimitiveValue="true" class="col-12" [loading]="processDefinitionService.loading"></ot-dropdown-entry>      
+    <!-- <ot-alpha-entry formControlName="MicroCode" [caption]="'Micro Code' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-numeric-entry formControlName="DisplayOrder" [caption]="'Display Order' | translate" class="col-12"></ot-numeric-entry>
+    <ot-switch-entry formControlName="ActiveFlag" [caption]="'Active Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

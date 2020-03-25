@@ -1,0 +1,15 @@
+﻿CREATE PROCEDURE STR_LST_PROHIBITEDHOURS_SP @ActionId INT AS
+BEGIN
+
+    DECLARE @UserId INT = dbo.SYS_GETCURRENTUSER_FN();
+
+    SELECT
+           P.PROHIBITEDHOURSID,
+           P.ACTION,
+           P.STORE_CD,
+           P.STARTHOUR_NO,
+           P.ENDHOUR_NO
+      FROM STR_PROHIBITEDHOURS P (NOLOCK)
+	 WHERE [ACTION] = @ActionId
+       AND @UserId NOT IN (233, 419) -- overtech_gm, yusuf esgin
+END;

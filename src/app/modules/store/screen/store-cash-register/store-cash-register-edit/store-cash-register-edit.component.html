@@ -1,0 +1,18 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreCashRegisterId" [caption]="'Store Cash Register Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="true"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Name" [caption]="'Name' | translate" class="col-12"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="container.MasterId ? [container.MasterObject] : storeService.completeList"
+      [isReadOnly]="container.MasterId" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+    <ot-dropdown-entry formControlName="CashRegisterModel" [caption]="'Cash Register Model' | translate" [items]="cashRegisterModelService.completeList" textField="Name" valueField="CashRegisterModelId" usePrimitiveValue="true" class="col-12" [loading]="cashRegisterModelService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="SerialNo" [caption]="'Serial No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="GibDeviceNo" [caption]="'Gib Device No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="IpAddress" [caption]="'IP Address' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PriceFilePath" [caption]="'Price File Path' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SaleFilePath1" [caption]="'Sale File Path 1' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SaleFilePath2" [caption]="'Sale File Path 2' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SaleFilePath3" [caption]="'Sale File Path 3' | translate" class="col-12"></ot-alpha-entry>
+    
+    <ot-switch-entry formControlName="CreatePriceFileFlag" [caption]="'Create Price File Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

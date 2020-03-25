@@ -1,0 +1,169 @@
+﻿<ot-list-screen-container [header]="'Loomis' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+    <ng-container header-items>
+        <table>
+            <tr>
+              <th class="col-md-5">
+                <kendo-datepicker [(value)]="selectedDay" format="dd.MM.yyyy" ></kendo-datepicker>
+              </th>
+              <th>
+                <ot-button class="col-md-2" [caption]="'Filter' | translate" color="primary" size="sm" (click)="getDateList()"></ot-button>  
+              </th>               
+              <th>
+                <ot-button [caption]="'Load' | translate" color="primary" size="sm" (click)="fileInput.click()"> </ot-button>
+              </th>
+              <th>
+                <ot-button [caption]="'Delete' | translate" color="primary" size="sm" (click)="onDeleteDay()"> </ot-button>
+              </th>
+              <th>
+                <kendo-dropdownbutton [primary]="true" size="sm" [data]="settings" (itemClick)="onMikro($event)"> Mikro </kendo-dropdownbutton>
+              </th>
+            </tr>
+        </table>
+    </ng-container>
+
+  <kendo-grid [data]="loomisActiveList" [loading]="dataService.loading" [height]="615"
+  [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+  [sortable]= "true" [sort]="listParams.sort"
+  [filterable]="true" [filter]="listParams.filter" 
+  (dataStateChange)="handleDataStateChange($event)"
+  [kendoGridSelectBy]="'LoomisId'" [selectable]="{checkboxOnly: true}" [selectedKeys]="checkedList"
+  (selectedKeysChange)="onSelectedKeysChange($event)"
+  >
+    <kendo-grid-checkbox-column showSelectAll="true" 
+    field="BankPosTransactionsId" 
+    width="50" filter="boolean">
+    </kendo-grid-checkbox-column> 
+    <!-- <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column> -->
+    <kendo-grid-column field="LoomisDate" [title]="'Loomis Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.LoomisDate">{{utilityService.toDate(dataItem.LoomisDate) | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="SaleDate" [title]="'Sale Date' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <kendo-datepicker [(value)]="dataItem.SaleDate" format="dd.MM.yyyy" [readonly]="dataItem.MikroStatusCode > 0"
+        (valueChange)="onSaleDateChange($event, dataItem)"></kendo-datepicker>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="storeService.completeList"
+              valueField="StoreId"
+              textField="Name"
+              memberField="Store"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+          </ng-template> 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="SealNo" [title]="'Seal No' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="DeclaredAmount" [title]="'Declared Amount' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.DeclaredAmount | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ActualAmount" [title]="'Actual Amount' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ActualAmount | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ReconciliationBankAmount" [title]="'Reconciliation Amount' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ReconciliationBankAmount | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>    
+
+    <kendo-grid-column field="ControlCode" [title]="'Control Status' | translate" width="200">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="controlStatusList"
+          valueField="value"
+          textField="text"
+          memberField="ControlCode"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.ControlCode | getName:'value':'text':controlStatusList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Explanation" [title]="'Explanation' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="MikroTime" [title]="'Mikro Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.MikroTime">{{utilityService.toDate(dataItem.MikroTime) | date:('angularLongDateFormat' | translate)}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MikroStatusCode" [title]="'Mikro Status Code' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="MikroTransactionCode" [title]="'Mikro Transaction Code' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="CumulativeDiff" [title]="'Cumulative Diff' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.CumulativeDiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CumulativeNegativeDiff" [title]="'Cumulative Negative Diff' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.CumulativeNegativeDiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ConsistentDayCount" [title]="'Consistent Day Count' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="DayCount" [title]="'Day Count' | translate" width="100"></kendo-grid-column>
+
+    <kendo-grid-column field="ActualDiff" [title]="'Actual Diff' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ActualDiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ReconciliationDiff" [title]="'Reconciliation Diff' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ReconciliationDiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ReconDeclaredDiff" [title]="'Rcl Declared Diff' | translate" width="100" filter="numeric" 
+      [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ReconDeclaredDiff | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="FakeAmount" [title]="'Fake Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<input [hidden]="true" #fileInput type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+<ot-loomis-edit #editScreen screenName="ot-loomis-edit"></ot-loomis-edit>
+
+<ot-custom-dialog #approveConfirm size="sm">
+  <p>{{localeDString}} Onaylıyor musunuz?</p>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'Cancel' | translate" (onClick)="approveConfirm.hide()"></ot-button>
+    <ot-button [caption]="'Confirm' | translate" color="primary" (onClick)="approveOnClicked()"></ot-button>
+  </ng-container>
+</ot-custom-dialog>
+
+<ot-approve-message-box #saleChangeApprove 
+  [approveMessage]="approveMessage" 
+  [approveTitle]="approveTitle" 
+  (approved)="onSaleChangeApproved()"
+  (cancelled)="onSaleChangeCancelled()">
+</ot-approve-message-box>

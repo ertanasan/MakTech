@@ -1,0 +1,404 @@
+<div class="row">
+  <ol class="col-md-6 breadcrumb">
+    <h4 class="ml-3">{{ storeName }}</h4>
+  </ol>
+  <div class="col-md-6 breadcrumb">
+  </div>
+</div>
+
+<!-- <ng-template #template let-anchor>
+  <span>{{ anchor.nativeElement.innerText }}</span>
+</ng-template>
+<div kendoTooltip
+  showOn="none"
+  [tooltipTemplate]="template"
+  filter=".k-grid td"
+  (mouseover)="showTooltip($event)"> -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          icon="fa fa-shopping-cart"
+          [caption]="'Daily Sale / Customer Count' | translate"
+          text="{{storeSaleSummaryData.TODAYSALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} / {{ storeSaleSummaryData.TODAYCUSTOMER }}"
+        ></ot-simple-widget>
+      </div>
+    <div class="col-md-12 col-lg-6 col-xl-3">
+      <ot-simple-widget
+        [padding]="0"
+        icon="fa fa-shopping-cart"
+        [caption]="'Mountly Maximum Sale / Customer Count' | translate"
+        text="{{storeSaleSummaryData.CM_MAXSALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} / {{ storeSaleSummaryData.CM_MAXCUSTOMER }}"
+      ></ot-simple-widget>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-3">
+      <ot-simple-widget
+        [padding]="0"
+        icon="fa fa-shopping-cart"
+        [caption]="'Mountly Average Sale / Customer Count' | translate"
+        text="{{storeSaleSummaryData.CM_AVGSALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} / {{ storeSaleSummaryData.CM_AVGCUSTOMER }}"
+      ></ot-simple-widget>
+    </div>
+    <div *ngIf="(dashboardAuthorization === 'HQ')" class="col-md-12 col-lg-6 col-xl-3">
+      <ot-simple-widget
+        [padding]="0"
+        icon="fa fa-archive"
+        [caption]="'Stock Price / Stocks At Critical Level' | translate"
+        text="{{storeSaleSummaryData.STOCKPRICE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}} / {{ stocksAtCriticalLevelCount }}"
+      ></ot-simple-widget>
+    </div>
+    <div *ngIf="(dashboardAuthorization !== 'HQ')" class="col-md-12 col-lg-6 col-xl-3">
+      <ot-simple-widget
+        [padding]="0"
+        icon="fa fa-archive"
+        [caption]="'Stocks At Critical Level' | translate"
+        text="{{ stocksAtCriticalLevelCount }}"
+      ></ot-simple-widget>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="dashboardAuthorization === 'HQ'">
+    <div class="col-md-12 col-lg-12 col-xl-12 ">
+      <ot-panel [caption]="'Daily Sale Trend' | translate">
+        <ng-container panel-header-tools>
+          <div class="row">
+            <kendo-daterange>
+              <kendo-dateinput kendoDateRangeStartInput [(value)]="saleTrendStartDate" spinners=true></kendo-dateinput>
+              &nbsp; - &nbsp;
+              <kendo-dateinput kendoDateRangeEndInput [(value)]="saleTrendEndDate" spinners=true></kendo-dateinput>
+            </kendo-daterange>
+            &nbsp;&nbsp;
+            <ot-button (onClick)="refreshDailySaleTrend()" icon="fa fa-refresh" color="primary" style.margin-right="10px" style.margin-left="10px"></ot-button>
+          </div>
+        </ng-container>
+        <div *ngIf="dailySaleTrendLoading" class="chartLoadingContainer col-12">
+          <span class="k-icon k-i-loading chartLoadingIcon"></span>
+        </div>
+        <kendo-chart *ngIf="dailySaleTrend && !dailySaleTrendLoading" [seriesColors]="chartColors">
+          <kendo-chart-legend position="bottom"></kendo-chart-legend>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item [title]="{ text: 'Days' | translate }" [plotBands]="packagePlotBands" baseUnit="days" type="date">
+              <kendo-chart-category-axis-item-labels [rotation]="270">
+              </kendo-chart-category-axis-item-labels>
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line"
+                                     [style]="'smooth'"
+                                     [data]="dailySaleTrend"
+                                     field="TOTALPRICE"
+                                     categoryField="DATE_DT">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{ category | date: 'dd.MM.yyyy' }}
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      {{ value | currency:'TRY':'symbol-narrow':'1.0-0':'tr' }}
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="dashboardAuthorization === 'HQ'" >
+    <div class="col-md-12 col-lg-12 col-xl-12 ">
+      <ot-panel [caption]="'Stock-Price-Sale Relation' | translate">
+        <h3 *ngIf="!isAnyStockTaking" [ngStyle]="{'color': utility.getColor('danger')}"> {{ msgNoStockTaking | translate}} </h3>
+        <ng-container panel-header-tools *ngIf="isAnyStockTaking">
+          <ot-button [caption]="'ShowData' | translate" (onClick)="onShowProductStockListDialog()" color="primary" size="sm"></ot-button>
+        </ng-container>
+        <div *ngIf="productStockLoading" class="chartLoadingContainer col-12">
+          <span class="k-icon k-i-loading chartLoadingIcon"></span>
+        </div>
+        <kendo-chart *ngIf="isAnyStockTaking" [pannable]="true" [zoomable]="true" class="chart-container" 
+                      [seriesColors]="chartColors" (seriesClick)="onStockBubbleClick($event)">
+          <!-- <kendo-chart-title [text]="'Stock-Price-Sale Relation' | translate"></kendo-chart-title> -->
+          <kendo-chart-series>
+            <kendo-chart-series-item type="scatter"
+                                      [data]="productStockList"
+                                      [xField]="xAxisOfStockScatterChart" yField="STOCK" sizeField="PRICE" categoryField="CATEGORY_NM">
+              <kendo-chart-series-item-tooltip >
+                <ng-template kendoChartSeriesTooltipTemplate let-dataItem="dataItem">
+                  <div class="row">
+                    <div class="col-12 header font-weight-bold">{{ dataItem.STOCKGROUP_NM }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 header font-weight-bold">{{ dataItem.CATEGORY_NM }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ 'Avg Daily Sale' | translate }} <span class="badge">{{ dataItem.AVGDAILYSALE | number:'1.1-1':'tr' }}</span></div>
+                    <!-- <div class="col-7" style="padding-right: 0">{{ 'Avg Daily Sale' | translate }}:</div>
+                    <div class="col-4 text-right" style="padding: 0">{{ dataItem.AVGDAILYSALE | number:'1.1-1':'tr' }}</div> -->
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ 'Price' | translate }} <span class="badge">{{ dataItem.PRICE | currency:'TRY':'symbol-narrow':'1.1-1':'tr' }}</span></div>
+                    <!-- <div class="col-7" style="padding-right: 0">{{ 'Price' | translate }} :</div>
+                    <div class="col-4 text-right" style="padding: 0">{{ dataItem.PRICE | currency:'TRY':'symbol-narrow':'1.1-1':'tr' }}</div> -->
+                  </div>
+                  <div class="row">
+                    <div class="col-12">{{ 'Stock' | translate }} <span class="badge">{{ dataItem.STOCK | number:'1.1-1':'tr' }}</span></div>
+                    <!-- <div class="col-7" style="padding-right: 0">{{ 'Stock' | translate }} :</div>
+                    <div class="col-4 text-right" style="padding: 0">{{ dataItem.STOCK | number:'1.1-1':'tr' }}</div> -->
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+          <kendo-chart-x-axis>
+              <kendo-chart-x-axis-item [title]="{text: xAxisOfStockScatterChart | translate}" type="log">
+              </kendo-chart-x-axis-item>
+          </kendo-chart-x-axis>
+          <kendo-chart-y-axis>
+              <kendo-chart-y-axis-item [title]="{text:'STOCK' | translate}" type="log">
+              </kendo-chart-y-axis-item>
+          </kendo-chart-y-axis>
+        </kendo-chart>
+        <div class="row" *ngIf="isAnyStockTaking">
+          <div class="col-md-12">
+            <div class="text-center">
+              <kendo-buttongroup class="col-md-2" [selection]="'single'">
+                <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="xAxisOfStockScatterChart='AVGDAILYTOTAL'"> {{ 'Average Daily Total' | translate }} </button>
+                <button kendoButton [toggleable]="true" (selectedChange)="xAxisOfStockScatterChart='PRICE'"> {{ 'Price' | translate }} </button>
+              </kendo-buttongroup>
+            </div>
+          </div>
+        </div>
+      </ot-panel>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row" *ngIf="dashboardAuthorization === 'HQ'">
+    <div class="col-md-12 col-lg-12 col-xl-12 ">
+      <ot-panel [caption]="'Daily Stock Trend' | translate">
+        <h3 *ngIf="!isAnyStockTaking" [ngStyle]="{'color': utility.getColor('danger')}"> {{ msgNoStockTaking | translate}} </h3>
+        <ng-container panel-header-tools *ngIf="isAnyStockTaking">
+          <div class="row">
+              <kendo-numerictextbox [(value)]="dailyStockTrendDays" [min]="0" [max]="366" format="n0" [style.width]="'80px'"></kendo-numerictextbox>
+              <ot-button (onClick)="refreshDailyStockTrend()" icon="fa fa-refresh" color="primary" [style.margin-right]="'10px'" [style.margin-left]="'10px'"></ot-button>
+          </div>
+        </ng-container>
+        <div *ngIf="dailyStockTrendByStoreLoading" class="chartLoadingContainer col-12">
+          <span class="k-icon k-i-loading chartLoadingIcon"></span>
+        </div>
+        <kendo-chart *ngIf="isAnyStockTaking && dailyStockTrendByStore && !dailyStockTrendByStoreLoading" [seriesColors]="chartColors">
+          <kendo-chart-legend position="bottom"></kendo-chart-legend>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item baseUnit="days" type="date">
+              <kendo-chart-category-axis-item-labels [rotation]="270">
+              </kendo-chart-category-axis-item-labels>
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line"
+                                     [data]="dailyStockTrendByStore"
+                                     field="STOCKPRICE"
+                                     categoryField="DATE_DT">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{ category | date: 'dd.MM.yyyy' }}
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      {{ value | currency:'TRY':'symbol-narrow':'1.0-0':'tr' }}
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6 col-xl-6">
+      <ot-panel [caption]="'StockOut Trend' | translate">
+        <h3 *ngIf="!isAnyStockTaking" [ngStyle]="{'color': utility.getColor('danger')}"> {{ msgNoStockTaking | translate}} </h3>
+        <ng-container panel-header-tools *ngIf="isAnyStockTaking">
+          <div class="row">
+              <kendo-numerictextbox [(value)]="stocksAtCriticalLevelDays" [min]="0" [max]="366" format="n0" [style.width]="'80px'"></kendo-numerictextbox>
+              <ot-button (onClick)="refreshDailyStockOut()" icon="fa fa-refresh" color="primary" [style.margin-right]="'10px'" [style.margin-left]="'10px'"></ot-button>
+          </div>
+        </ng-container>
+        <div *ngIf="dailyStockoutLoading" class="chartLoadingContainer col-12">
+          <span class="k-icon k-i-loading chartLoadingIcon"></span>
+        </div>
+        <kendo-chart *ngIf="isAnyStockTaking && dailyStockoutList && !dailyStockoutLoading" [seriesColors]="chartColors" (seriesClick)="onDailyStockAreaClick($event)">
+          <kendo-chart-value-axis>
+            <kendo-chart-value-axis-item name="StockOut_axis"
+                                        [title]="{ text: 'StockOut' | translate }">
+            </kendo-chart-value-axis-item>
+          </kendo-chart-value-axis>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item [categories]="dailyStockoutList.TRANSACTION_DT" baseUnit="days" type="date" [title]="{ text: 'Transaction Date' | translate }">
+              <kendo-chart-category-axis-item-labels [rotation]="270">
+              </kendo-chart-category-axis-item-labels>
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="area" 
+                                      [data]="dailyStockoutList"
+                                      field="STOCKOUT"
+                                      categoryField="TRANSACTION_DT"
+                                      axis="StockOut_axis">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{ category | date: 'dd.MM.yyyy' }}
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      {{ value | currency:'TRY':'symbol-narrow':'1.1-1':'tr' }}
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-6">
+      <ot-panel [caption]="'Stocks At Critical Level' | translate">
+        <h3 *ngIf="!isAnyStockTaking" [ngStyle]="{'color': utility.getColor('danger')}"> {{ msgNoStockTaking | translate}} </h3>
+        <kendo-grid *ngIf="isAnyStockTaking" [data]="stocksAtCriticalLevel" [height]="400"[pageable]="false" [pageSize]="4000" [sortable]= "false">
+          <!-- <kendo-grid-column field="STORE" [title]="'StoreId' | translate" width="50" filter="numeric"></kendo-grid-column>
+          <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="160"></kendo-grid-column>
+          <kendo-grid-column field="PRODUCT" [title]="'ProductId' | translate" width="50" filter="numeric"></kendo-grid-column>     -->
+          <kendo-grid-column field="CRITICALLEVEL" [title]="'Critical Level' | translate" filter="numeric" width="60" class="text-center">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span *ngIf="dataItem.CRITICALLEVEL === 0" class="k-icon k-i-warning text-warning"></span>
+              <span *ngIf="dataItem.CRITICALLEVEL === 1" class="k-icon k-i-close-circle text-danger"></span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="STOCKGROUP_NM" [title]="'Stock Group Name' | translate" width="160" ></kendo-grid-column>
+          <kendo-grid-column *ngIf="dashboardAuthorization === 'HQ'" field="STOCK" [title]="'Stock' | translate" filter="numeric" width="80">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="AVGDAILYSALE" [title]="'Average Daily Sale' | translate" filter="numeric" width="80">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.AVGDAILYSALE | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="MAXDAILYSALE" [title]="'Maximum Daily Sale' | translate" filter="numeric" width="80" >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.MAXDAILYSALE | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>  
+      </ot-panel>
+    </div>
+  </div> 
+
+  <div class="row" *ngIf="dashboardAuthorization === 'HQ'">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+      <ot-panel [caption]="'Sales By Category' | translate">
+        <div class="row">
+          <div class="col-md-12 col-lg-6 col-xl-6">
+            <kendo-chart *ngIf="salesByCategories" [seriesColors]="chartColors" (seriesClick)="onCategorySalesBarClicked($event)" >
+              <!-- <kendo-chart-title [text]="'Category Percentages' | translate"></kendo-chart-title> -->
+              <kendo-chart-category-axis>
+                  <kendo-chart-category-axis-item  type="category">
+                    <kendo-chart-category-axis-item-labels>
+                    </kendo-chart-category-axis-item-labels>
+                  </kendo-chart-category-axis-item>
+              </kendo-chart-category-axis>
+              <kendo-chart-series>
+                <kendo-chart-series-item *ngFor="let columnHeader of xAxisOfCategorySalesBarChart"
+                                         type="bar" 
+                                         [gap]="2" 
+                                         [spacing]=".25" 
+                                         [data]="salesByCategories" 
+                                         [field]="columnHeader.dbName" 
+                                         categoryField="CATEGORY_NM"
+                                         >
+                  <kendo-chart-series-item-tooltip>
+                      <ng-template let-category="category" let-value="value">
+                        <div class="header font-weight-bold">
+                          {{ category }}
+                        </div>
+                        <div>
+                          {{ columnHeader.viewName }}
+                        </div>
+                        <div *ngIf="columnHeader.type === 'percent'" class="row">
+                          <div class="col-12">
+                            {{ value | percent:'1.2-2'  }}
+                          </div>
+                        </div>
+                        <div *ngIf="columnHeader.type === 'currency'" class="row">
+                          <div class="col-12">
+                            {{ value | currency:'TRY':'symbol-narrow':'1.2-2':'tr'  }}
+                          </div>
+                        </div>
+                      </ng-template>
+                    </kendo-chart-series-item-tooltip>
+                </kendo-chart-series-item>
+              </kendo-chart-series>
+            </kendo-chart>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="text-center">
+                  <kendo-buttongroup class="col-md-2" [selection]="'single'">
+                    <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="onCategorySaleBarAxisSwitched('Percent')"> {{ 'Percent' | translate }} </button>
+                    <button kendoButton [toggleable]="true" (selectedChange)="onCategorySaleBarAxisSwitched('Sale')"> {{ 'Sale' | translate }} </button>
+                  </kendo-buttongroup>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-6 col-xl-6">
+            <kendo-chart [seriesColors]="chartColors" (seriesClick)="onProductPieClick($event)">
+              <kendo-chart-title [text]="parametersOfProductSalesPieChart.title | translate"></kendo-chart-title>
+              <kendo-chart-legend position="bottom"></kendo-chart-legend>
+              <kendo-chart-series>
+                <kendo-chart-series-item type="pie"
+                  [data]="salesByProducts"
+                  [field]="parametersOfProductSalesPieChart.valueField"
+                  categoryField="PRODUCT_NM">
+                  <kendo-chart-series-item-tooltip>
+                    <ng-template let-category="category" let-value="value">
+                      <div class="header font-weight-bold">
+                        {{category}}
+                      </div>
+                      <div *ngIf="parametersOfProductSalesPieChart.type === 'percent'" class="row">
+                        <div class="col-6">
+                          {{ value | percent:'1.1-1':'tr' }}
+                        </div>
+                      </div>
+                      <div *ngIf="parametersOfProductSalesPieChart.type === 'currency'" class="row">
+                        <div class="col-6">
+                          {{ value | currency:'TRY':'symbol-narrow':'1.2-2':'tr'  }}
+                        </div>
+                      </div>
+                    </ng-template>
+                  </kendo-chart-series-item-tooltip>
+                </kendo-chart-series-item>
+              </kendo-chart-series>
+            </kendo-chart>
+          </div>
+        </div>
+      </ot-panel>
+    </div>
+  </div>
+</div>
+
+<ot-stockout-product-detail></ot-stockout-product-detail>
+<ot-stock-transaction-dialog></ot-stock-transaction-dialog>
+<ot-product-stock-dialog></ot-product-stock-dialog>

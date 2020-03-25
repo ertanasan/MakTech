@@ -1,0 +1,23 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" [editorWidth]="editorWidth" [captionWidth]="captionWidth"
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched"
+  [validationMessages]="getValidationMessages()"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+>
+  <kendo-timepicker
+    editor
+    [ngClass]="getControlClasses()"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [(ngModel)]="dateValue"
+    (blur)="touch()"
+    [placeholder]="placeholder"
+    [format]="format"
+    [formatPlaceholder]="formatPattern"
+    [min]="min"
+    [max]="max"
+  ></kendo-timepicker>
+</ot-data-entry-template>

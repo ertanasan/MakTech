@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>OverStore.Tables</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{67abe3b7-a5ed-4c12-af8f-0f053d152704}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>OverStore.Tables</RootNamespace>
+    <AssemblyName>OverStore.Tables</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="OSM\" />
+    <Folder Include="STR\" />
+    <Folder Include="SUP\" />
+    <Folder Include="PRD\" />
+    <Folder Include="SLS\" />
+    <Folder Include="RCL\" />
+    <Folder Include="PRC\" />
+    <Folder Include="WHS\" />
+    <Folder Include="INV" />
+    <Folder Include="ANN\" />
+    <Folder Include="MIK" />
+    <Folder Include="ACC\" />
+    <Folder Include="GAM\" />
+    <Folder Include="HDK\" />
+    <Folder Include="FIN\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OverFrame\DB\MSSQL\Tables\Tables.sqlproj">
+      <Name>Tables</Name>
+      <Project>{3648c149-5d15-48d7-a8fb-f22b93d1d5ed}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OverFrame\DB\MSSQL\Functions\Functions.sqlproj">
+      <Name>Functions</Name>
+      <Project>{c3f0921f-a1c5-4e88-a896-48d04461260d}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="STR\STR_CASHREGISTERBRAND.sql" />
+    <Build Include="STR\STR_CASHREGISTERBRANDLOG.sql" />
+    <Build Include="STR\STR_SCALEBRAND.sql" />
+    <Build Include="STR\STR_SCALEBRANDLOG.sql" />
+    <Build Include="STR\STR_SCALEMODEL.sql" />
+    <Build Include="STR\STR_SCALEMODELLOG.sql" />
+    <Build Include="STR\STR_SCALE.sql" />
+    <Build Include="STR\STR_SCALELOG.sql" />
+    <Build Include="STR\STR_CASHREGISTERMODEL.sql" />
+    <Build Include="STR\STR_CASHREGISTERMODELLOG.sql" />
+    <Build Include="STR\STR_CASHREGISTER.sql" />
+    <Build Include="STR\STR_CASHREGISTERLOG.sql" />
+    <Build Include="STR\STR_STORE.sql" />
+    <Build Include="STR\STR_STORELOG.sql" />
+    <Build Include="SUP\SUP_STATUS.sql" />
+    <Build Include="SUP\SUP_STATUSLOG.sql" />
+    <Build Include="SUP\SUP_UPLOADTYPE.sql" />
+    <Build Include="SUP\SUP_UPLOADTYPELOG.sql" />
+    <Build Include="SUP\SUP_DATAUPLOAD.sql" />
+    <Build Include="PRD\PRD_PACKAGE.sql" />
+    <Build Include="PRD\PRD_PACKAGELOG.sql" />
+    <Build Include="PRD\PRD_PRODUCT.sql" />
+    <Build Include="PRD\PRD_PRODUCTLOG.sql" />
+    <Build Include="PRD\PRD_PROPERTYTYPE.sql" />
+    <Build Include="PRD\PRD_PROPERTYTYPELOG.sql" />
+    <Build Include="PRD\PRD_UNIT.sql" />
+    <Build Include="PRD\PRD_UNITLOG.sql" />
+    <Build Include="SLS\SLS_SALE.sql" />
+    <Build Include="SLS\SLS_SALEDETAIL.sql" />
+    <Build Include="SLS\SLS_SALERAW.sql" />
+    <Build Include="SLS\SLS_POSBANKTYPE.sql" />
+    <Build Include="SLS\SLS_POSBANKTYPELOG.sql" />
+    <Build Include="SLS\SLS_POSTRXTYPE.sql" />
+    <Build Include="SLS\SLS_POSTRXTYPELOG.sql" />
+    <Build Include="SLS\SLS_SALEPAYMENT.sql" />
+    <Build Include="SLS\SLS_TRANSACTIONTYPE.sql" />
+    <Build Include="SLS\SLS_TRANSACTIONTYPELOG.sql" />
+    <Build Include="SLS\SLS_SALEZET.sql" />
+    <Build Include="STR\STR_CITY.sql" />
+    <Build Include="STR\STR_CITYLOG.sql" />
+    <Build Include="STR\STR_TOWN.sql" />
+    <Build Include="STR\STR_TOWNLOG.sql" />
+    <Build Include="PRD\PRD_BARCODE.sql" />
+    <Build Include="PRC\PRC_PRODUCT.sql" />
+    <Build Include="PRC\PRC_PRODUCTLOG.sql" />
+    <Build Include="PRC\PRC_PACKAGE.sql" />
+    <Build Include="PRD\PRD_PROPERTYLOG.sql" />
+    <Build Include="PRD\PRD_PROPERTY.sql" />
+    <Build Include="PRD\PRD_BARCODETYPEINT.sql" />
+    <Build Include="PRD\PRD_BARCODETYPEINTLOG.sql" />
+    <Build Include="PRD\PRD_BARCODETYPE.sql" />
+    <Build Include="PRD\PRD_BARCODETYPELOG.sql" />
+    <Build Include="PRD\PRD_CATEGORY.sql" />
+    <Build Include="PRD\PRD_CATEGORYLOG.sql" />
+    <Build Include="PRD\PRD_COUNTRY.sql" />
+    <Build Include="PRD\PRD_COUNTRYLOG.sql" />
+    <Build Include="PRD\PRD_SEASONTYPE.sql" />
+    <Build Include="PRD\PRD_SEASONTYPELOG.sql" />
+    <Build Include="PRD\PRD_STORAGECONDITION.sql" />
+    <Build Include="PRD\PRD_STORAGECONDITIONLOG.sql" />
+    <Build Include="PRD\PRD_SUBGROUP.sql" />
+    <Build Include="PRD\PRD_SUBGROUPLOG.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP1.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP1LOG.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP2.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP2LOG.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP3.sql" />
+    <Build Include="PRD\PRD_SUPERGROUP3LOG.sql" />
+    <Build Include="PRD\PRD_WARNING.sql" />
+    <Build Include="PRD\PRD_WARNINGLOG.sql" />
+    <Build Include="PRC\PRC_PACKAGETYPE.sql" />
+    <Build Include="PRC\PRC_PACKAGETYPELOG.sql" />
+    <Build Include="PRC\PRC_PACKAGEVERSION.sql" />
+    <Build Include="PRC\PRC_STOREPACKAGE.sql" />
+    <Build Include="PRC\PRC_LABELPRINT.sql" />
+    <Build Include="STR\STR_REGIONMANAGERS.sql" />
+    <Build Include="STR\STR_REGIONMANAGERSLOG.sql" />
+    <Build Include="RCL\RCL_RECONCILIATION.sql" />
+    <Build Include="PRC\PRC_CURRENTPRICE.sql" />
+    <Build Include="PRC\PRC_CURRENTPRICELOG.sql" />
+    <Build Include="PRD\PRD_CAMPAIGN.sql" />
+    <Build Include="PRD\PRD_CAMPAIGNLOG.sql" />
+    <Build Include="WHS\WHS_SHIPMENTSCHEDULE.sql" />
+    <Build Include="WHS\WHS_SHIPMENTUNIT.sql" />
+    <Build Include="WHS\WHS_SHIPMENTUNITLOG.sql" />
+    <Build Include="WHS\WHS_STOREORDER.sql" />
+    <Build Include="WHS\WHS_STOREORDERDETAIL.sql" />
+    <Build Include="WHS\WHS_STOREORDERHISTORY.sql" />
+    <Build Include="WHS\WHS_STOREORDERSTATUS.sql" />
+    <Build Include="WHS\WHS_STOREORDERSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_PACKAGETYPE.sql" />
+    <Build Include="WHS\WHS_PACKAGETYPELOG.sql" />
+    <Build Include="WHS\WHS_SHIPMENTTYPE.sql" />
+    <Build Include="WHS\WHS_SHIPMENTTYPELOG.sql" />
+    <Build Include="WHS\WHS_PRODUCTSHIPMENTUNIT.sql" />
+    <Build Include="STR\STR_PROPERTYTYPE.sql" />
+    <Build Include="STR\STR_PROPERTYTYPELOG.sql" />
+    <Build Include="STR\STR_PROPERTY.sql" />
+    <Build Include="STR\STR_PROPERTYLOG.sql" />
+    <Build Include="WHS\WHS_STOCKTAKING.sql" />
+    <Build Include="PRD\PRD_BARCODELOG.sql" />
+    <Build Include="WHS\WHS_SHIPMENTSCHEDULELOG.sql" />
+    <Build Include="WHS\WHS_CONSTRAINTEXCEPTION.sql" />
+    <Build Include="WHS\WHS_CONSTRAINTEXCEPTIONLOG.sql" />
+    <Build Include="WHS\WHS_ZONE.sql" />
+    <Build Include="WHS\WHS_ZONELOG.sql" />
+    <Build Include="WHS\WHS_STOCKTAKINGSCHEDULE.sql" />
+    <Build Include="WHS\WHS_COUNTINGSTATUS.sql" />
+    <Build Include="WHS\WHS_COUNTINGSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_COUNTINGTYPE.sql" />
+    <Build Include="WHS\WHS_COUNTINGTYPELOG.sql" />
+    <Build Include="INV\INV_WAREHOUSETYPE_SYN.sql" />
+    <Build Include="INV\INV_WAREHOUSE_SYN.sql" />
+    <Build Include="INV\INV_TRANSACTIONTYPE_SYN.sql" />
+    <Build Include="INV\INV_STOCKTRANSACTIONS_SYN.sql" />
+    <Build Include="SLS\SLS_STOREDAILYPRODUCT_SYN.sql" />
+    <Build Include="PRC\PRC_DELIST.sql" />
+    <Build Include="RCL\RCL_BANKNOTE.sql" />
+    <Build Include="RCL\RCL_BANKNOTELOG.sql" />
+    <Build Include="RCL\RCL_EXPENSE.sql" />
+    <Build Include="RCL\RCL_EXPENSETYPE.sql" />
+    <Build Include="RCL\RCL_EXPENSETYPELOG.sql" />
+    <Build Include="RCL\RCL_STORE.sql" />
+    <Build Include="RCL\RCL_CASHDIST.sql" />
+    <Build Include="PRC\PRC_PROMOTIONTYPE.sql" />
+    <Build Include="PRC\PRC_PROMOTIONTYPELOG.sql" />
+    <Build Include="PRC\PRC_PACKAGEPROMOTION.sql" />
+    <Build Include="RCL\RCL_CARDDIST.sql" />
+    <Build Include="RCL\RCL_ADJUSTMENT.sql" />
+    <Build Include="STR\STR_ACTIVETERMINALS.sql" />
+    <Build Include="WHS\WHS_RETURNDESTINATION.sql" />
+    <Build Include="WHS\WHS_RETURNDESTINATIONLOG.sql" />
+    <Build Include="WHS\WHS_RETURNREASON.sql" />
+    <Build Include="WHS\WHS_RETURNREASONLOG.sql" />
+    <Build Include="WHS\WHS_RETURNREASONDETAIL.sql" />
+    <Build Include="WHS\WHS_RETURNREASONDETAILLOG.sql" />
+    <Build Include="WHS\WHS_RETURNSTATUS.sql" />
+    <Build Include="WHS\WHS_RETURNSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_PRODUCTRETURN.sql" />
+    <Build Include="WHS\WHS_PRODUCTRETURNREASON.sql" />
+    <Build Include="WHS\WHS_RETURNORDER.sql" />
+    <Build Include="WHS\WHS_ORDERSTATUSHISTORY.sql" />
+    <Build Include="ANN\ANN_SUGGESTION.sql" />
+    <Build Include="STR\STR_CASHIERTEMPLATE.sql" />
+    <Build Include="STR\STR_CASHIERTEMPLATELOG.sql" />
+    <Build Include="STR\STR_CASHIER.sql" />
+    <Build Include="PRD\PRD_STOCKGROUPNAME.sql" />
+    <Build Include="PRD\PRD_STOCKGROUPNAMELOG.sql" />
+    <Build Include="PRD\PRD_STOCKGROUP.sql" />
+    <Build Include="PRD\PRD_LST_PRODUCTREPORT_SP.sql" />
+    <Build Include="WHS\WHS_TOC.sql" />
+    <Build Include="WHS\WHS_TOCDETAIL.sql" />
+    <Build Include="STR\STR_USERSSTORES.sql" />
+    <Build Include="RCL\RCL_STORELOG.sql" />
+    <Build Include="RCL\RCL_EXPENSELOG.sql" />
+    <Build Include="RCL\RCL_ZETIMAGE.sql" />
+    <Build Include="WHS\WHS_INTAKESTATUS.sql" />
+    <Build Include="WHS\WHS_INTAKESTATUSTYPE.sql" />
+    <Build Include="WHS\WHS_INTAKESTATUSTYPELOG.sql" />
+    <Build Include="RCL\RCL_DAYSOFF.sql" />
+    <Build Include="RCL\RCL_DAYSOFFLOG.sql" />
+    <Build Include="ANN\ANN_SUGGESTIONSTATUS.sql" />
+    <Build Include="ANN\ANN_SUGGESTIONSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_SUPPLIERTYPE.sql" />
+    <Build Include="WHS\WHS_SUPPLIERTYPELOG.sql" />
+    <Build Include="WHS\WHS_SUPPLIER.sql" />
+    <Build Include="WHS\WHS_CONSIGNMENTGOODPURCHASE.sql" />
+    <Build Include="STR\STR_BANK.sql" />
+    <Build Include="STR\STR_POS.sql" />
+    <Build Include="WHS\WHS_DRILLPRODUCT.sql" />
+    <Build Include="WHS\WHS_DRILLPRODUCTLOG.sql" />
+    <Build Include="MIK\MIK_EXPENSETRANSFER.sql" />
+    <Build Include="ANN\ANN_SUGGESTIONTYPE.sql" />
+    <Build Include="ANN\ANN_SUGGESTIONTYPELOG.sql" />
+    <Build Include="WHS\WHS_TRANSFERPRODUCT.sql" />
+    <Build Include="WHS\WHS_TRANSFERPRODUCTDETAIL.sql" />
+    <Build Include="STR\STR_CASHIERLOG.sql" />
+    <Build Include="STR\STR_TERMINAL.sql" />
+    <Build Include="WHS\WHS_TRANSFERPRODUCTSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_TRANSFERPRODUCTSTATUS.sql" />
+    <Build Include="WHS\WHS_FAKEORDER.sql" />
+    <Build Include="PRC\PRC_PRICECHANGE.sql" />
+    <Build Include="RCL\RCL_EXCEPTION.sql" />
+    <Build Include="RCL\RCL_VATGROUP.sql" />
+    <Build Include="RCL\RCL_VATGROUPLOG.sql" />
+    <Build Include="ACC\ACC_BANKPOSTRAN.sql" />
+    <Build Include="ACC\ACC_EXCELFILE.sql" />
+    <Build Include="ACC\ACC_EXCELFILELOG.sql" />
+    <Build Include="ACC\ACC_EXCELFILECOLUMNS.sql" />
+    <Build Include="ACC\ACC_EXCELFILECOLUMNSLOG.sql" />
+    <Build Include="SLS\SLS_CANCELREASON.sql" />
+    <Build Include="WHS\WHS_GATHERINGSTATUS.sql" />
+    <Build Include="WHS\WHS_GATHERINGSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_GATHERINGTYPE.sql" />
+    <Build Include="WHS\WHS_GATHERINGTYPELOG.sql" />
+    <Build Include="WHS\WHS_GATHERING.sql" />
+    <Build Include="WHS\WHS_GATHERINGDETAIL.sql" />
+    <Build Include="STR\STR_POSLOG.sql" />
+    <Build Include="STR\STR_ACTION.sql" />
+    <Build Include="STR\STR_ACTIONLOG.sql" />
+    <Build Include="STR\STR_PROHIBITEDHOURS.sql" />
+    <Build Include="STR\STR_PROHIBITEDHOURSLOG.sql" />
+    <Build Include="ACC\ACC_LOOMIS.sql" />
+    <Build Include="STR\STR_ACCOUNTTYPE.sql" />
+    <Build Include="STR\STR_ACCOUNTTYPELOG.sql" />
+    <Build Include="STR\STR_ACCOUNTS.sql" />
+    <Build Include="WHS\WHS_PRODUCTION.sql" />
+    <Build Include="WHS\WHS_PRODUCTIONLOG.sql" />
+    <Build Include="WHS\WHS_PRODUCTIONCONTENT.sql" />
+    <Build Include="WHS\WHS_PRODUCTIONCONTENTLOG.sql" />
+    <Build Include="WHS\WHS_PRODUCTIONORDER.sql" />
+    <Build Include="ACC\ACC_BANKSTATEMENT.sql" />
+    <Build Include="STR\STR_EMPLOYEE.sql" />
+    <Build Include="STR\STR_EMPLOYEELOG.sql" />
+    <Build Include="ACC\ACC_PAYROLL.sql" />
+    <Build Include="ACC\ACC_DEPARTMENT.sql" />
+    <Build Include="ACC\ACC_DEPARTMENTLOG.sql" />
+    <Build Include="ANN\ANN_NOTIFICATION.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONSTATUS.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONSTATUSLOG.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONSTORE.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONTYPE.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONTYPELOG.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONUSER.sql" />
+    <Build Include="GAM\GAM_QUESTION.sql" />
+    <Build Include="GAM\GAM_QUESTIONLOG.sql" />
+    <Build Include="GAM\GAM_CHOICE.sql" />
+    <Build Include="GAM\GAM_CHOICELOG.sql" />
+    <Build Include="GAM\GAM_PLAYER.sql" />
+    <Build Include="GAM\GAM_PLAYERLOG.sql" />
+    <Build Include="GAM\GAM_GAME.sql" />
+    <Build Include="GAM\GAM_GAMELOG.sql" />
+    <Build Include="GAM\GAM_GAMELEVEL.sql" />
+    <Build Include="GAM\GAM_GAMELEVELLOG.sql" />
+    <Build Include="GAM\GAM_PLAY.sql" />
+    <Build Include="GAM\GAM_ANSWER.sql" />
+    <Build Include="PRD\PRD_STOCKGROUPLOG.sql" />
+    <Build Include="SLS\SLS_SALEDASHBOARD.sql" />
+    <Build Include="PRD\PRD_FIXTURE.sql" />
+    <Build Include="PRD\PRD_FIXTURELOG.sql" />
+    <Build Include="STR\STR_FIXTURE.sql" />
+    <Build Include="HDK\HDK_REQUESTGROUP.sql" />
+    <Build Include="HDK\HDK_REQUESTGROUPLOG.sql" />
+    <Build Include="HDK\HDK_REQUESTDEF.sql" />
+    <Build Include="HDK\HDK_REQUESTDEFLOG.sql" />
+    <Build Include="HDK\HDK_PROCESSDEF.sql" />
+    <Build Include="HDK\HDK_PROCESSDEFLOG.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTETYPE.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTETYPELOG.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTE.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTELOG.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTECHOICE.sql" />
+    <Build Include="HDK\HDK_ATTRIBUTECHOICELOG.sql" />
+    <Build Include="HDK\HDK_REQUEST.sql" />
+    <Build Include="HDK\HDK_REQUESTDETAIL.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONGROUP.sql" />
+    <Build Include="ANN\ANN_NOTIFICATIONGROUPUSER.sql" />
+    <Build Include="WHS\WHS_DRILLCOUNTSUMMARY.sql" />
+    <Build Include="SLS\SLS_PRODUCTSUMMARY_SYN.sql" />
+    <Build Include="SLS\SLS_SALEZETLOG.sql" />
+    <Build Include="WHS\WHS_COUNTINGSTOCK.sql" />
+    <Build Include="WHS\WHS_TOCSTORE.sql" />
+    <Build Include="RCL\RCL_ZCONTROLLOG.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLET.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLETSTATUS.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLETSTATUSLOG.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLETLOG.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLETPHOTO.sql" />
+    <Build Include="WHS\WHS_GATHERINGLOG.sql" />
+    <Build Include="STR\STR_POSMOVE.sql" />
+    <Build Include="OSM\OSM_SCREENPROPERTY.sql" />
+    <Build Include="OSM\OSM_SCREENPROPERTYLOG.sql" />
+    <Build Include="ACC\ACC_EINVOICECLIENT.sql" />
+    <Build Include="ACC\ACC_EINVOICECLIENTLOG.sql" />
+    <Build Include="ACC\ACC_INVOICE.sql" />
+    <Build Include="OSM\OSM_TASK.sql" />
+    <Build Include="OSM\OSM_TASKDOCUMENT.sql" />
+    <Build Include="OSM\OSM_TASKHISTORY.sql" />
+    <Build Include="OSM\OSM_TASKSTATUS.sql" />
+    <Build Include="OSM\OSM_TASKSTATUSLOG.sql" />
+    <Build Include="OSM\OSM_TASKTYPE.sql" />
+    <Build Include="OSM\OSM_TASKTYPELOG.sql" />
+    <Build Include="FIN\FIN_CONTRACTDRAFTVERSION.sql" />
+    <Build Include="FIN\FIN_CONTRACTDRAFTVERSIONLOG.sql" />
+    <Build Include="FIN\FIN_LANDLORD.sql" />
+    <Build Include="FIN\FIN_LANDLORDLOG.sql" />
+    <Build Include="FIN\FIN_ESTATERENT.sql" />
+    <Build Include="FIN\FIN_ESTATERENTLOG.sql" />
+    <Build Include="FIN\FIN_ESTATERENTPERIOD.sql" />
+    <Build Include="FIN\FIN_ESTATERENTPERIODLOG.sql" />
+    <Build Include="FIN\FIN_RENTPAYMENTPLAN.sql" />
+    <Build Include="FIN\FIN_RENTPAYMENTPLANLOG.sql" />
+    <Build Include="FIN\FIN_ESTATELANDLORD.sql" />
+    <Build Include="WHS\WHS_COUNTINGSTOCKDIFF.sql" />
+    <Build Include="WHS\WHS_MATERIALCATEGORY.sql" />
+    <Build Include="WHS\WHS_MATERIALCATEGORYLOG.sql" />
+    <Build Include="WHS\WHS_MATERIAL.sql" />
+    <Build Include="WHS\WHS_MATERIALLOG.sql" />
+    <Build Include="WHS\WHS_MATERIALORDER.sql" />
+    <Build Include="WHS\WHS_MATERIALORDERDETAIL.sql" />
+    <Build Include="WHS\WHS_STOCKTAKINGLOG.sql" />
+    <Build Include="HDK\HDK_REQADDITIONALINFO.sql" />
+    <Build Include="ACC\ACC_IDENTITYINFO.sql" />
+    <Build Include="PRD\PRD_FIXTUREBRAND.sql" />
+    <Build Include="PRD\PRD_FIXTUREBRANDLOG.sql" />
+    <Build Include="PRD\PRD_FIXTUREMODEL.sql" />
+    <Build Include="PRD\PRD_FIXTUREMODELLOG.sql" />
+    <Build Include="HDK\HDK_ASSIGNUSER.sql" />
+    <Build Include="HDK\HDK_ASSIGNUSERLOG.sql" />
+    <Build Include="WHS\WHS_MATERIALINFO.sql" />
+    <Build Include="WHS\WHS_MATERIALINFOLOG.sql" />
+    <Build Include="WHS\WHS_MATERIALORDERSTATUSHIST.sql" />
+    <Build Include="SLS\SLS_SALECUSTOMER.sql" />
+    <Build Include="FIN\FIN_CONTRACTPARAMETER.sql" />
+    <Build Include="FIN\FIN_CONTRACTPARAMETERLOG.sql" />
+    <Build Include="OSM\OSM_DOCUMENTDOWNLOADLOG.sql" />
+    <Build Include="STR\STR_WORKINGHOURS.sql" />
+    <Build Include="ACC\ACC_MONTHCLOSE.sql" />
+    <Build Include="INV\INV_STOCKDASHBOARD.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OverStore.Tables.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="OverStore.Tables.refactorlog" />
+  </ItemGroup>
+</Project>

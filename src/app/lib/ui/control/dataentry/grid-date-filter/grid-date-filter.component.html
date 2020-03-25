@@ -1,0 +1,11 @@
+<kendo-datepicker (valueChange)="filterRange($event)">
+
+</kendo-datepicker>
+<button
+*ngIf="hasFilter"
+class="k-button k-button-icon"
+title="Clear"
+(click)="clearFilter()">
+<span class="k-icon k-i-filter-clear"></span>
+</button>
+

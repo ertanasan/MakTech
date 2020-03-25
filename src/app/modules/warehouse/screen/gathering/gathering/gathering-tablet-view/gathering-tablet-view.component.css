@@ -1,0 +1,86 @@
+.tabletview-title-container {
+    background-color: rgba(0,0,0,.4);
+    height: 80px;
+}
+
+.tabletview-input-container {
+    height: 310px;
+    background-color: #F8F8F2;
+}
+
+.tabletview-footer-container {
+    height: 60px;
+    background-color: #F8F8F2;
+}
+
+.product-title {
+    color: #fff;
+    text-align: left;
+    font-size: 40px;
+}
+
+.product-title-small {
+    color: #fff;
+    text-align: left;
+    font-size: 30px;
+}
+
+.activeIndex {
+    font-size: 20px;
+}
+
+.pallet-label,
+.page-label {
+    text-align: center;
+    font-size: 30px;
+    width: 80px;
+    height: 52px;
+    border: double;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.page-label {
+    height: 40px;
+}
+
+.pallet-button {
+    padding-top: 5px;
+}
+
+.slider.slider-horizontal{
+    width: 100px;
+  }
+
+.k-switch {
+    width: 5em!important;
+}
+.k-switch-handle {
+    width: 2.5em!important;
+    height: 2.5em!important;
+}
+.k-switch-on .k-switch-handle {
+    left: calc(100% - 4.8em)!important;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.k-icon-32 {
+    font-size: 32px; /* Sets icon size to 32px */
+}
+
+.k-icon-48 {
+    font-size: 48px; /* Sets icon size to 48px */
+}
+
+.k-icon-64 {
+    font-size: 64px; /* Sets icon size to 64px */
+}
+
+/* BOOTSTRAP 4 COLOR HEX
+#868e96 // secondary
+#f8f9fa // light
+#28a745 // succes
+#28a745 // danger
+#28a745 // primary
+#ffc107 // warning
+#17a2b8 //  info */

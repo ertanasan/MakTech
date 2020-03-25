@@ -1,0 +1,28 @@
+<ot-custom-dialog #dialog size="lg">
+  <kendo-grid [data]="activeList" [height]="400"[pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" (dataStateChange)="handleDataStateChange($event)"
+    >
+    <kendo-grid-column field="PRODUCTID" [title]="'ProductId' | translate" width="50" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="PRODUCT_NM" [title]="'Product Name' | translate"></kendo-grid-column>
+    <kendo-grid-column *ngIf="dashboardAuthorization === 'HQ'" field="DAYSTOCK" [title]="'Stock At That Day' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.DAYSTOCK | number:'1.2-2':'tr'}}</span>
+    </ng-template>
+    </kendo-grid-column>    
+    <kendo-grid-column field="SALE" [title]="'Sale' | translate" filter="numeric" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.SALE | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AVGSALE" [title]="'Average Sale' | translate" filter="numeric" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.AVGSALE | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="STOCKOUT" [title]="'Stockout' | translate" filter="numeric" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.STOCKOUT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-custom-dialog>

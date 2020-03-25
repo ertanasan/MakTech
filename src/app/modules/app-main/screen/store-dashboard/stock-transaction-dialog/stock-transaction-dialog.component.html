@@ -1,0 +1,43 @@
+<ot-custom-dialog #dialog size="lg">
+  <kendo-grid [data]="activeList" [height]="400"[pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+  [sortable]= "true" [sort]="listParams.sort" (dataStateChange)="handleDataStateChange($event)"
+  >
+    <!-- <kendo-grid-column field="STOREID" [title]="'StoreId' | translate" width="50" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="160"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="CATEGORY_NM" [title]="'Category Name' | translate" width="160"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="PRODUCT_NM" [title]="'Product Name' | translate" width="160"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="TRANSACTION_DT" [title]="'Transaction Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.TRANSACTION_DT | date: 'dd.MM.yyyy HH:mm'}}</span>
+      </ng-template>
+    </kendo-grid-column>    
+    <kendo-grid-column field="TRANSACTIONTYPE_NM" [title]="'Transaction Type Name' | translate" width="160"></kendo-grid-column>
+    <kendo-grid-column field="QUANTITY_QTY" [title]="'Quantity' | translate" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.QUANTITY_QTY | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="STOCK" [title]="'Stock' | translate" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column> -->
+
+    <kendo-grid-column field="TRANSACTION_DT" [title]="'Tarih'" width="80" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.TRANSACTION_DT | date:'dd.MM.yyyy'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TRANSACTIONTYPE_NM" [title]="'İşlem Tipi'" width="150"></kendo-grid-column>
+    <kendo-grid-column field="QUANTITY_QTY" [title]="'İşlem'" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.QUANTITY_QTY | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="STOCK"  [title]="'Stok'" width="90" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-custom-dialog>

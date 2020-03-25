@@ -1,0 +1,188 @@
+﻿<table width="95%">
+    <tr>
+      <td class="td1"><b>Depo Ürün Toplama Listesi</b></td>
+    </tr>
+</table>
+
+<br>
+
+<table width="60%">
+  <tbody>
+    <tr>
+      <td class="td3" width="30%" ><b>Sipariş No</b></td>
+      <td class="td3">{{storeOrder.StoreOrderId}}</td>
+    </tr>
+    <tr>
+      <td class="td3" width="30%" ><b>Mağaza Adı</b></td>
+      <td class="td3">{{storeOrder.StoreName}}</td>
+    </tr>
+    <tr>
+      <td class="td3"width="30%"  ><b>Sipariş Tarihi</b></td>
+      <td class="td3">{{storeOrder.OrderDate | date:'dd.MM.yyyy'}}</td>
+    </tr>
+    <tr>
+      <td class="td3"width="30%"  ><b>Sevk Tarihi</b></td>
+      <td class="td3">{{storeOrder.ShipmentDate | date:'dd.MM.yyyy'}}</td>
+    </tr>
+    <tr>
+      <td class="td3"width="30%"  ><b>Siparişi Giren</b></td>
+      <td class="td3">{{storeOrder.LastApproveUser}}</td>
+    </tr>
+    <!-- <tr>
+      <td class="td3" width="30%" ><b>Özel Durum Kodu</b></td>
+      <td class="td3"></td>
+    </tr> -->
+  </tbody>
+</table>
+
+<br>
+
+<table style="page-break-after: always;" width="95%">
+  <tbody>
+    <!-- <tr>
+      <td class="td2" colspan=9 class="uyarı">Siparişiniz aşağıdaki gibidir. Son kontrolü yapmanızı ve onaylamanızı rica ederiz.</td>
+    </tr> -->
+    <tr class="printrow">
+      <td class="td2" colspan=9 >TOPLAMA LİSTESİ 1: AĞIR PAKETLİ ÜRÜNLER</td>
+    </tr>
+    <tr class="printrow">
+      <td class="td2">Sipariş No</td>
+      <td  class="td2">Ürün Kodu</td>
+      <td  class="td2"width="40%">Ürün Adı</td>
+      <td  class="td2">Toplanan Paket Adedi</td>
+      <td  class="td2">Paket Adedi</td>
+      <td  class="td2">Paket İçeriği</td>
+      <td  class="td2">Toplam Sevk Miktarı</td>
+      <td  class="td2">Ürün Adresi</td>
+      <td  class="td2">Palet Sonu</td>
+    </tr>
+    <tr class="printrow" *ngFor="let item of heavyProducts; let i = index;">
+      <td class="td3">{{i+1}}</td>
+      <td class="td3">{{item.ProductCode}}</td>
+      <td class="td3"width="40%">{{item.ProductName}}</td>
+      <td class="td3"></td>
+      <td class="td3">{{item.ShippedQuantity}}</td>
+      <td class="td3">{{item.PackageQuantity}} {{item.Unit}}</td>
+      <td class="td3">{{item.TotalQuantity}} {{item.Unit}}</td>
+      <td class="td3">{{item.LoadOrder}}</td>
+      <td class="td3"><ot-check-box [showCaption]="false"></ot-check-box></td>
+    </tr>
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td colspan=2 >&nbsp;</td>
+      <td >&nbsp;</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3"colspan=2 >Toplam Adet</td>
+      <td class="td3" >{{heavyProductsTotal.packageTotal}}</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3"colspan=2 >Toplam Kg</td>
+      <td class="td3">{{heavyProductsTotal.weightTotal}}</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3" colspan=2 >Toplam Tutar</td>
+      <td class="td3" >{{heavyProductsTotal.priceTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</td>
+    </tr> 
+</tbody>
+</table>
+
+<br>
+
+<table width="95%">
+  <tr>
+    <td class="td1"><b>Depo Ürün Toplama Listesi</b></td>
+  </tr>
+</table>
+
+<br>
+
+<table width="60%">
+<tbody>
+  <tr>
+    <td class="td3" width="30%" ><b>Sipariş No</b></td>
+    <td class="td3">{{storeOrder.StoreOrderId}}</td>
+  </tr>
+  <tr>
+    <td class="td3" width="30%" ><b>Mağaza Adı</b></td>
+    <td class="td3">{{storeOrder.StoreName}}</td>
+  </tr>
+  <tr>
+    <td class="td3"width="30%"  ><b>Sipariş Tarihi</b></td>
+    <td class="td3">{{storeOrder.OrderDate | date:'dd.MM.yyyy'}}</td>
+  </tr>
+  <tr>
+    <td class="td3"width="30%"  ><b>Sevk Tarihi</b></td>
+    <td class="td3">{{storeOrder.ShipmentDate | date:'dd.MM.yyyy'}}</td>
+  </tr>
+  <tr>
+    <td class="td3"width="30%"  ><b>Siparişi Giren</b></td>
+    <td class="td3">{{storeOrder.LastApproveUser}}</td>
+  </tr>
+  <!-- <tr>
+    <td class="td3" width="30%" ><b>Özel Durum Kodu</b></td>
+    <td class="td3"></td>
+  </tr> -->
+</tbody>
+</table>
+
+<br>
+
+<table width="95%">
+  <tbody>
+    <!-- <tr>
+      <td class="td2" colspan=9 class="uyarı">Siparişiniz aşağıdaki gibidir. Son kontrolü yapmanızı ve onaylamanızı rica ederiz.</td>
+    </tr> -->
+    <tr class="printrow">
+      <td class="td2" colspan=9 >TOPLAMA LİSTESİ 2: HAFİF PAKETLİ ÜRÜNLER</td>
+    </tr>
+    <tr class="printrow">
+      <td class="td2">Sipariş No</td>
+      <td class="td2">Ürün Kodu</td>
+      <td class="td2" width="40%">Ürün Adı</td>
+      <td class="td2">Toplanan Paket Adedi</td>
+      <td class="td2">Paket Adedi</td>
+      <td class="td2">Paket İçeriği</td>
+      <td class="td2">Toplam Sevk Miktarı</td>
+      <td class="td2">Ürün Adresi</td>
+      <td class="td2">Palet Sonu</td>
+    </tr>
+    <tr class="printrow" *ngFor="let item of lightProducts; let i = index;">
+      <td class="td3" >{{i+1}}</td>
+      <td class="td3" >{{item.ProductCode}}</td>
+      <td class="td3"  width="40%">{{item.ProductName}}</td>
+      <td class="td3" ></td>
+      <td class="td3" >{{item.ShippedQuantity}}</td>
+      <td class="td3" >{{item.PackageQuantity}} {{item.Unit}}</td>
+      <td class="td3" >{{item.TotalQuantity}} {{item.Unit}}</td>
+      <td class="td3" >{{item.LoadOrder}}</td>
+      <td class="td3" ><ot-check-box [showCaption]="false"></ot-check-box> </td>
+    </tr>
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td colspan=2 >&nbsp;</td>
+      <td >&nbsp;</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3"colspan=2 >Toplam Adet</td>
+      <td class="td3" >{{lightProductsTotal.packageTotal}}</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3"colspan=2 >Toplam Kg</td>
+      <td class="td3">{{lightProductsTotal.weightTotal}}</td>
+    </tr> 
+    <tr>
+      <td colspan=6 >&nbsp;</td>
+      <td class="td3" colspan=2 >Toplam Tutar</td>
+      <td class="td3" >{{lightProductsTotal.priceTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</td>
+    </tr> 
+  </tbody>
+</table>
+
+<br>
+

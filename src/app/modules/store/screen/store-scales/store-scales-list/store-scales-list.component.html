@@ -1,0 +1,77 @@
+﻿<ot-list-screen-container [header]="'Store Scales' | translate" [breadcrumbItems]="breadcrumbItems"
+  [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataLoading"
+    [height]="isEmbedded ? 200:615" [filterable]="isEmbedded?false:true" [filter]="listParams.filter" [sortable]="true"
+    [sort]="listParams.sort" [pageable]="!isEmbedded ?listParams.pageable:false" [pageSize]="listParams.take"
+    [skip]="listParams.skip" (dataStateChange)="handleDataStateChange($event)">
+    <kendo-grid-command-column *ngIf="isEmbedded && (createEnabled || readEnabled || updateEnabled || deleteEnabled)"
+      title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')"
+            [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i
+              class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" (onClick)="showDialog(editScreen, 'Update', dataItem)"
+            icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" (onClick)="showDialog(editScreen, 'Delete', dataItem)"
+            icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-command-column title="" [width]="50" locked="true">
+      <ng-container *ngIf="!isEmbedded">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button kendoGridExcelCommand [caption]="'Excel'" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="Name" [title]="'Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column *ngIf="!masterId" field="Store" [title]="'Store' | translate" width="180">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ScaleModel" [title]="'Scale Model' | translate" width="180">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.ScaleModel | getName:'ScaleModelId':'Name':scaleModelService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="IpAdress" [title]="'IP Address' | translate" width="180"></kendo-grid-column>
+    <!-- <kendo-grid-column field="CurrentPriceVersion" [title]="'Current Price Version' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="CurrentPriceLoadTime" [title]="'Current Price Load Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CurrentPriceLoadTime">{{dataItem.CurrentPriceLoadTime | date: 'dd.MM.yyyy HH:mm' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PrivatePriceVersion" [title]="'Private Price Version' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="PrivatePriceLoadTime" [title]="'Private Price Load Time' | translate" width="180" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.PrivatePriceLoadTime">{{dataItem.PrivatePriceLoadTime | date: 'dd.MM.yyyy HH:mm' }}</div>
+      </ng-template>
+    </kendo-grid-column> -->
+    <!-- <kendo-grid-column field="CreatePriceFileFlag" [title]="'Create Price File Flag' | translate" width="108" filter="boolean"></kendo-grid-column> -->
+    <kendo-grid-column field="Status" [title]="'Status' | translate" width="90" filter="boolean">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-check-box [value]="dataItem.Status" optionName="checkbox_{{ dataItem.StoreScalesId }}" [inGrid]="true"
+          [isReadOnly]="true"></ot-check-box>
+        <!-- <span *ngIf='dataItem.Status' class="k-icon k-i-check" style="color: blue;"></span>
+        <span *ngIf='!dataItem.Status' class="k-icon k-i-close" style="color: red;"></span> -->
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="StatusText" [title]="'Status Text' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="SerialNumber" [title]="'Serial Number' | translate"></kendo-grid-column>
+    <kendo-grid-column field="SealValidDate" [title]="'Seal Valid Date' | translate" width="90" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.SealValidDate && (dataItem.SealValidDate | date:'yyyy-MM-dd') > '2000-01-01'">
+          {{dataItem.SealValidDate | date: 'dd.MM.yyyy' }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-store-scales-edit #editScreen screenName="ot-store-scales-edit" [StoreId]="masterId"></ot-store-scales-edit>

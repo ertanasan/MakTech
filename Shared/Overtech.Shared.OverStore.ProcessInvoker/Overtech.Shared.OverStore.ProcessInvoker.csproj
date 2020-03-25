@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D6D3DCBB-8884-4EDB-895D-44CF88273FA4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Overtech.Shared.OverStore.ProcessInvoker</RootNamespace>
+    <AssemblyName>Overtech.Shared.OverStore.ProcessInvoker</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Overtech.Core.Contract">
+      <HintPath>\\lotiis01\References\Overtech.Core.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Core.Data">
+      <HintPath>\\lotiis01\References\Overtech.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Service">
+      <HintPath>\\lotiis01\References\Overtech.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Overtech.Shared.Configuration">
+      <HintPath>\\lotiis01\References\Overtech.Shared.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountingInvoker.cs" />
+    <Compile Include="AnnouncementInvoker.cs" />
+    <Compile Include="HelpdeskInvoker.cs" />
+    <Compile Include="OverStoreMainInvoker.cs" />
+    <Compile Include="WarehouseInvoker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Accounting\Overtech.DataModels.Accounting.csproj">
+      <Project>{B58F2E43-46A2-4FC0-8965-F9C86A778528}</Project>
+      <Name>Overtech.DataModels.Accounting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Announcement\Overtech.DataModels.Announcement.csproj">
+      <Project>{f016bff5-3d88-4a97-9b48-9d36cca918be}</Project>
+      <Name>Overtech.DataModels.Announcement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Helpdesk\Overtech.DataModels.Helpdesk.csproj">
+      <Project>{6e9be789-c55b-4e5d-9eb7-ae1e0acdb666}</Project>
+      <Name>Overtech.DataModels.Helpdesk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.OverStoreMain\Overtech.DataModels.OverStoreMain.csproj">
+      <Project>{d1afab36-e55e-48ea-aa25-bab01117bb25}</Project>
+      <Name>Overtech.DataModels.OverStoreMain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataModels\Overtech.DataModels.Warehouse\Overtech.DataModels.Warehouse.csproj">
+      <Project>{7d4c2abb-8a3c-4c60-8c4d-5ae31be94a06}</Project>
+      <Name>Overtech.DataModels.Warehouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.Accounting\Overtech.ServiceContracts.Accounting.csproj">
+      <Project>{B0241FE9-5942-4393-8F61-FD96E873390B}</Project>
+      <Name>Overtech.ServiceContracts.Accounting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.Announcement\Overtech.ServiceContracts.Announcement.csproj">
+      <Project>{2c58d643-5aff-4cc4-b304-2e0b356857c0}</Project>
+      <Name>Overtech.ServiceContracts.Announcement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.Helpdesk\Overtech.ServiceContracts.Helpdesk.csproj">
+      <Project>{465c8591-e424-4e48-86dd-6df26037df4e}</Project>
+      <Name>Overtech.ServiceContracts.Helpdesk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.OverStoreMain\Overtech.ServiceContracts.OverStoreMain.csproj">
+      <Project>{273c42f2-8587-4a44-abcd-29e32fabd444}</Project>
+      <Name>Overtech.ServiceContracts.OverStoreMain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceContracts\Overtech.ServiceContracts.Warehouse\Overtech.ServiceContracts.Warehouse.csproj">
+      <Project>{d7fa35ac-6b42-4cc3-83d1-d4b1d5f7ad91}</Project>
+      <Name>Overtech.ServiceContracts.Warehouse</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

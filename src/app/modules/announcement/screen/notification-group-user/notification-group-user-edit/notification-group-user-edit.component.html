@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-dropdown-entry formControlName="NotificationGroup" [caption]="'Notification Group' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : notificationGroupService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="GroupName" valueField="NotificationGroupId" usePrimitiveValue="true" class="col-12" [loading]="notificationGroupService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="User" [caption]="'User' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : userList"
+      [isReadOnly]="container.rightRelationId" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,30 @@
+﻿<ot-list-screen-container [header]="'Task Document' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataLoading" [height]="250"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column *ngIf="!leftRelationId" field="OverStoreTask" [title]="'OverStore Task' | translate" width="120">      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.OverStoreTaskOverStoreTaskId }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="!rightRelationId" field="Document" [title]="'Document' | translate" width="120">      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.DocumentName }}
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-task-document-edit #editScreen screenName="ot-task-document-edit"></ot-task-document-edit>

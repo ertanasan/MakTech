@@ -1,0 +1,13 @@
+<div class="row" [ngSwitch]="filter.TypeObject.Name">
+  <ot-alpha-entry *ngSwitchCase="'Text'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" class="col-6" [captionWidth]="6" [editorWidth]="6"></ot-alpha-entry>
+  <ot-numeric-entry *ngSwitchCase="'Numeric'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" class="col-6" [captionWidth]="6" [editorWidth]="6"></ot-numeric-entry>
+  <ot-date-entry *ngSwitchCase="'Date'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" [format]="filter.Format" class="col-6" [captionWidth]="6" [editorWidth]="6"></ot-date-entry>
+  <ot-date-entry *ngSwitchCase="'DateTime'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" [format]="filter.Format" class="col-6" [captionWidth]="6" [editorWidth]="6"></ot-date-entry>
+  <ot-date-range *ngSwitchCase="'DateRange'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue"  class="col-6" [captionWidth]="6" [editorWidth]="6"></ot-date-range>
+  <ot-dropdown-entry *ngSwitchCase="'Static List'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" class="col-6"
+    textField="Text" valueField="Value" usePrimitiveValue="true" [items]="items" [defaultItem]="filter.additionalParameters.defaultItem" [captionWidth]="6" [editorWidth]="6"
+  ></ot-dropdown-entry>
+  <ot-dropdown-entry *ngSwitchCase="'Dynamic List'" [caption]="filter.LocalHeader || filter.Header" [(value)]="filter.filterValue" class="col-6"
+    [textField]="filter.additionalParameters.TextField" [valueField]="filter.additionalParameters.ValueField"  usePrimitiveValue="true" [items]="items" [captionWidth]="6" [editorWidth]="6"
+  ></ot-dropdown-entry>
+</div>

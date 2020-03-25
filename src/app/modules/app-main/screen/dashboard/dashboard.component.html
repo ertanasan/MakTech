@@ -1,0 +1,382 @@
+<div class="col-md-12 mt-2 mb-1">
+  <div class="row">
+    <div class="col-md-6 ">
+      <h4 class="mx-3" style="display: inline-block; vertical-align: sub">{{ 'Dashboard' | translate }}{{saleService.storeName?'-':''}}{{saleService.storeName}}</h4>
+      <ot-dashboard-router [activeDashboard]="'Sale Dashboard'"></ot-dashboard-router>
+    </div>
+    <div class="col-md-6">
+      <!-- <p *otPrivilege="'Open Home Page'">Yetkin varsa görürsün!</p> -->
+      <p class="refreshtime float-right mr-2">{{ 'Last Refresh Time' | translate }}: {{refreshTime | date : "dd.MM.yyyy HH:mm"}}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="dashboardData" class="container-fluid">
+  <div class="row">
+      <div *ngIf="isStore" class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          icon="fas fa-poll"
+          caption="Stok Satış Oranı / Sırası"
+          text="{{summaryData.stockKPI | number:'1.2-2':'tr'}}/{{summaryData.stockKPIOrder}}"
+          (click)="onStoreCountClick()"
+        ></ot-simple-widget>
+      </div>
+      <div *ngIf="!isStore" class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          icon="fa fa-shopping-cart"
+          caption="Mağaza Sayısı"
+          text="{{summaryData.saleStoreCount}}/{{summaryData.storeCount}}"
+          (click)="onStoreCountClick()"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-shopping-bag"
+          caption="Satış"
+          text="{{summaryData.daily.sale | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+          [routerLink]="['/OverStoreMain/CategoryDetails', 'All']"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-reply-all"
+          caption="İadeler"
+          text="{{summaryData.daily.refund | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+          (click)="onProductReturnClick()"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="warning"
+          icon="fa fa-shopping-bag"
+          caption="Ortalama Satış / Müşteri Sayısı"
+          text="{{summaryData.daily.saleavg | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} / {{summaryData.daily.receiptCount | number: '1.0-0':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+      <ot-progress-widget 
+        title="Bugün : {{summaryData.daily.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}" 
+        titleAlternative="Geçen Hafta Bugün : {{summaryData.lastWeekToday.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+        description="Bugünkü satışlar ile geçen hafta bugün satış oranı."
+        progressCaption="Günlük Satış" 
+        progressPercent="%{{summaryData.daily.pct-100 | number:'1.2-2':'tr'}}" 
+        color="{{summaryData.daily.color}}" 
+        progressMin="0" 
+        progressMax="100"
+        progressValue="{{summaryData.daily.pct/2.0}}"
+        inverted="{{summaryData.daily.inverted}}"
+        [routerLink]="['/OverStoreMain/DashboardDetails', 2]"
+        [coloredTitle]="true"
+      ></ot-progress-widget>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+      <ot-progress-widget 
+        title="Bu Hafta : {{summaryData.weekly.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}" 
+        titleAlternative="Geçen Hafta : {{summaryData.prevWeek.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+        description="Bu haftaki satışlar ile geçen hafta arasında satış oranı."
+        progressCaption="Haftalık Satış" 
+        progressPercent="%{{summaryData.weekly.pct-100 | number:'1.2-2':'tr'}}" 
+        color="{{summaryData.weekly.color}}"
+        progressMin="0" 
+        progressMax="100"
+        progressValue="{{summaryData.weekly.pct/2.0}}"
+        inverted="{{summaryData.weekly.inverted}}"
+        [routerLink]="['/OverStoreMain/DashboardDetails', 3]"
+        [coloredTitle]="true"
+      ></ot-progress-widget>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+      <ot-progress-widget 
+        title="Bu Ay : {{summaryData.monthly.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}" 
+        titleAlternative="Geçen Ay : {{summaryData.prevMonth.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+        description="Bu ayki satışlar ile geçen ay arasında satış oranı."
+        progressCaption="Aylık Satış" 
+        progressPercent="%{{summaryData.monthly.pct-100 | number:'1.2-2':'tr'}}" 
+        color="{{summaryData.monthly.color}}"
+        progressMin="0" 
+        progressMax="100"
+        progressValue="{{summaryData.monthly.pct/2.0}}"
+        inverted="{{summaryData.monthly.inverted}}"
+        [routerLink]="['/OverStoreMain/DashboardDetails', 4]"
+        [coloredTitle]="true"
+      ></ot-progress-widget>
+    </div>
+    <div *ngIf="dashboardAuthorization !== 'ST'" class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+      <ot-progress-widget 
+        title="Bu Yıl : {{summaryData.thisyear.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} - {{summaryData.thisyear.storecount | number: '1.2-2':'tr'}}" 
+        titleAlternative="Geçen Yıl : {{summaryData.lastyear.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} - {{summaryData.lastyear.storecount | number: '1.2-2':'tr'}}"
+        description="Geçen yıl ile bu yıl arasında satış oranı."
+        progressCaption="Yıllık Satış" 
+        progressPercent="%{{summaryData.annual.pct-100 | number:'1.2-2':'tr'}}" 
+        color="{{summaryData.annual.color}}"
+        progressMin="0" 
+        progressMax="100"
+        progressValue="{{summaryData.annual.pct/2.0}}"
+        inverted="{{summaryData.annual.inverted}}"
+        [routerLink]="['/OverStoreMain/DashboardDetails', 5]"
+        [coloredTitle]="true"
+      ></ot-progress-widget>
+    </div>
+    <div *ngIf="dashboardAuthorization === 'ST'" class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+      <ot-progress-widget 
+        title="Dün : {{summaryData.yesterday.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}" 
+        titleAlternative="Geçen Hafta Dün : {{summaryData.lastWeekYesterday.net | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+        description="Dünkü satışlar ile geçen hafta arasında satış oranı."
+        progressCaption="Dünkü Satış" 
+        progressPercent="%{{summaryData.yesterday.pct-100 | number:'1.2-2':'tr'}}" 
+        color="{{summaryData.yesterday.color}}"
+        progressMin="0" 
+        progressMax="100"
+        progressValue="{{summaryData.yesterday.pct/2.0}}"
+        inverted="{{summaryData.yesterday.inverted}}"
+        [routerLink]="['/OverStoreMain/DashboardDetails', 5]"
+        [coloredTitle]="true"
+      ></ot-progress-widget>
+    </div>
+  </div>
+  <div class="row">
+    <!-- <div class="col-md-8 col-lg-4"> -->
+    <div class="col-md-12 col-lg-6 insidevalue">
+      <ot-panel caption="Toplam Satışlar" 
+      [routerLink]="['/OverStoreMain/CategoryDetails', 'All']">
+        <kendo-chart [seriesColors]="chartColors" (seriesClick)="onSeriesClick($event)">
+          <kendo-chart-legend position="top"></kendo-chart-legend>
+          <kendo-chart-series>
+              <!-- <kendo-chart-series-item 
+              *ngFor="let item of series"
+              [data]="item.items" [name]="item.revenue"
+              field="revenue" categoryField="family"
+              type="line">
+            </kendo-chart-series-item> -->
+            <kendo-chart-series-item type="pie"
+              [data]="familyRevenue"
+              field="revenue"
+              categoryField="family"
+              fieldColor="color">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{category}}
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      {{ value | currency:'₺':'symbol':'1.0-0':'tr' }}
+                    </div>
+                    <div class="col-6">
+                      {{ (value/familyGrandTotal) | percent:'1.2-2':'tr'}}
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+    <div class="col-md-12 col-lg-6">
+      <ot-panel caption="Fiyat Gönderim">
+        <kendo-chart style="height: 280px;" [seriesColors]="chartColors" (seriesClick)="onPriceSeriesClick($event)">
+          <kendo-chart-series> 
+            <kendo-chart-series-item  type="bar" [stack]="true" [data]="priceLoadTotals" field="Data[0]" categoryField="Device" color="#0abb87"> 
+              <kendo-chart-series-item-tooltip></kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>  
+            <kendo-chart-series-item  type="bar" [data]="priceLoadTotals" field="Data[1]" categoryField="Device" color="#ffb822">  
+              <kendo-chart-series-item-tooltip></kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>  
+          </kendo-chart-series>
+        </kendo-chart>
+        
+        <kendo-chart style="height: 120px;" (seriesClick)="onLabelPrintClick($event)" [seriesColors]="chartColors" >
+          <kendo-chart-title font='14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"' 
+                            text="Etiket Basım Yüzdesi"></kendo-chart-title>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="bullet" [data]="printedLabelsPercentage" color="#0abb87">
+            </kendo-chart-series-item>
+            <kendo-chart-value-axis>
+              <kendo-chart-value-axis-item  [min]="printedLabelValueAxis.min" 
+                                            [max]="printedLabelValueAxis.max" 
+                                            [plotBands]="printedLabelValueAxis.plotBands">
+                                            <!-- [majorGridLines]="'hidden'" [minorTicks]="'hidden'" -->
+              </kendo-chart-value-axis-item>
+            </kendo-chart-value-axis>
+          </kendo-chart-series>
+          <kendo-chart-tooltip>
+            <ng-template kendoChartSeriesTooltipTemplate let-value="value">
+                <!-- Mağaza Sayısı: {{ value.target }} <br /> -->
+                Basım Yüzdesi: {{ value.current / 100 | percent:'1.1-1':'tr' }}
+            </ng-template>
+          </kendo-chart-tooltip>
+        </kendo-chart>
+      </ot-panel>
+    </div>
+  </div>
+  <!-- <div class="row"> -->
+    <!-- <div class="col-12"> -->
+        <ot-list-screen-container [header]="'Store Sales' | translate" >
+            <ng-container header-items>
+                <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'">Excel</button>  
+                <kendo-buttongroup [selection]="'single'" class="button-group-filter">
+                    <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="onSelectedChange($event, 1)" >Ciro</button>
+                    <button kendoButton [toggleable]="true" (selectedChange)="onSelectedChange($event, 2)">Büyüme</button>
+                </kendo-buttongroup>
+            </ng-container>
+        <kendo-grid #grid="kendoGrid" [data]="storeSalesList" [height]="400" [pageable]="storeSalesLP.pageable" [pageSize]="storeSalesLP.take" [skip]="storeSalesLP.skip" 
+        [sortable]="true" [sort]="storeSalesLP.sort" [filterable]="true" [filter]="storeSalesLP.filter" [navigable]="true" 
+        (dataStateChange)="storeSalesHandleStateChange($event)"  [loading]="storeSalesLoading"
+        [selectable]="{'mode':'single'}" [kendoGridSelectBy]="'STOREID'" (selectedKeysChange)="onStoreSelected($event)">
+          <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+            <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+          </ng-template>
+          <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="150">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <a style="color: blue ; text-decoration: underline" [routerLink]="['/OverStoreMain/StoreDashboard', dataItem.STOREID]" >{{dataItem.STORE_NM}}</a>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="DAILY_AMT" [title]="'Daily Amount' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.DAILY_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="LASTWEEKDAILY_AMT" [title]="'Last Week Daily Amount' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.LASTWEEKDAILY_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="DAILY_PCT" [title]="'Daily PCT' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.DAILY_PCT | percent:'1.1-1':'tr'}} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="WEEKLY_AMT" [title]="'Weekly Amount' | translate" filter="numeric" width="150"  class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.WEEKLY_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="PREVWEEK_AMT" [title]="'Prev Week Amount' | translate" filter="numeric" width="150" class="text-right pr-5">
+              <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                {{ dataItem.PREVWEEK_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+              </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="WEEKLY_PCT" [title]="'Weekly PCT' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.WEEKLY_PCT | percent:'1.1-1':'tr'}} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="MONTHLY_AMT" [title]="'Monthly Amount' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.MONTHLY_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="PREVMONTH_AMT" [title]="'Prev Month Amount' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.PREVMONTH_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===2" field="MONTHLY_PCT" [title]="'Monhtly PCT' | translate" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                {{ dataItem.MONTHLY_PCT | percent:'1.1-1':'tr'}} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===1" field="LASTTRANSACTION_TM" [title]="'Last Transaction Time' | translate" width="70" filterable="false">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.LASTTRANSACTION_TM | date:'HH:mm'}} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===1" field="STORERANK" [title]="'Store Rank' | translate" width="120" class="text-center"></kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===1" field="REGIONRANK" [title]="'Region Rank' | translate" width="120" class="text-center"></kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===1" field="STOCKSALEPCT" [title]="'Stok Satış Oranı'" filter="numeric" width="150" class="text-right pr-5">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.STOCKSALEPCT | number:'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column *ngIf="saleViewCode===1" field="MAKBULORDER" [title]="'Stok Satış Sırası'" width="120" class="text-center"></kendo-grid-column>
+
+          <kendo-grid-excel [fileName]="getFileName('storeSales')"></kendo-grid-excel>
+        </kendo-grid>
+      </ot-list-screen-container>
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <div class="row"> -->
+    <!-- <div class="col-12"> -->
+      <ot-list-screen-container *ngIf = "!isStore" [header]="'Region Manager Sales' | translate" >
+        <ng-container header-items>
+          <button kendoButton [primary]="true" (click)="exportToExcel(gridRM)" [look]="'outline'">Excel</button>
+          <button kendoButton [primary]="true" [routerLink]="['/OverStoreMain/DrillCountPerformance']" [look]="'outline'">Sondaj Sayım</button>
+        </ng-container>
+
+        <kendo-grid #gridRM="kendoGrid" [data]="rmSalesList" [height]="400" [pageable]="false" [pageSize]="rmSalesLP.take" [skip]="rmSalesLP.skip" 
+        [sortable]="true" [sort]="rmSalesLP.sort" [filterable]="false" [filter]="rmSalesLP.filter" [navigable]="true" 
+        (dataStateChange)="rmSalesHandleStateChange($event)"  [loading]="rmSalesLoading">
+          <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+            <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+          </ng-template>
+          <kendo-grid-column field="MANAGER_NM" [title]="'RM Name' | translate" width="150"> </kendo-grid-column>
+          <kendo-grid-column field="STORE_CNT" [title]="'Store Count' | translate" width="80" class="text-center"> </kendo-grid-column>
+          <kendo-grid-column field="DAILYSALE_AMT" [title]="'Daily Amount' | translate" filter="numeric" width="150"  class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.DAILYSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="LASTWEEKSALE_AMT" [title]="'Last Week Amount' | translate" filter="numeric" width="150" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.LASTWEEKSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="DAILY_PCT" [title]="'Daily PCT' | translate" filter="numeric" width="100" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{dataItem.DAILY_PCT | percent:'1.1-1':'tr'}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="DAILYRANK" [title]="'Daily Rank' | translate" width="60" class="text-center"></kendo-grid-column>
+
+          <kendo-grid-column field="WEEKLYSALE_AMT" [title]="'Weekly Amount' | translate" filter="numeric" width="150"  class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.WEEKLYSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="PREVWEEKSALE_AMT" [title]="'Prev Week Amount' | translate" filter="numeric" width="150" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.PREVWEEKSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="WEEKLY_PCT" [title]="'Weekly PCT' | translate" filter="numeric" width="100" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{dataItem.WEEKLY_PCT | percent:'1.1-1':'tr'}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="WEEKLYRANK" [title]="'Weekly Rank' | translate" width="60" class="text-center"></kendo-grid-column>
+
+          <kendo-grid-column field="MONTHLYSALE_AMT" [title]="'Monthly Amount' | translate" filter="numeric" width="150"  class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.MONTHLYSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="PREVMONTHSALE_AMT" [title]="'Prev Month Amount' | translate" filter="numeric" width="150" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.PREVMONTHSALE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="MONTHLY_PCT" [title]="'Monthly PCT' | translate" filter="numeric" width="100" class="text-right">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{dataItem.MONTHLY_PCT | percent:'1.1-1':'tr'}}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="MONTHLYRANK" [title]="'Monthly Rank' | translate" width="60" class="text-center"></kendo-grid-column>
+          <kendo-grid-excel [fileName]="getFileName('BSPerformans')"></kendo-grid-excel>
+        </kendo-grid>
+      </ot-list-screen-container>
+    <!-- </div> -->
+  <!-- </div> -->
+</div>
+
+<!-- <div #kendoMap style="height:600px; width:100%;">
+</div> -->

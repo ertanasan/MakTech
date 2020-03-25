@@ -1,0 +1,39 @@
+<ot-custom-dialog #dialog [caption]="'Product Stocks' | translate" size="xl">
+  <kendo-grid [data]="activeList" [height]="400"[pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+  [sortable]= "true" [sort]="listParams.sort" (dataStateChange)="handleDataStateChange($event)"
+ >
+    <kendo-grid-column field="PRODUCT" [title]="'Id' | translate" width="50" filter="numeric">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="STOCKGROUP_NM" [title]="'Stock Group Name' | translate" width="160"> </kendo-grid-column>
+    <kendo-grid-column field="STOCK" [title]="'Stock' | translate" width="100" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.STOCK | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>    
+    <kendo-grid-column field="AVGDAILYSALE" [title]="'Average Daily Sale' | translate" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.AVGDAILYSALE | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PRICE" [title]="'Price' | translate" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.PRICE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AVGDAILYTOTAL" [title]="'Average Daily Total' | translate" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.AVGDAILYTOTAL | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="STOCKPRICE" [title]="'Stock Price' | translate" filter="numeric" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.STOCKPRICE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CATEGORY_NM" [title]="'Category' | translate" width="160"></kendo-grid-column>
+    <kendo-grid-excel [fileName]="getFileName()"></kendo-grid-excel>
+  </kendo-grid>
+</ot-custom-dialog>

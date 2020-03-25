@@ -1,0 +1,31 @@
+<ot-data-entry-template
+  caption="{{ caption }}"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <span #popupAnchor class="k-numeric-wrap">
+    <input
+      editor
+      kendoTextBox
+      [readonly]="true"
+      [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+      class="form-control"
+      [ngModel]="displayText"
+      (blur)="touch()"
+    >
+    <button type="button" kendoButton iconClass="fa fa-th" (click)="dropDownClicked()"></button>
+  </span>
+  <kendo-popup *ngIf="popupVisible" class="popup-Wrapper" popupClass="popup-Content" [anchor]="popupAnchor" [copyAnchorStyles]="true" (anchorViewportLeave)="popupVisible = false">
+    <kendo-treeview
+      [nodes]="nodes"
+      [idField]="idField"
+      [textField]="textField"
+      [parentIdField]="parentIdField"
+      kendoTreeViewExpandable
+      kendoTreeViewSelectable
+      kendoTreeViewFlatDataBinding
+      (selectionChange)="selectionChanged($event)"
+      [style.width]="nativeWidth + 'px'"
+    ></kendo-treeview>
+  </kendo-popup>
+</ot-data-entry-template>

@@ -1,0 +1,21 @@
+.refreshtime {
+    font-style: italic;
+}
+
+.insidevalue
+{
+    cursor: pointer;
+}
+
+.parent-container {
+    overflow-y: scroll; 
+    width: 100%;
+}
+
+.chart-container {
+  overflow: auto; 
+  width: 1600px;
+}
+/* .tooltip-container  {
+    display: block !important;
+} */

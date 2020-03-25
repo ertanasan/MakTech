@@ -1,0 +1,18 @@
+﻿<ot-edit-screen-container #container size="lg">
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreId" [caption]="'Store Id' | translate" class="col-md-6" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="Advance" [caption]="'Advance' | translate" class="col-md-6"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="Name" [caption]="'Name' | translate" class="col-md-6"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="IpAddress" [caption]="'Ip Address' | translate" class="col-md-6"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="OrganizationBranch" [caption]="'Organization Branch' | translate" [items]="branchService.branchTreeList" textField="Name" valueField="BranchId" usePrimitiveValue="true" class="col-md-6" [loading]="branchService.loading"></ot-dropdown-entry>
+    <!-- <ot-dropdown-entry formControlName="RegionManager" [caption]="'Region Manager' | translate" [items]="regionManagersService.completeList" textField="RegionManagerName" valueField="RegionManagersId" usePrimitiveValue="true" class="col-md-6" [loading]="regionManagersService.loading"></ot-dropdown-entry> -->
+    <ot-dropdown-entry formControlName="City" [caption]="'City' | translate" [items]="cityService.completeList" textField="CityName" valueField="CityId" usePrimitiveValue="true" class="col-md-6" [loading]="cityService.loading" (valueChange)="onCityValueChange($event)"></ot-dropdown-entry>
+    <ot-date-entry formControlName="OpeningDate" [caption]="'Opening Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Town" [caption]="'Town' | translate" [items]="townList" textField="TownName" valueField="TownId" usePrimitiveValue="true" class="col-md-6" [loading]="townService.loading"></ot-dropdown-entry>
+    <ot-date-entry formControlName="ClosingDate" [caption]="'Closing Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+    <ot-text-entry formControlName="Address" [caption]="'Address' | translate" rows="3" class="col-6"></ot-text-entry>
+    <ot-switch-entry formControlName="ActiveFlag" [caption]="'Active Flag' | translate" color="primary" labelStyle="check" class="col-4" editorWidth=6 captionWidth=6></ot-switch-entry>
+    <ot-switch-entry formControlName="ProductionFlag" [caption]="'Production Flag' | translate" color="primary" labelStyle="check" class="col-4" editorWidth=6 captionWidth=6></ot-switch-entry>
+    <ot-switch-entry formControlName="InConstruction" [caption]="'In Construction' | translate" color="primary" labelStyle="check" class="col-4" editorWidth=6 captionWidth=6></ot-switch-entry>    
+  </form>
+</ot-edit-screen-container>

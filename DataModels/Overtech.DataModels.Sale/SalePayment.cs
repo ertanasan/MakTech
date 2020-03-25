@@ -1,0 +1,411 @@
+﻿// Created by OverGenerator
+/*Section="Usings"*/
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+using Overtech.Core.Data;
+
+/*Section="ClassHeader"*/
+namespace Overtech.DataModels.Sale
+{
+    [OTDataObject(Module = "Sale", ModuleShortName = "SLS", Table = "SALEPAYMENT", HasAutoIdentity = true, DisplayName = "Sale Payment", IdField = "SalePaymentId")]
+    [DataContract]
+    public class SalePayment : DataModelObject
+    {
+        private long _salePaymentId;
+        private long _event;
+        private long _organization;
+        private bool _deleted;
+        private DateTime _createDate;
+        private Nullable<DateTime> _updateDate;
+        private long _createUser;
+        private Nullable<long> _updateUser;
+        private long _createChannel;
+        private long _createBranch;
+        private long _createScreen;
+        private long _saleID;
+        private string _transactionID;
+        private DateTime _transactionDate;
+        private long _store;
+        private string _paymentType;
+        private decimal _paidAmount;
+        private decimal _refundAmount;
+        private Nullable<long> _posBankType;
+        private Nullable<long> _posTrxType;
+        private string _creditCardNo;
+        private bool _isDebitCard;
+        private decimal _creditCardAmount;
+
+        /*Section="Field-SalePaymentId"*/
+        [OTDataField("SALEPAYMENTID")]
+        [DataMember]
+        public long SalePaymentId
+        {
+            get
+            {
+                return _salePaymentId;
+            }
+            set
+            {
+                _salePaymentId = value;
+            }
+        }
+
+        /*Section="Field-Event"*/
+        [OTDataField("EVENT")]
+        [DataMember]
+        public long Event
+        {
+            get
+            {
+                return _event;
+            }
+            set
+            {
+                _event = value;
+            }
+        }
+
+        /*Section="Field-Organization"*/
+        [OTDataField("ORGANIZATION")]
+        [DataMember]
+        public long Organization
+        {
+            get
+            {
+                return _organization;
+            }
+            set
+            {
+                _organization = value;
+            }
+        }
+
+        /*Section="Field-Deleted"*/
+        [OTDataField("DELETED_FL")]
+        [ReadOnly(true)]
+        [DataMember]
+        public bool Deleted
+        {
+            get
+            {
+                return _deleted;
+            }
+            set
+            {
+                _deleted = value;
+            }
+        }
+
+        /*Section="Field-CreateDate"*/
+        [OTDataField("CREATE_DT")]
+        [ReadOnly(true)]
+        [DataMember]
+        public DateTime CreateDate
+        {
+            get
+            {
+                return _createDate;
+            }
+            set
+            {
+                _createDate = value;
+            }
+        }
+
+        /*Section="Field-UpdateDate"*/
+        [OTDataField("UPDATE_DT", Nullable = true)]
+        [ReadOnly(true)]
+        [DataMember]
+        public Nullable<DateTime> UpdateDate
+        {
+            get
+            {
+                return _updateDate;
+            }
+            set
+            {
+                _updateDate = value;
+            }
+        }
+
+        /*Section="Field-CreateUser"*/
+        [OTDataField("CREATEUSER")]
+        [ReadOnly(true)]
+        [DataMember]
+        public long CreateUser
+        {
+            get
+            {
+                return _createUser;
+            }
+            set
+            {
+                _createUser = value;
+            }
+        }
+
+        /*Section="Field-UpdateUser"*/
+        [OTDataField("UPDATEUSER", Nullable = true)]
+        [ReadOnly(true)]
+        [DataMember]
+        public Nullable<long> UpdateUser
+        {
+            get
+            {
+                return _updateUser;
+            }
+            set
+            {
+                _updateUser = value;
+            }
+        }
+
+        /*Section="Field-CreateChannel"*/
+        [OTDataField("CREATECHANNEL")]
+        [ReadOnly(true)]
+        [DataMember]
+        public long CreateChannel
+        {
+            get
+            {
+                return _createChannel;
+            }
+            set
+            {
+                _createChannel = value;
+            }
+        }
+
+        /*Section="Field-CreateBranch"*/
+        [OTDataField("CREATEBRANCH")]
+        [ReadOnly(true)]
+        [DataMember]
+        public long CreateBranch
+        {
+            get
+            {
+                return _createBranch;
+            }
+            set
+            {
+                _createBranch = value;
+            }
+        }
+
+        /*Section="Field-CreateScreen"*/
+        [OTDataField("CREATESCREEN")]
+        [ReadOnly(true)]
+        [DataMember]
+        public long CreateScreen
+        {
+            get
+            {
+                return _createScreen;
+            }
+            set
+            {
+                _createScreen = value;
+            }
+        }
+
+        /*Section="Field-SaleID"*/
+        [OTDataField("SALE")]
+        [DataMember]
+        public long SaleID
+        {
+            get
+            {
+                return _saleID;
+            }
+            set
+            {
+                _saleID = value;
+            }
+        }
+
+        /*Section="Field-TransactionID"*/
+        [OTDataField("TRANSACTION_TXT")]
+        [DataMember]
+        public string TransactionID
+        {
+            get
+            {
+                return _transactionID;
+            }
+            set
+            {
+                _transactionID = value;
+            }
+        }
+
+        /*Section="Field-TransactionDate"*/
+        [OTDataField("TRANSACTION_DT")]
+        [DataMember]
+        public DateTime TransactionDate
+        {
+            get
+            {
+                return _transactionDate;
+            }
+            set
+            {
+                _transactionDate = value;
+            }
+        }
+
+        /*Section="Field-Store"*/
+        [OTDataField("STORE")]
+        [DataMember]
+        public long Store
+        {
+            get
+            {
+                return _store;
+            }
+            set
+            {
+                _store = value;
+            }
+        }
+
+        /*Section="Field-PaymentType"*/
+        [OTDataField("PAYMENTTYPE_TXT")]
+        [DataMember]
+        public string PaymentType
+        {
+            get
+            {
+                return _paymentType;
+            }
+            set
+            {
+                _paymentType = value;
+            }
+        }
+
+        /*Section="Field-PaidAmount"*/
+        [OTDataField("PAID_AMT")]
+        [DataMember]
+        public decimal PaidAmount
+        {
+            get
+            {
+                return _paidAmount;
+            }
+            set
+            {
+                _paidAmount = value;
+            }
+        }
+
+        /*Section="Field-RefundAmount"*/
+        [OTDataField("REFUND_AMT")]
+        [DataMember]
+        public decimal RefundAmount
+        {
+            get
+            {
+                return _refundAmount;
+            }
+            set
+            {
+                _refundAmount = value;
+            }
+        }
+
+        /*Section="Field-PosBankType"*/
+        [OTDataField("POSBANKTYPE", Nullable = true)]
+        [DataMember]
+        public Nullable<long> PosBankType
+        {
+            get
+            {
+                return _posBankType;
+            }
+            set
+            {
+                _posBankType = value;
+            }
+        }
+
+        /*Section="Field-PosTrxType"*/
+        [OTDataField("POSTRXTYPE", Nullable = true)]
+        [DataMember]
+        public Nullable<long> PosTrxType
+        {
+            get
+            {
+                return _posTrxType;
+            }
+            set
+            {
+                _posTrxType = value;
+            }
+        }
+
+        /*Section="Field-CreditCardNo"*/
+        [OTDataField("ACCNO_TXT")]
+        [DataMember]
+        public string CreditCardNo
+        {
+            get
+            {
+                return _creditCardNo;
+            }
+            set
+            {
+                _creditCardNo = value;
+            }
+        }
+
+        /*Section="Field-IsDebitCard"*/
+        [OTDataField("DEBITCARD_FL")]
+        [DataMember]
+        public bool IsDebitCard
+        {
+            get
+            {
+                return _isDebitCard;
+            }
+            set
+            {
+                _isDebitCard = value;
+            }
+        }
+
+        /*Section="Field-CreditCardAmount"*/
+        [OTDataField("CARD_AMT")]
+        [DataMember]
+        public decimal CreditCardAmount
+        {
+            get
+            {
+                return _creditCardAmount;
+            }
+            set
+            {
+                _creditCardAmount = value;
+            }
+        }
+
+        /*Section="Method-SetId"*/
+        public override void SetId(long id)
+        {
+            _salePaymentId = id;
+        }
+
+        /*Section="CustomCodeRegion"*/
+        #region Customized
+        // Keep your custom code in this region.
+        #endregion Customized
+
+    /*Section="ClassFooter"*/
+    }
+}
+

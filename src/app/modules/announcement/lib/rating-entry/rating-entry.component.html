@@ -1,0 +1,28 @@
+<ot-data-entry-template 
+  caption="{{ caption }}"
+  [showCaption]="showCaption"
+  [captionBS]="captionBS"
+  [captionWidth]="captionWidth"
+  [editorWidth]="editorWidth"
+  [editorBS]="editorBS"
+  [hasFormControl]="ngControl"
+  >
+    <span *ngFor = "let x of starArray; let i = index">
+        <span (click) = "onIconClicked(x)"
+              (mouseenter) ="onMouseEnter(x)"
+              (mouseleave) ="onMouseLeave(x)">
+            <fa-icon [icon]="activeIconsArray[x]"
+                     [ngStyle] = "{'color': color, 'margin-right': spacing, 'font-size': height }" >
+            </fa-icon>
+        </span>
+    </span>
+    <span *ngIf="!isReadOnly"
+          (click) = "onCancelClicked()"
+          (mouseenter) ="onCancelMouseEnter()"
+          (mouseleave) ="onCancelMouseLeave()">
+        <fa-icon [icon]="cancelIcon"
+                 [ngStyle] = "{'color': cancelIconColor, 'margin-left': cancelIconSpacing, 'visibility': isCancelIconVisible ? 'visible' : 'hidden' }"
+                 size="lg" >
+        </fa-icon>
+    </span>
+</ot-data-entry-template>

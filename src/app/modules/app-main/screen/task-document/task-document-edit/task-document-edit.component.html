@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-dropdown-entry formControlName="OverStoreTask" [caption]="'OverStore Task' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : overStoreTaskService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="OverStoreTaskId" valueField="OverStoreTaskId" usePrimitiveValue="true" class="col-12" [loading]="overStoreTaskService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Document" [caption]="'Document' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : documentService.completeList"
+      [isReadOnly]="container.rightRelationId" textField="Name" valueField="DocumentId" usePrimitiveValue="true" class="col-12" [loading]="documentService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

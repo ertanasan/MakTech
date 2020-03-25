@@ -1,0 +1,7 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="GameId" [caption]="'Game Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="GameName" [caption]="'Game Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="ErrorTolerance" [caption]="'Error Tolerance' | translate" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

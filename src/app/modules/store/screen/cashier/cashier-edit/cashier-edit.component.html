@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="CashierId" [caption]="'Cashier  Id' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="CashierName" [caption]="'Cashier Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="CashierTemplateNumber" [caption]="'Template' | translate" [items]="cashierTemplateService.completeList" textField="CashierTemplateName" valueField="CashierTemplateId" usePrimitiveValue="true" class="col-12" [loading]="cashierTemplateService.loading" ></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="CashierTitleNumber" [caption]="'Title' | translate" [items]="storeService.titles" textField="Name" valueField="TitleId" usePrimitiveValue="true" class="col-12" [loading]="cashierTemplateService.loading" ></ot-dropdown-entry>
+    <ot-alpha-entry  formControlName="Password"  [caption]="'Password' | translate" class="col-12" ></ot-alpha-entry>
+    <ot-switch-entry formControlName="CashierFlag" [caption]="'Cashier  Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="IsActive" [caption]="'Is Active' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="Salesman" [caption]="'Salesman' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-dropdown-entry formControlName="WorkingType" [caption]="'Working Type' | translate" [items]="workingTypeList" textField="WorkingTypeName" valueField="WorkingTypeId" usePrimitiveValue="true" class="col-12" ></ot-dropdown-entry>
+    <ot-text-entry formControlName="Note" [caption]="'Note' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

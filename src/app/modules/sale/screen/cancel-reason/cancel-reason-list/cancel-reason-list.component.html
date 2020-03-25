@@ -1,0 +1,37 @@
+﻿<ot-list-screen-container [header]="'Cancel Reason' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="updateEnabled" title="" width="40" locked="true">
+      <ng-container *ngIf="updateEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="Store" [title]="'Store' | translate" width="100" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+        </ng-template>
+      </kendo-grid-column>
+    <kendo-grid-column field="SaleDetail" [title]="'Sale Detail' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="SaleTransactionTime" [title]="'Transaction Time' | translate" width="120" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.SaleTransactionTime | date:'HH:mm:ss'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="SaleCashRegister" [title]="'Cash Register Id' | translate" width="80" ></kendo-grid-column>
+    <kendo-grid-column field="Price" [title]="'Transaction Amount' | translate" width="100" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.Price | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ReasonText" [title]="'Reason Text' | translate" width="200"></kendo-grid-column>
+    <kendo-grid-column field="CashierName" [title]="'Cashier Name' | translate" width="120"></kendo-grid-column>
+    
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-cancel-reason-edit #editScreen screenName="ot-cancel-reason-edit"></ot-cancel-reason-edit>

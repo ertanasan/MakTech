@@ -1,0 +1,282 @@
+<div class="col-md-12 mt-2 mb-1">
+  <div class="row">
+    <div class="col-md-6">
+      <h4 class="mx-3" style="display: inline-block; vertical-align: sub">{{ 'Stock Dashboard' | translate }}</h4>
+      <ot-dashboard-router [activeDashboard]="'Stock Dashboard'"></ot-dashboard-router>
+    </div>
+    <div class="col-md-6">
+      <p class="refreshtime float-right mr-2">{{ 'Last Refresh Time' | translate }}: {{refreshTime | date : "dd.MM.yyyy HH:mm"}}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data" class="container-fluid">
+  <div class="row">
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-shopping-cart"
+          caption="Mağaza Stok"
+          text="{{dashboard.StoreStockAmount | number: '1.0-0':'tr' }}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-cubes"
+          caption="Depo Stok"
+          text="{{dashboard.WarehouseStockAmount | number: '1.0-0':'tr' }}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="danger"
+          icon="fa fa-truck"
+          caption="Mağaza Stok Satış Oranı"
+          text="{{dashboard.StoreStockSaleRate | number: '1.2-2':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+      <div class="col-md-12 col-lg-6 col-xl-3">
+        <ot-simple-widget
+          [padding]="0"
+          color="success"
+          icon="fa fa-shield"
+          caption="Depo Stok Satış Oranı"
+          text="{{dashboard.WarehouseStockSaleRate | number:'1.2-2':'tr'}}"
+        ></ot-simple-widget>
+      </div>
+  </div>
+
+  <div class="row">
+
+  <div class="col-md-12 col-lg-6 col-xl-6" #categoryTarget id="IdCategory">
+    <kendo-grid #categoryGrid="kendoGrid" [data]="categoryList" [scrollable]="'scrollable'" [height]="400"
+    [kendoGridSelectBy]="'Name'" [selectable]="{checkboxOnly: true, mode: single}" 
+    [selectedKeys]="groupCheckedList" (selectedKeysChange)="onSelectedKeysChange()">
+
+      <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      </ng-template>
+
+      <kendo-grid-column field="Name" [title]="'Kategori'" width="120" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000'}"> 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.Name !== 'null'">
+          {{dataItem.Name}}
+        </div>
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="StoreStock" [title]="'Mağaza'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.StoreStock | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="StoreAvgRate" [title]="'Oran'" width="60" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.StoreAvgRate | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WarehouseStock" [title]="'Depo'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.WarehouseStock | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WarehouseAvgRate" [title]="'Oran'" width="60" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.WarehouseAvgRate | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-checkbox-column field="Name"  width="50" filter="boolean"
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'center'}"> </kendo-grid-checkbox-column>
+      <kendo-grid-excel [fileName]="'KategoriStokListesi'"></kendo-grid-excel>
+    </kendo-grid>
+  </div>
+  <kendo-contextmenu [target]="categoryTarget" [items]="items" (select)="exportToExcel(categoryGrid)">
+  </kendo-contextmenu>
+
+  <div class="col-md-12 col-lg-6 col-xl-6">
+
+  <kendo-chart *ngIf="monthGraphData" [seriesColors]="chartColors">
+    <kendo-chart-legend position="bottom"></kendo-chart-legend>
+    <kendo-chart-category-axis>
+        <kendo-chart-category-axis-item baseUnit="days" type="date">
+            <kendo-chart-category-axis-item-labels [rotation]="270">
+            </kendo-chart-category-axis-item-labels>
+        </kendo-chart-category-axis-item>
+    </kendo-chart-category-axis>
+    <kendo-chart-series>
+        <kendo-chart-series-item type="line"
+                                  [name]="'Mağaza Stok'"
+                                  [data]="monthGraphData"
+                                  field="StoreStock"
+                                  categoryField="Days">
+            <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                    <div class="header font-weight-bold">
+                        {{ category | date: 'dd.MM.yyyy' }}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {{ value | number:'1.0-0':'tr' }}
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+        <kendo-chart-series-item type="line"
+                                  [name]="'Depo Stok'"
+                                  [data]="monthGraphData"
+                                  field="WarehouseStock"
+                                  categoryField="Days">
+            <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                    <div class="header font-weight-bold">
+                        {{ category | date: 'dd.MM.yyyy' }}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {{ value | number:'1.0-0':'tr' }}
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+    </kendo-chart-series>
+  </kendo-chart>
+  <div *ngIf="monthGraphDataLoading" class="k-i-loading"></div>
+  </div>
+
+  </div>
+
+  <div class="row mt-3">
+
+  <div class="col-md-12 col-lg-6 col-xl-6" #productTarget id="IdProduct">
+    <kendo-grid #productGrid="kendoGrid" [data]="productActiveList" [scrollable]="'scrollable'" [height]="300"
+    [filterable]="true" [filter]="productListParams.filter"
+    [sortable]="true" [sort]="productListParams.sort"
+    (dataStateChange)="handleDataStateChange($event, productListParams)"
+    [kendoGridSelectBy]="'NAME_NM'" [selectable]="{checkboxOnly: true, mode: single}" 
+    [selectedKeys]="productCheckedList" (selectedKeysChange)="onProductListChanged()">
+
+      <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      </ng-template>
+
+      <kendo-grid-column field="NAME_NM" [title]="'Ürün'" width="120" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000'}"> 
+      </kendo-grid-column>
+      <kendo-grid-column field="STORESTOCK_AMT" [title]="'Mağaza'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STORESTOCK_AMT | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STORESTOCK_QTY" [title]="'Miktar'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STORESTOCK_QTY | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STOREAVGRATE" [title]="'Oran'" width="60" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STOREAVGRATE | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WAREHOUSESTOCK_AMT" [title]="'Depo'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.WAREHOUSESTOCK_AMT | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WAREHOUSESTOCK_QTY" [title]="'Miktar'" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.WAREHOUSESTOCK_QTY | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WAREHOUSEAVGRATE" [title]="'Oran'" width="60" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.WAREHOUSEAVGRATE | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-checkbox-column field="NAME_NM"  width="50" filter="boolean"
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+
+      <kendo-grid-excel [fileName]="'ÜrünStokListesi'"></kendo-grid-excel>
+    </kendo-grid>
+  </div>
+  <kendo-contextmenu [target]="productTarget" [items]="items" (select)="exportToExcel(productGrid)">
+  </kendo-contextmenu>
+  <div class="col-md-12 col-lg-6 col-xl-6" #storeTarget id="IdStore">
+    <kendo-grid #storeGrid="kendoGrid" [data]="storeActiveList" [scrollable]="'scrollable'" [height]="300"
+    [filterable]="true" [filter]="storeListParams.filter"
+    [sortable]="true" [sort]="storeListParams.sort" [loading]="storeLoading"
+    (dataStateChange)="handleDataStateChange($event, storeListParams)"
+    [kendoGridSelectBy]="'STORE_NM'" [selectable]="{checkboxOnly: true, mode: single}" 
+    [selectedKeys]="storeCheckedList" (selectedKeysChange)="onStoreListChanged()">
+
+      <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      </ng-template>
+
+      <kendo-grid-column field="STORE_NM" [title]="'Mağaza' | translate" width="120" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000'}"> 
+      </kendo-grid-column>
+      <kendo-grid-column field="STORESTOCK_AMT" [title]="'Tutar' | translate" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STORESTOCK_AMT | number: '1.0-0':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STORESTOCK_QTY" [title]="'Miktar' | translate" width="80" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STORESTOCK_QTY | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STOREAVGRATE" [title]="'Oran' | translate" width="60" 
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff', 'text-align':'right'}"
+      [style]="{'background-color': '#FFF','color': '#000', 'text-align':'right'}" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.STOREAVGRATE | number: '1.2-2':'tr'}}
+      </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-checkbox-column field="STORE_NM"  width="50" filter="boolean"
+      [headerStyle]="{'background-color': '#E7505A','color': '#fff'}"
+      [style]="{'background-color': '#FFF','color': '#000'}"> </kendo-grid-checkbox-column>
+      
+      <kendo-grid-excel [fileName]="'MagazaStokListesi'"></kendo-grid-excel>
+    </kendo-grid>
+  </div>
+  <kendo-contextmenu [target]="storeTarget" [items]="items" (select)="exportToExcel(storeGrid)">
+  </kendo-contextmenu>
+  </div>
+
+      
+</div>

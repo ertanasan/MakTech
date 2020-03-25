@@ -1,0 +1,151 @@
+﻿CREATE PROCEDURE INV_INS_STOCKTRANSACTIONS2_SP AS  
+BEGIN  
+  
+ DELETE ST  
+   FROM INV_STOCKTRANSACTIONS2 ST  
+   LEFT JOIN MIK_TRANSACTION_SYN T ON ST.MIKROGUID = T.sth_Guid  
+  WHERE sth_Guid IS NULL  
+  
+ INSERT INTO INV_STOCKTRANSACTIONS2  
+ SELECT WG.WAREHOUSEID, sth_malkbl_sevk_tarihi TRANSACTION_DT, P.PRODUCTID,   
+		CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 1  
+			 WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 3  
+			 WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 6  
+			 WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 8  
+		END TRANSACTIONTYPE,  
+		sth_miktar QUANTITY_QTY, WC.WAREHOUSEID COUNTERWAREHOUSE,   
+		cast(sth_evraktip as varchar(10))+'-'+sth_evrakno_seri+'-'+cast(sth_evrakno_sira as varchar(100))+'-'+cast(sth_satirno as varchar(100))+'-'+sth_belge_no INFO_TXT,  
+		t.sth_Guid MIKROGUID  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   LEFT JOIN INV_STOCKTRANSACTIONS2 ST 
+     ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 1  
+								  WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 3  
+								  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 6  
+								  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 8 END  
+  WHERE sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 2  
+    AND ST.MIKROGUID IS NULL  
+  
+ UPDATE ST  
+    SET TRANSACTION_DT = sth_malkbl_sevk_tarihi  
+	  , QUANTITY_QTY = sth_miktar  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 1  
+             WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 3  
+             WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 6  
+             WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 8 END  
+  WHERE sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 2       
+    AND (TRANSACTION_DT != sth_malkbl_sevk_tarihi OR QUANTITY_QTY != sth_miktar)  
+  
+  
+ INSERT INTO INV_STOCKTRANSACTIONS2  
+ SELECT WC.WAREHOUSEID, sth_malkbl_sevk_tarihi TRANSACTION_DT, P.PRODUCTID,   
+		CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 2  
+		  WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 4  
+		  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 5  
+		  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 7  
+		END TRANSACTIONTYPE,  
+		-1*sth_miktar QUANTITY_QTY, WG.WAREHOUSEID COUNTERWAREHOUSE,   
+		cast(sth_evraktip as varchar(10))+'-'+sth_evrakno_seri+'-'+cast(sth_evrakno_sira as varchar(100))+'-'+cast(sth_satirno as varchar(100))+'-'+sth_belge_no INFO_TXT,  
+		t.sth_Guid MIKROGUID  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   LEFT JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 2  
+          WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 4  
+          WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 5  
+          WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 7 END  
+  WHERE sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 2  
+    AND ST.MIKROGUID IS NULL  
+  
+ UPDATE ST  
+    SET TRANSACTION_DT = sth_malkbl_sevk_tarihi  
+	  , QUANTITY_QTY = -1*sth_miktar  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 2 THEN 2  
+								  WHEN WG.WAREHOUSETYPE = 1 AND WC.WAREHOUSETYPE = 1 THEN 4  
+								  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 1 THEN 5  
+								  WHEN WG.WAREHOUSETYPE = 2 AND WC.WAREHOUSETYPE = 2 THEN 7 END  
+  WHERE sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 2  
+    AND (TRANSACTION_DT != sth_malkbl_sevk_tarihi OR QUANTITY_QTY != -1*sth_miktar)  
+  
+ INSERT INTO INV_STOCKTRANSACTIONS2  
+ SELECT WG.WAREHOUSEID, sth_malkbl_sevk_tarihi TRANSACTION_DT, P.PRODUCTID,   
+		CASE WHEN WG.WAREHOUSETYPE = 1 THEN 11  
+			 WHEN WG.WAREHOUSETYPE = 2 THEN 9  
+		END TRANSACTIONTYPE,  
+		sth_miktar QUANTITY_QTY, -1 COUNTERWAREHOUSE,   
+		cast(sth_evraktip as varchar(10))+'-'+sth_evrakno_seri+'-'+cast(sth_evrakno_sira as varchar(100))+'-'+cast(sth_satirno as varchar(100))+'-'+sth_belge_no INFO_TXT,  
+		t.sth_Guid MIKROGUID  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   LEFT JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 THEN 11 WHEN WG.WAREHOUSETYPE = 2 THEN 9 END    
+  WHERE sth_pos_satis = 0  
+    AND sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 0  
+    AND ST.MIKROGUID IS NULL  
+  
+ UPDATE ST  
+    SET TRANSACTION_DT = sth_malkbl_sevk_tarihi  
+	  , QUANTITY_QTY = sth_miktar  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WG ON t.sth_giris_depo_no = WG.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WG.WAREHOUSETYPE = 1 THEN 11 WHEN WG.WAREHOUSETYPE = 2 THEN 9 END    
+  WHERE sth_pos_satis = 0  
+    AND sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 0  
+    AND (TRANSACTION_DT != sth_malkbl_sevk_tarihi OR QUANTITY_QTY != sth_miktar)  
+  
+ INSERT INTO INV_STOCKTRANSACTIONS2  
+ SELECT WC.WAREHOUSEID, sth_malkbl_sevk_tarihi TRANSACTION_DT, P.PRODUCTID,   
+		CASE WHEN WC.WAREHOUSETYPE = 1 THEN 12  
+			 WHEN WC.WAREHOUSETYPE = 2 THEN 10  
+		END TRANSACTIONTYPE,  
+		-1* sth_miktar QUANTITY_QTY, -1 COUNTERWAREHOUSE,   
+		cast(sth_evraktip as varchar(10))+'-'+sth_evrakno_seri+'-'+cast(sth_evrakno_sira as varchar(100))+'-'+cast(sth_satirno as varchar(100))+'-'+sth_belge_no INFO_TXT,  
+		t.sth_Guid MIKROGUID  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   LEFT JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WC.WAREHOUSETYPE = 1 THEN 12 WHEN WC.WAREHOUSETYPE = 2 THEN 10 END    
+  WHERE sth_pos_satis = 0  
+    AND sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 1  
+    AND ST.MIKROGUID IS NULL  
+  
+ UPDATE ST  
+    SET TRANSACTION_DT = sth_malkbl_sevk_tarihi  
+	  , QUANTITY_QTY = -1*sth_miktar  
+   FROM MIK_TRANSACTION_SYN t  
+   JOIN INV_WAREHOUSE WC ON t.sth_cikis_depo_no = WC.WAREHOUSEID  
+   JOIN MaktechProd.dbo.PRD_PRODUCT P ON t.sth_stok_kod COLLATE Turkish_100_CI_AS = P.CODE_NM  
+   JOIN INV_STOCKTRANSACTIONS2 ST ON ST.MIKROGUID = t.sth_Guid   
+    AND ST.TRANSACTIONTYPE = CASE WHEN WC.WAREHOUSETYPE = 1 THEN 12 WHEN WC.WAREHOUSETYPE = 2 THEN 10 END    
+  WHERE sth_pos_satis = 0  
+    AND sth_malkbl_sevk_tarihi >= '2019-01-01'  
+    AND sth_tip = 1  
+    AND (TRANSACTION_DT != sth_malkbl_sevk_tarihi OR QUANTITY_QTY != -1*sth_miktar)  
+  
+END  

@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="EmployeeId" [caption]="'Employee Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="EmployeeName" [caption]="'Employee Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="DepartmentCode" [caption]="'Department' | translate" [items]="departmentService.completeList" textField="DepartmentName" valueField="AccountingDepartmentId" usePrimitiveValue="true" class="col-12" [loading]="departmentService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="DepartmentCode" [caption]="'Department Code' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="DepartmentName" [caption]="'Department Name' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-alpha-entry formControlName="IncentiveActCode" [caption]="'Incentive Act Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="StartDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="QuitDate" [caption]="'Quit Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-text-entry formControlName="WorkingType" [caption]="'Working Type' | translate" rows="3" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

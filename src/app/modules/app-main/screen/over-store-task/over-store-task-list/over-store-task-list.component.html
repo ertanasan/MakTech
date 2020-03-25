@@ -1,0 +1,71 @@
+﻿<ot-list-screen-container *ngIf="!modeReview" [breadcrumbItems]="breadcrumbItems" [header]="'OverStoreTask' | translate"
+                          [showAsDetail]="isEmbedded">
+    <kendo-grid (dataStateChange)="handleDataStateChange($event)" [data]="isEmbedded ? dataList : dataService.activeList" [filter]="listParams.filter"
+                [filterable]="true" [height]="575" [loading]="dataService.loading"
+                [pageSize]="listParams.take" [pageable]="listParams.pageable" [skip]="listParams.skip" [sort]="listParams.sort"
+                [sortable]="true"
+    >
+        <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" [width]="160" locked="true"
+                                   title="">
+            <ng-container *ngIf="createEnabled">
+                <ng-template kendoGridHeaderTemplate>
+                    <ot-button (onClick)="showDialog(editScreen, 'Create')" [block]="false"
+                               [caption]="'New' | translate" [outline]="true" color="primary"
+                               icon="fas fa-plus" size="sm"></ot-button>
+                </ng-template>
+            </ng-container>
+            <ng-container *ngIf="updateEnabled || deleteEnabled">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <ot-light-button (onClick)="showDialog(editScreen, 'Update', dataItem)" *ngIf="updateEnabled" color="primary"
+                                     icon="fas fa-edit"
+                                     otTooltip="{{ 'Update' | translate }}"></ot-light-button>
+                    <ot-light-button (onClick)="showDialog(editScreen, 'Delete', dataItem)" *ngIf="deleteEnabled" color="danger"
+                                     icon="fas fa-trash-alt"
+                                     otTooltip="{{ 'Delete' | translate }}"></ot-light-button>
+                    <ot-light-button (onClick)="showDialog(historyScreen, 'ShowHistory', dataItem)" *ngIf="dataItem.Status > 1" color="primary"
+                                     icon="fas fa-history"
+                                     otTooltip="{{ 'History' | translate }}"></ot-light-button>
+                </ng-template>
+            </ng-container>
+        </kendo-grid-command-column>
+        <kendo-grid-column [title]="'Create Date' | translate" field="CreateDate" filter="date" width="180">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span *ngIf="dataItem.CreateDate">{{utilityService.toDate(dataItem.CreateDate) | date:'dd.MM.yyyy'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [title]="'Status' | translate" field="Status" width="180">
+            <ng-template kendoGridFilterCellTemplate let-dataItem>
+                <ot-dropdown-list-filter [data]="overStoreTaskStatusService.completeList"
+                                         [filter]="listParams.filter"
+                                         memberField="Status"
+                                         textField="Status"
+                                         valueField="OverStoreTaskStatusId">
+                </ot-dropdown-list-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.Status | getName:'OverStoreTaskStatusId':'Status':overStoreTaskStatusService.completeList }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [title]="'Type' | translate" field="Type" width="180">
+            <ng-template kendoGridFilterCellTemplate let-dataItem>
+                <ot-dropdown-list-filter [data]="overStoreTaskTypeService.completeList"
+                                         [filter]="listParams.filter"
+                                         memberField="Type"
+                                         textField="TaskType"
+                                         valueField="OverStoreTaskTypeId">
+                </ot-dropdown-list-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.Type | getName:'OverStoreTaskTypeId':'TaskType':overStoreTaskTypeService.completeList }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [title]="'Content' | translate" field="Content"></kendo-grid-column>
+        <kendo-grid-column [title]="'Deadline' | translate" field="Deadline" filter="date" width="180">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.Deadline">{{utilityService.toDate(dataItem.Deadline) | date:'dd.MM.yyyy'}}</div>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</ot-list-screen-container>
+<ot-over-store-task-edit #editScreen screenName="ot-over-store-task-edit"></ot-over-store-task-edit>
+<ot-process-history #historyScreen></ot-process-history>

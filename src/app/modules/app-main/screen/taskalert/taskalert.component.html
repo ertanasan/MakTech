@@ -1,0 +1,15 @@
+<ot-custom-dialog #dialog [caption]="dialogTitle" color="primary" size="md" (onClose)="onAlertClose($event)">
+  <div *ngIf="newTasksText && newTasksText.length > 0" class="text-center">
+    <h5> {{ newTasksText }} </h5>
+  </div>
+  <div class="text-center">
+    <span>{{ waitingTasksText }}</span>
+    <br>
+    <span *ngIf="unreadNotificationsText && unreadNotificationsText.length > 0">{{ unreadNotificationsText }}</span>
+  </div>
+  <br>
+  <ng-container dialog-actions>
+    <ot-button [caption]="' Remind Me Later' | translate" icon="fa fa-eye-slash" (onClick)="onStayLastPage()" [block]="false" color="secondary" size="md"></ot-button>
+    <ot-button [caption]="' Go To My Tasks' | translate" icon="fa fa-inbox" (onClick)="onGoToTasks()" [block]="false" color="primary" size="md"></ot-button>
+</ng-container>  
+</ot-custom-dialog>

@@ -1,0 +1,15 @@
+<ot-data-entry-template 
+  caption="{{ caption }}" 
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <ot-button-input
+    class="form-control k-widget"
+    editor
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [(ngModel)]="value"
+    (blur)="touch()"
+    (onButtonClick)="onButtonClick.emit($event)"
+  ></ot-button-input>
+</ot-data-entry-template>

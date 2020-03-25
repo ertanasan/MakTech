@@ -1,0 +1,28 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StorePropertyId" [caption]="'Store Property Id' | translate" class="col-md-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PropertyName" [caption]="'Property Name' | translate" class="col-md-12"></ot-alpha-entry>
+   
+  </form>
+  <!-- <ot-radio-entry [(value)]="assignOption" optionName="assignTo" [caption]="'Assing Value To' | translate" [items]="[{value: 'none', text: 'None' | translate, checked: true}, {value: 'onlyNull', text: 'Only Null Stores' | translate}, {value: 'all', text: 'All Stores' | translate}]" [showCaption]="true"></ot-radio-entry> -->
+  <!-- <ot-dropdown-entry [item]="assignOptionItems" valueField="value" textField="text" defaultItem="assignOptionItems[0]" caption="'Assing Value To' | translate" usePrimitives="true"></ot-dropdown-entry> -->
+  <div class="row ml-1 mt-2">
+    <div class="radio icheck-primary icheck-inline">
+      <input type="radio" id="assignOption0" name="assignOption0" [checked]="assignOption === 'none'" (change)="onRadioClicked('none')"/>
+      <label for="assignOption0">{{ 'None' | translate }}</label>
+    </div>
+    <div class="radio icheck-primary icheck-inline">
+      <input type="radio" id="assignOption1" name="assignOption1" [checked]="assignOption === 'onlyNull'" (change)="onRadioClicked('onlyNull')"/>
+      <label for="assignOption1">{{ 'Only Null Stores' | translate }}</label>
+    </div>
+    <div class="radio icheck-primary icheck-inline">
+      <input type="radio" id="assignOption2" name="assignOption2" [checked]="assignOption === 'all'" (change)="onRadioClicked('all')"/>
+      <label for="assignOption2">{{ 'All Stores' | translate }}</label>
+    </div>
+  </div>
+  <div class="row mt-2" *ngIf="assignOption !== 'none'">
+    <label for="assignValue1" class="col-md-3" style="text-align: left">{{ 'Value To Be Assigned' | translate }}</label>
+    <input id="assignValue1" [(ngModel)]="assignValue" class="k-textbox form-control col-md-8">
+  </div>
+  <!-- <ot-alpha-entry *ngIf="assignOption !== 'none'" [(value)]="assignValue" [caption]="'Value To Be Assigned' | translate" class="col-md-12"></ot-alpha-entry> -->
+</ot-edit-screen-container>

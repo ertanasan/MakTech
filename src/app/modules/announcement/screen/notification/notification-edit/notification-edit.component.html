@@ -1,0 +1,16 @@
+﻿<ot-edit-screen-container #container size="lg" [childActions]="modeContext?modeContext.childActions:null">
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <ot-alpha-entry formControlName="NotificationId" [caption]="'Notification Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable || modeReview"></ot-alpha-entry>
+        <ot-text-entry formControlName="NotificationText" [caption]="'Notification Text' | translate" rows="10" class="col-12" [isReadOnly]="modeReview"></ot-text-entry>
+        <!-- editorWidth="12" editorWidth="12"  -->
+        <!-- <ot-dropdown-entry formControlName="NotificationType" [caption]="'Notification Type' | translate" [items]="notificationTypeService.completeList" textField="NotificationTypeName" valueField="NotificationTypeId" usePrimitiveValue="true" class="col-12" [loading]="notificationTypeService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="NotificationStatus" [caption]="'Notification Status' | translate" [items]="notificationStatusService.completeList" textField="NotificationStatusName" valueField="NotificationStatusId" usePrimitiveValue="true" class="col-12" [loading]="notificationStatusService.loading"></ot-dropdown-entry> -->
+        <ot-folder-entry formControlName="FolderHandle"
+                         [readUrl]="downloadUrl"
+                         [deleteUrl]="deleteUrl"
+                         [caption]="'Attachments' | translate"
+                         class="col-12"
+                         [readonly]="!container.mainForm.enabled || container.actionName === 'Review'">
+        </ot-folder-entry>
+    </form>
+</ot-edit-screen-container>

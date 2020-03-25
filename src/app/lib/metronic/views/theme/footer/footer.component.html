@@ -1,0 +1,21 @@
+<!-- begin:: Footer -->
+<div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
+	<div class="kt-container" [ngClass]="{'kt-container--fluid': fluid}">
+		<div class="kt-footer__copyright">
+			<span>&copy;{{ environment.application.copyrightYear }} &bull;
+				<a href="{{ environment.application.companyUrl }}" target="_blank">{{ environment.application.company }}</a></span>
+		</div>
+		<div class="kt-footer__menu">
+			<span class="ml-auto">
+				<ul class="list-inline my-0">
+					<li class="list-inline-item">{{ (contextState$ | async).User.Name }}</li>
+					<li class="list-inline-item">&bull; {{ (contextState$ | async).Organization.Name }}</li>
+					<li class="list-inline-item">&bull; {{ (contextState$ | async).Environment }}</li>
+					<li class="list-inline-item">&bull;
+						{{ today | date:'dd MMMM yyyy EEEE':'':(contextState$ | async).UserLanguage }}</li>
+				</ul>
+			</span>
+		</div>
+	</div>
+</div>
+<!-- end:: Footer -->

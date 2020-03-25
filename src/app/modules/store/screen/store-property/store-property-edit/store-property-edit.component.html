@@ -1,0 +1,11 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <!-- <ot-alpha-entry formControlName="Store" [caption]="'Store' | translate" class="col-md-12" isReadOnly=true></ot-alpha-entry> -->
+    <ot-dropdown-entry *ngIf="!container.masterId" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="PropertyType" [caption]="'Property Type' | translate" class="col-12" isReadOnly=true></ot-alpha-entry> -->
+    <ot-dropdown-entry *ngIf="!edit" formControlName="PropertyType" [caption]="'Property Type' | translate" [items]="storePropertyTypeService.remainingPropertyTypes" textField="PropertyName" valueField="StorePropertyId" usePrimitiveValue="true" class="col-md-12" [loading]="storeService.loading" [isReadOnly]="container.actionName == 'Update'"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="edit"  formControlName="PropertyType" [caption]="'Property Type' | translate" [items]="storePropertyTypeService.completeList" textField="PropertyName" valueField="StorePropertyId" usePrimitiveValue="true" class="col-md-12" [loading]="storeService.loading" [isReadOnly]="container.actionName == 'Update'"></ot-dropdown-entry>
+    <ot-text-entry formControlName="PropertyValue" [caption]="'Property Value' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-alpha-entry formControlName="PropertyId" [caption]="'Property Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

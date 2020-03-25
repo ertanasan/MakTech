@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Overtech.ApiControllers.Accounting.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Overtech_ApiControllers_Accounting_gibservice_GIBBilgiServisi" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://smmmservis.tnb.org.tr/GIBBilgiServisi/GBS.asmx</Value>
+    </Setting>
+    <Setting Name="Overtech_ApiControllers_Accounting_kdsservice_Service" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://smmmservis.tnb.org.tr/NPSKimlikDogrulamaServisi/Service.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

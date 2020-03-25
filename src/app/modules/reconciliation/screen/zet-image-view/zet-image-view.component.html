@@ -1,0 +1,41 @@
+<ot-custom-dialog #dialog size="lg" (onClose)="onDialogClose($event)">
+  <ot-custom-loading-icon *ngIf="zetImageLoading"></ot-custom-loading-icon>
+  <span *ngIf="!zetImageLoading">
+    <div class="row pb-2">
+      <div *ngIf="camera.cameraStatus === 3" class="col-md-12 text-center">
+        <ot-button [caption]="'Add Photo' | translate" color="primary" (click)="camera.openCamera()"><i class="k-i-plus"></i></ot-button>
+      </div>
+      <div class="col-md-12 text-center">
+        <ot-zet-image #camera [reconciliationId]="reconciliationId"></ot-zet-image>
+      </div>
+    </div>
+    <div *ngIf="!zetPhotos.length && camera.cameraStatus === 3" class="row">
+      <div class="col-xs-12 text-center">
+        <div [ngStyle]="{'color': utility.getColor('danger')}"> {{ 'There is no uploaded photo for this reconciliation' | translate }} </div>
+      </div>
+    </div>
+    <div *ngIf="zetPhotos.length" class="row">
+      <div *ngFor="let z of zetPhotos" class="col-lg-6 col-md-12 pb-2 text-right">
+        <div class="row" style="display: block !important;">
+          <div class="col-sm-12 text-center">
+            <img [src]="z.Photo" [height]="camera.photoArea.height" [width]="camera.photoArea.width">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10 text-center">
+            <div>
+              {{ 'CashRegisterId: ' | translate }} {{ z.CashRegister }}
+            </div>
+            <div>
+              {{ 'CreateDate: ' | translate }} {{ z.CreateDate | date: "dd.MM.yyyy HH:mm" }}
+            </div>
+          </div>
+          <div class="col-2 text-right">
+            <ot-light-button color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="deletePhoto(z)" icon="fas fa-trash-alt"></ot-light-button>
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+  </span>
+</ot-custom-dialog>

@@ -1,0 +1,27 @@
+<ot-data-entry-template caption="{{ caption }}" [showCaption]="showCaption" [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth" [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched"
+  [validationMessages]="getValidationMessages()">
+  <div editor>
+    <div *ngIf="showBrowse" class="input-group input-item">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile" [accept]="extensions"
+          (change)="fileSelected($event.target.files[0])" [disabled]="readonly">
+        <label class="custom-file-label"
+          for="inputGroupFile">{{ value && value.isEmpty ? browsePrompt : value.fileName  }}</label>
+      </div>
+    </div>
+    <div *ngIf="!showBrowse" class="input-group input-item">
+      <input [attr.disabled]="true" type="text" class="form-control input-item-selected" [value]="value.fileName"
+        [disabled]="readonly">
+      <span class="input-group-append">
+        <button *ngIf="showRead" class="btn btn-info" type="button" title="{{'Download' | translate}}"
+          (click)="fileDownload()" [disabled]="readonly"><i class="fa fa-download"></i></button>
+        <button *ngIf="allowDelete && showDelete" class="btn btn-danger" type="button" title="{{'Delete' | translate}}"
+          (click)="fileDeleted()" [disabled]="readonly"><i class="fas fa-trash-alt"></i></button>
+      </span>
+    </div>
+  </div>
+  <div *ngIf="showExtensionInfo" class="col-12 extensionsInfo">
+    <label class="extensionsInfo col-9 pull-right">{{ listExtensions()  }}</label>
+  </div>
+</ot-data-entry-template>

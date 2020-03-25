@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="GameLevelId" [caption]="'Game Level Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Game" [caption]="'Game' | translate" [items]="container.MasterId ? [container.MasterObject] : gameService.completeList"
+      [isReadOnly]="container.MasterId" textField="GameName" valueField="GameId" usePrimitiveValue="true" class="col-12" [loading]="gameService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="LevelName" [caption]="'Level Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="QuestionCount" [caption]="'Question Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="MinDifficultyLevel" [caption]="'Min Difficulty Level' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MaxDifficultyLevel" [caption]="'Max Difficulty Level' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="Duration" [caption]="'Duration' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LevelErrorTolerance" [caption]="'Level Error Tolerance' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PointofRightAnswer" [caption]="'Point of Right Answer' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="LevelCode" [caption]="'Level Code' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,11 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreOrderDetailId" [caption]="'Store Order Detail Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="OrderQuantity" [caption]="'Order Quantity (Package)' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="RevisedQuantity" [caption]="'Revised Quantity (Package)' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ShippedQuantity" [caption]="'Shipped Quantity (Package)' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="OrderUnitQuantity" [caption]="'Order Unit Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-alpha-entry formControlName="StoreOrder" [caption]="'Store Order' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

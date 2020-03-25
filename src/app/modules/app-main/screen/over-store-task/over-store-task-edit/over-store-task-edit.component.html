@@ -1,0 +1,82 @@
+﻿<ot-edit-screen-container #container [childActions]="modeContext?modeContext.childActions:null" size="lg">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" [formGroup]="container.mainForm" class="form-horizontal row">
+        <ot-alpha-entry [caption]="'OverStoreTask Id' | translate" [isReadOnly]="!container.isIdentityEditable"
+                        [ngClass]="{'ot-hidden': container.isIdentityHidden}"
+                        class="col-12"
+                        formControlName="OverStoreTaskId"></ot-alpha-entry>
+        <ot-dropdown-entry *ngIf="container.actionName !== 'Create'" [caption]="'Status' | translate"
+                           [items]="overStoreTaskStatusService.completeList"
+                           [loading]="overStoreTaskStatusService.loading"
+                           class="col-12" formControlName="Status" isReadOnly=true textField="Status"
+                           usePrimitiveValue="true" valueField="OverStoreTaskStatusId"></ot-dropdown-entry>
+        <ot-dropdown-entry [caption]="'Type' | translate" [isReadOnly]="container.actionName === 'Review'"
+                           [items]="overStoreTaskTypeService.completeList" [loading]="overStoreTaskTypeService.loading"
+                           class="col-12" formControlName="Type" textField="TaskType"
+                           usePrimitiveValue="true"
+                           valueField="OverStoreTaskTypeId"></ot-dropdown-entry>
+        <ot-radio-entry (valueChange)="onResponsibleTypeChange($event)" *ngIf="container.actionName !== 'Review'"
+                        [caption]="'Responsible Type' | translate" [choice]="responsibleTypeStr"
+                        [items]="responsibleTypeItems" class="form-group col-12"></ot-radio-entry>
+        <ot-dropdown-entry *ngIf="container.actionName !== 'Review' && responsibleTypeStr === '1'"
+                           [caption]="'Responsible User' | translate" [items]="activeUserList"
+                           [loading]="userService.loading" class="col-12" formControlName="ResponsibleUser"
+                           textField="UserFullName" usePrimitiveValue="true" valueField="UserId"></ot-dropdown-entry>
+        <ot-dropdown-entry *ngIf="container.actionName !== 'Review' && responsibleTypeStr === '2'"
+                           [caption]="'Responsible Group' | translate" [items]="activeGroupList"
+                           [loading]="groupService.loading" class="col-12" formControlName="ResponsibleGroup"
+                           textField="Name"
+                           usePrimitiveValue="true" valueField="GroupId"></ot-dropdown-entry>
+        <ot-dropdown-entry *ngIf="container.actionName !== 'Review' && responsibleTypeStr === '3'"
+                           [caption]="'Responsible Department' | translate" [items]="activeBranchList"
+                           [loading]="branchService.loading" class="col-12" formControlName="ResponsibleBranch"
+                           textField="Name"
+                           usePrimitiveValue="true" valueField="BranchId"></ot-dropdown-entry>
+        <ot-text-entry [caption]="'Content' | translate" [isReadOnly]="container.actionName === 'Review'" class="col-12"
+                       formControlName="Content"
+                       rows="7"></ot-text-entry>
+        <ot-alpha-entry *ngIf="container.actionName !== 'Create'" [caption]="'Process Id' | translate"
+                        class="col-12" formControlName="ProcessInstance" isReadOnly=true></ot-alpha-entry>
+        <ot-switch-entry *ngIf="container.actionName !== 'Review'" [caption]="'Forwardable Process' | translate"
+                         class="col-12" formControlName="ForwardableFlag"></ot-switch-entry>
+        <ot-check-box *ngIf="container.actionName !== 'Review'" [caption]="'Deadline Exists' | translate"
+                      captionWidth="6" class="col-6" editorWidth="6"
+                      formControlName="DeadlineFlag"></ot-check-box>
+        <ot-date-entry *ngIf="container.mainForm.controls.DeadlineFlag.value" [caption]="'Deadline' | translate"
+                       class="col-6" formControlName="Deadline" format="dd.MM.yyyy"></ot-date-entry>
+        <ot-folder-entry [caption]="'Document List' | translate"
+                         [deleteUrl]="deleteDocumentUrl" [readUrl]="downloadDocumentUrl"
+                         class="col-12" formControlName="FolderHandle"></ot-folder-entry>
+        <ot-text-entry *ngIf="container.actionName === 'Review' && container.mainForm.controls.Status.value > 1"
+                       [caption]="'Previous User Note' | translate" class="col-12"
+                       formControlName="PreviousActionComment"
+                       isReadOnly=true rows="3"></ot-text-entry>
+        <ot-text-entry *ngIf="container.actionName === 'Review'" [caption]="'Comment' | translate"
+                       class="col-12" formControlName="ActionComment" rows="3"></ot-text-entry>
+    </form>
+</ot-edit-screen-container>
+
+<ot-custom-dialog #forwardProcessDialog [caption]="'Forward Process' | translate">
+    <ot-radio-entry (valueChange)="onResponsibleTypeChange($event)" [caption]="'Responsible Type' | translate"
+                    [choice]="responsibleTypeStr" [items]="responsibleTypeItems"
+                    class="form-group col-12"></ot-radio-entry>
+    <ot-dropdown-entry *ngIf="responsibleTypeStr === '1'" [(value)]="forwardedUser"
+                       [caption]="'Responsible User' | translate" [items]="activeUserList"
+                       [loading]="userService.loading"
+                       class="form-group col-12" textField="UserFullName" usePrimitiveValue="true"
+                       valueField="UserId"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="responsibleTypeStr === '2'" [(value)]="forwardedGroup"
+                       [caption]="'Responsible Group' | translate" [items]="activeGroupList"
+                       [loading]="groupService.loading"
+                       class="form-group col-12" textField="Name" usePrimitiveValue="true"
+                       valueField="GroupId"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="responsibleTypeStr === '3'" [(value)]="forwardedBranch"
+                       [caption]="'Responsible Branch' | translate" [items]="activeBranchList"
+                       [loading]="branchService.loading"
+                       class="form-group col-12" textField="Name" usePrimitiveValue="true"
+                       valueField="BranchId"></ot-dropdown-entry>
+    <ng-container dialog-actions>
+        <ot-button (onClick)="hideForwardDialog()" caption="{{'Close' | translate}}"></ot-button>
+        <ot-button (onClick)="onForwardProcess()" caption="{{'Forward' | translate}}" color="primary"
+                   icon="fa fa-forward fa-fw"></ot-button>
+    </ng-container>
+</ot-custom-dialog>

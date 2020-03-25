@@ -1,0 +1,137 @@
+﻿<ot-list-screen-container [header]="'Store Order Detail' | translate" [breadcrumbItems]="breadcrumbItems"
+  [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+    <ot-button 
+    [caption]="'Back' | translate"
+    [routerLink]="['/Warehouse/StoreOrder/Index']" 
+    icon="fa fa-arrow-left fa-fw" 
+    [block]="false" 
+    color="primary" size="sm"></ot-button>
+    <ot-button *ngIf="storeOrder && storeOrder.Status>=4" [caption]="'Sipariş Sevk Farkı'" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onDiffOrdervsShipment()" ></ot-button>
+    <ot-button [caption]="'Save' | translate" 
+    icon="fa fa-save fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onSave()" ></ot-button>
+    <ot-button *ngIf="storeOrder && storeOrder.Status===1" 
+    [caption]="'Approve' | translate" 
+    icon="fa fa-check fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onApprove()" ></ot-button>
+    <ot-button *ngIf="storeOrder && storeOrder.Status===2 && fromStore==='head'" 
+    [caption]="'Checked' | translate" 
+    icon="fa fa-thumbs-up fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onChecked()" ></ot-button>
+    <ot-button *ngIf="storeOrder && storeOrder.Status===3 && fromStore==='head'" 
+    [caption]="'Dispatch' | translate" 
+    icon="fa fa-truck fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onShipped()" ></ot-button>
+    <ot-button *ngIf="storeOrder && storeOrder.Status===4 && fromStore==='store'" 
+    [caption]="'Accept' | translate" 
+    icon="fa fa-thumbs-up fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "onAccepted()" ></ot-button>
+    <ot-button *ngIf="fromStore==='head'" 
+    [caption]="'Print' | translate" 
+    icon="fa fa-print fa-fw" 
+    [block]="false" color="primary" size="sm"
+    (click)= "showPrintDialog()" ></ot-button>
+    <ot-button *ngIf="fromStore==='head'" [caption]="'Load' | translate" color="primary" size="sm" (click)="fileInput.click()"> </ot-button>
+  </ng-container>
+
+  <kendo-grid [data]="dataService.orderDetails" [loading]="dataLoading" [height]="575"
+    [pageable]="true" [pageSize]="listParams.take" [skip]="listParams.skip" 
+    [sortable]="true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)"
+    [navigable]="true" >
+
+    <kendo-grid-column field="closetoOrder" [title]="''" width="20">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span *ngIf="dataItem.ClosetoOrder" class="whole-cell" [style.backgroundColor]="'#B22222'">
+                {{ '    ' }}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-command-column *ngIf="fromStore==='store' && storeOrder && storeOrder.Status<=2" [width]="40" locked="true">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <ot-button icon="fa fa-trash" [block]="false" color="danger" size="sm" (click)="onDeleteRow($event, dataItem, rowIndex) "></ot-button>
+      </ng-template>
+    </kendo-grid-command-column> -->
+    <!-- <kendo-grid-column field="Product" [title]="'Product' | translate" width="360">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <ot-dropdown-entry #dropdown [isReadOnly]="!productSelectionEnabled" [showCaption]="false" [editorWidth]="12"
+          [items]="dataService.warehouseProductUnits" textField="SearchString" [(value)]="dataItem.Product" valueField="ProductId"
+          usePrimitiveValue="true" (valueChange)="onValueChange($event, dataItem)"></ot-dropdown-entry>
+      </ng-template>
+    </kendo-grid-column> -->
+    <kendo-grid-column field="Category" [title]="'Category' | translate" width="80"></kendo-grid-column>
+    <!-- <kendo-grid-column field="ScaleCode" [title]="'Scale Code' | translate" width="80"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="ProductCode" [title]="'Product Code' | translate" width="80"></kendo-grid-column> -->
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="150"></kendo-grid-column>
+    <kendo-grid-column field="ScaleCode" [title]="'Scale Code' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="UnitQuantityText" [title]="'Order Unit Quantity' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="Unit" [title]="'Unit' | translate" width="80"></kendo-grid-column> -->
+    <!-- <kendo-grid-column *ngIf="storeOrder && storeOrder.Status==1" field="OnWayQuantity" [title]="'Last 48 Hours Shipped Quantity (Package)' | translate"
+      width="80" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="SaleAverage" [title]="'Sale Average' | translate" width="80" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.SaleAverage | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>      
+    <kendo-grid-column field="SuggestionQuantity" [title]="'Suggestion Quantity' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="OrderQuantity" [title]="'Order Quantity (Package)' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column *ngIf="storeOrder && storeOrder.Status==2" field="RevisedQuantity" [title]="'Revised Quantity  (Package)' | translate"
+      width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column *ngIf="storeOrder && storeOrder.Status>=3" field="ShippedQuantity" [title]="'Shipped Quantity (Package)' | translate"
+      width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column *ngIf="storeOrder && storeOrder.Status>=4" field="IntakeQuantity" [title]="'Intake Quantity (Package)' | translate"
+          width="80" filter="numeric"></kendo-grid-column>  
+    <kendo-grid-column field="TotalQuantity" [title]="titleTotalQuantity" width="80"></kendo-grid-column>
+    <kendo-grid-column field="Unit" [title]="'Unit' | translate" width="50"></kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="TotalAmount" [title]="titleTotalSellingPrice" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.TotalAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+
+<div #orderDetailPrint *ngIf="storeOrder" class="row" hidden="true">
+  <store-order-print class="col-12 mx-auto"
+    [heavyProducts]="heavyOrderDetails"
+    [lightProducts]="lightOrderDetails" 
+    [heavyProductsTotal]="heavyProductsTotal"
+    [lightProductsTotal]="ligthProductsTotal"
+    [storeOrder]="storeOrder" >
+  </store-order-print>
+</div>
+
+
+<ot-custom-dialog #diffOrdervsShipment size="lg">
+    <kendo-grid [data]="diffOrdervsShipmentList" [height]="200">
+      <kendo-grid-column field="ProductName" [title]="'Ürün'" width="180" > </kendo-grid-column>
+      <kendo-grid-column field="OrderQuantity" [title]="'Sipariş'" width="180" >
+          <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.OrderQuantity*dataItem.PackageQuantity | number:'1.2-2':'tr'}}{{' '+dataItem.Unit}}
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ShippedQuantity" [title]="'Sevk'" width="180" >
+          <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.ShippedQuantity*dataItem.PackageQuantity | number:'1.2-2':'tr'}}{{' '+dataItem.Unit}}
+          </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+</ot-custom-dialog>
+
+<ot-custom-dialog #approveConfirm size="sm">
+  <p>Sevk Tarihi : {{localeDString}} dir. Onaylıyor musunuz?</p>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'Cancel' | translate" (onClick)="approveConfirm.hide()"></ot-button>
+    <ot-button [caption]="'Confirm' | translate" color="primary" (onClick)="approveOnClicked()"></ot-button>
+  </ng-container>
+</ot-custom-dialog>
+
+<input [hidden]="true" #fileInput type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />

@@ -1,0 +1,173 @@
+<div class="col-md-12 mt-2 mb-1">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 class="ml-3">{{ 'Warehouse Dashboard - Order Details' | translate }}</h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <ot-button [caption]="'Back' | translate" icon="fas fa-arrow-left" color="primary" size="md" (onClick)="onBackBtnClicked()"></ot-button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div *ngIf="wDashboardOrderData" class="row">
+        <div class="col-md-12 col-lg-6 col-xl-3">
+            <ot-simple-widget
+                    [padding]="0"
+                    icon="fas fa-lira-sign"
+                    [caption]="'Amount (Total)' | translate"
+                    text="{{ wDashboardOrderData.WidgetData.HeavyOrderAmount + wDashboardOrderData.WidgetData.LightOrderAmount | currency:'TRY':'symbol-narrow':'1.0-0':'tr' }}"
+            ></ot-simple-widget>
+            <!--                    / {{ wDashboardOrderData.WDWidgetData.HeavyGatheredAmount + wDashboardOrderData.WDWidgetData.LightGatheredAmount | currency:'TRY':'symbol-narrow':'1.0-0':'tr' }}-->
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-3">
+            <ot-simple-widget
+                    [padding]="0"
+                    color="success"
+                    icon="fas fa-archive"
+                    [caption]="'Heavy Package (Total / Gathered)' | translate"
+                    text="{{ wDashboardOrderData.WidgetData.HeavyOrderPackage | number:'1.0-0':'tr' }} / {{ wDashboardOrderData.WidgetData.HeavyGatheredPackage | number:'1.0-0':'tr' }}"
+            ></ot-simple-widget>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-3">
+            <ot-simple-widget
+                    [padding]="0"
+                    color="success"
+                    icon="fas fa-archive"
+                    [caption]="'Light Package  (Total / Gathered)' | translate"
+                    text="{{ wDashboardOrderData.WidgetData.LightOrderPackage | number:'1.0-0':'tr' }} / {{ wDashboardOrderData.WidgetData.LightGatheredPackage | number:'1.0-0':'tr' }}"
+            ></ot-simple-widget>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-3">
+            <ot-simple-widget
+                    [padding]="0"
+                    color="danger"
+                    icon="fas fa-shopping-basket"
+                    [caption]="'Product Count (Total / Not Gathered)' | translate"
+                    text="{{ (wDashboardOrderData.WidgetData.HeavyProductCount + wDashboardOrderData.WidgetData.LightProductCount) | number:'1.0-0':'tr' }} / {{ (wDashboardOrderData.WidgetData.NonGatheredHeavyProduct + wDashboardOrderData.WidgetData.NonGatheredLightProduct) | number:'1.0-0':'tr' }}"
+            ></ot-simple-widget>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <kt-portlet>
+                <kt-portlet-header [title]="'Order Trend'">
+                    <ng-container ktPortletTools>
+                        <kendo-buttongroup [selection]="'single'" class="button-group-filter pl-2">
+                            <button *ngFor="let dt of gatheringService.wdTrendDataTypes, let i = index" kendoButton [toggleable]="true" [selected]="activeWdTrendDataTypeIndex === i" (selectedChange)="activeWdTrendDataTypeIndex = i"  class="btn btn-sm">{{ dt.caption }}</button>
+                        </kendo-buttongroup>
+                        <kendo-numerictextbox [(value)]="orderTrendDays" [min]="0" [max]="366" format="n0" [style.width]="'80px'"></kendo-numerictextbox>
+                        <ot-button (onClick)="refreshOrderTrendData()" icon="fa fa-refresh" color="primary" [style.margin-right]="'10px'" [style.margin-left]="'10px'" size="sm"></ot-button>
+                    </ng-container>
+                </kt-portlet-header>
+                <kt-portlet-body>
+                    <div *ngIf="orderTrendLoading" class="chartLoadingContainer col-12">
+                        <span class="k-icon k-i-loading chartLoadingIcon"></span>
+                    </div>
+                    <kendo-chart *ngIf="wDashboardOrderData && !orderTrendLoading" [seriesColors]="chartColors">
+                        <kendo-chart-legend position="bottom"></kendo-chart-legend>
+                        <kendo-chart-category-axis>
+                            <kendo-chart-category-axis-item baseUnit="days" type="date">
+                                <kendo-chart-category-axis-item-labels [rotation]="270">
+                                </kendo-chart-category-axis-item-labels>
+                            </kendo-chart-category-axis-item>
+                        </kendo-chart-category-axis>
+                        <kendo-chart-series>
+                            <kendo-chart-series-item type="line"
+                                                     [name]="shippedQtyLegendText"
+                                                     [data]="wDashboardOrderData.OrderTrend"
+                                                     field="ShippedQuantity"
+                                                     categoryField="GatherDate">
+                                <kendo-chart-series-item-tooltip>
+                                    <ng-template let-category="category" let-value="value">
+                                        <div class="header font-weight-bold">
+                                            {{ category | date: 'dd.MM.yyyy' }}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-center">
+                                                {{ value | number:'1.0-0':'tr' }}
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </kendo-chart-series-item-tooltip>
+                            </kendo-chart-series-item>
+                            <kendo-chart-series-item type="line"
+                                                     [name]="orderQtyLegendText"
+                                                     [data]="wDashboardOrderData.OrderTrend"
+                                                     field="OrderQuantity"
+                                                     categoryField="GatherDate">
+                                <kendo-chart-series-item-tooltip>
+                                    <ng-template let-category="category" let-value="value">
+                                        <div class="header font-weight-bold">
+                                            {{ category | date: 'dd.MM.yyyy' }}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-center">
+                                                {{ value | number:'1.0-0':'tr' }}
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </kendo-chart-series-item-tooltip>
+                            </kendo-chart-series-item>
+                        </kendo-chart-series>
+                    </kendo-chart>
+                </kt-portlet-body>
+            </kt-portlet>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <kt-portlet>
+                <kt-portlet-header [title]="'Gathering Weight Stats By Product' | translate">
+                    <ng-container ktPortletTools>
+                        <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'" class="mr-1 p-2">Excel</button>
+                    </ng-container>
+                </kt-portlet-header>
+                <kt-portlet-body>
+                    <kendo-grid #grid (dataStateChange)="handleDataStateChange($event)" [data]="gatheringDifferenceList"
+                                [filter]="listParams.filter" [filterable]="true"
+                                [height]="400" [navigable]="true"
+                                [sort]="listParams.sort" [sortable]="true">
+                        <ng-template *ngIf="false" kendoGridToolbarTemplate>
+                            <button icon="file-excel" kendoGridExcelCommand type="button">Export to Excel</button>
+                        </ng-template>
+                        <!--                        <kendo-grid-column field="ProductCode" [title]="'Product Code' | translate"></kendo-grid-column>-->
+                        <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="220"></kendo-grid-column>
+                        <kendo-grid-column field="CurrentStock" filter="numeric" [title]="'Current Stock' | translate" class="text-right">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.CurrentStock | number:'1.2-2':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="NotGatheredStoreCount" filter="numeric" [title]="'Not Gathered Stores' | translate" class="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.NotGatheredStoreCount | number:'1.0-0':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="GatheredStoreCount" filter="numeric" [title]="'Gathered Stores' | translate" class="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.GatheredStoreCount | number:'1.0-0':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="NotGatheredStoreRate" filter="numeric" [title]="'Not Gathered Store Percentage' | translate" class="text-center">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.NotGatheredStoreRate | percent:'1.1-1':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="NotGatheredQuantity" filter="numeric" [title]="'Not Gathered' | translate" class="text-right">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.NotGatheredQuantity | number:'1.2-2':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="GatheredQuantity" filter="numeric" [title]="'Gathered' | translate" class="text-right">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.GatheredQuantity | number:'1.2-2':'tr'}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-excel [fetchData]="allData" [fileName]="getxlsFileName()"></kendo-grid-excel>
+                    </kendo-grid>
+                </kt-portlet-body>
+            </kt-portlet>
+        </div>
+    </div>
+</div>

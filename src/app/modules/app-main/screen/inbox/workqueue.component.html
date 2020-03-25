@@ -1,0 +1,56 @@
+<ot-list-screen-container [header]="'Workqueue Items' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <div class="row mt-2">   
+      <div class="col-12">          
+        <ot-field-set title="Workqueue Filters">
+          <form #form="ngForm" [formGroup]="mainForm" (ngSubmit)="filter()" class="form-horizontal ">
+            <div class="row" style="padding: 15px 15px 0px 15px;">
+              <ot-dropdown-entry formControlName="Workqueue" [caption]="'Workqueue' | translate" [items]=dataService.workqueueList
+                textField="Name" valueField="WorkQueueId" usePrimitiveValue="true" class="col-md-6" ></ot-dropdown-entry>
+              <ot-dropdown-entry formControlName="TaskType" [caption]="'Task Lists' | translate" [items]=dataService.taskLists
+                textField="Text" valueField="Value" usePrimitiveValue="true" class="col-md-6" ></ot-dropdown-entry>
+              <ot-date-entry formControlName="StartDate" (valueChange) = "startDateChange($event)" [max] = 'startDateMax' [caption]="'Start Date' | translate" [format]="'dd.MM.yyyy'" class="col-md-6"></ot-date-entry>
+              <ot-date-entry formControlName="EndDate" (valueChange) = "endDateChange($event)" [min] = 'endDateMin' [caption]="'End Date' | translate" [format]="'dd.MM.yyyy'" class="col-md-6"></ot-date-entry>
+              <ot-numeric-entry formControlName="CustomerNo" [caption]="'Customer No' | translate" class="col-md-6"></ot-numeric-entry>          
+              <div class="col-md-6" style="margin-bottom:10px">
+                <ot-button [caption]="'Filter' | translate" color="primary" class="pull-right"></ot-button>
+              </div>
+            </div>
+          </form>
+        </ot-field-set>     
+      </div>
+      <div class="col-12 mt-2">
+        <ot-field-set title="Tasks">
+          <kendo-grid [data]="dataService.workqueueItems" [height]="600">
+            <kendo-grid-command-column  title="" [width]="commandColumnWidth" locked="true">
+              <ng-container>
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <ot-button caption="" icon="fa fa-search" (click)="showReviewDialog(dataItem)"></ot-button>                                    
+                </ng-template>
+              </ng-container>
+            </kendo-grid-command-column>
+            <kendo-grid-column field="ProcessDefinitionName" [title]="'Process' | translate"></kendo-grid-column>
+            <kendo-grid-column field="WorkQueueName" [title]="'Workqueue' | translate"></kendo-grid-column>
+            <kendo-grid-column field="ActivityName" [title]="'Activity' | translate"></kendo-grid-column>
+            <kendo-grid-column field="ProcessInstanceCreateUserName" [title]="'Creator Name' | translate"></kendo-grid-column>
+            <kendo-grid-column field="ProcessInstanceStartDate" [title]="'Process Start Date' | translate" filter="date" editor="date" format="{{'angularDateFormat' | translate}}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.ProcessInstanceStartDate">{{utilityService.toDate(dataItem.ProcessInstanceStartDate) | date:('angularDateFormat' | translate)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="AssignTime" [title]="'Assign Time' | translate"></kendo-grid-column>
+            <kendo-grid-column field="StartTime" [title]="'Start Time' | translate" filter="date" editor="date" format="{{'angularDateFormat' | translate}}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.StartTime">{{utilityService.toDate(dataItem.StartTime) | date:('angularDateFormat' | translate)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="FinishTime" [title]="'FinishTime Time' | translate" filter="date" editor="date" format="{{'angularDateFormat' | translate}}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.FinishTime">{{utilityService.toDate(dataItem.FinishTime) | date:('angularDateFormat' | translate)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </ot-field-set>
+      </div>  
+  </div>
+</ot-list-screen-container>
+<ng-template #reviewComponent></ng-template>

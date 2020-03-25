@@ -1,0 +1,22 @@
+<!-- <ul class="nav">
+  <ng-template #recursiveMenu let-menu>
+    <ng-template ngFor let-navitem [ngForOf]="menu">
+      <li *ngIf="!isHasChild(navitem)" [ngClass]="{'nav-title': isTitle(navitem), 'nav-item': !(isTitle(navitem) || isDivider(navitem)), 'nav-divider': isDivider(navitem)}">
+        <span *ngIf="isTitle(navitem)">{{navitem.name}}</span>
+        <span *ngIf="isDivider(navitem)"></span>
+        <a class="nav-link" *ngIf="!(isTitle(navitem) || isDivider(navitem))" routerLink="{{navitem.url}}"
+          routerLinkActive="active">
+          <i class="nav-icon" [ngClass]="navitem.icon"></i> {{navitem.name}}
+        </a>
+      </li>
+      <li *ngIf="isHasChild(navitem)" appNavDropdown routerLinkActive="open" class="nav-item nav-dropdown">
+        <a appNavDropdownToggle class="nav-link nav-dropdown-toggle" role="button"><i class="nav-icon" [ngClass]="navitem.icon"></i>
+          {{navitem.name}}</a>
+        <ul class="nav-dropdown-items">
+          <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: navitem.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-template>
+  </ng-template>
+  <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: navItems }"></ng-container>
+</ul> -->

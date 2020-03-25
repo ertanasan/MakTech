@@ -1,0 +1,19 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="SalesId" [caption]="'Sales Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry #transactionCode formControlName="TransactionCode" [caption]="'Transaction Code' | translate" rows="7" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry #storeID formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="CashierCode" [caption]="'Cashier Code' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-alpha-entry formControlName="CashRegister" [caption]="'Cash Register' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry #transactionDate formControlName="TransactionDate" [caption]="'Transaction Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="TransactionTime" [caption]="'Transaction Time' | translate" format="HH:mm:ss" class="col-12"></ot-date-entry>
+    <!-- <ot-numeric-entry formControlName="VATAmount" [caption]="'VAT Amount' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-numeric-entry formControlName="Total" [caption]="'Total' | translate" class="col-12"></ot-numeric-entry>
+    <!-- <ot-numeric-entry formControlName="ProductDiscount" [caption]="'Product Discount' | translate" class="col-12"></ot-numeric-entry> -->
+    <!-- <ot-numeric-entry formControlName="TotalDiscount" [caption]="'Total Discount' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-numeric-entry formControlName="ProductCount" [caption]="'Product Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ProcessDuration" [caption]="'Process Duration' | translate" class="col-12"></ot-numeric-entry>
+    <ot-switch-entry formControlName="Cancelled" [caption]="'Cancelled' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-dropdown-entry formControlName="TransactionType" [caption]="'Transaction Type' | translate" [items]="transactionTypeService.completeList" textField="TransactionName" valueField="TransactionTypeId" usePrimitiveValue="true" class="col-12" [loading]="transactionTypeService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

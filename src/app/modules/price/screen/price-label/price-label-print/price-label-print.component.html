@@ -1,0 +1,68 @@
+﻿<table class="{{ isLastLabel ? '' : 'not-last-label' }}" cellpadding="1px" style="min-height: 50mm; max-height:55mm;">
+  <tbody>
+    <tr>
+      <td class="{{ barcode.toString().length <= 12 ? 'rotate' : 'rotate_nobarcode' }}" rowspan="2" style="border: none;border-right: 1px solid;width: 12mm; padding:3px">
+        <div>{{barcode}}</div>
+      </td>
+      <td align="left" class="a" rowspan="2" style="width: 16mm;vertical-align: top; padding:3px">
+        <img [src]="printingImageSrc" style="width:15mm; height:15mm">
+      <td align="left" class="a" colspan="3" style="font-size: 20px;width: 68mm;"><b>&nbsp;&nbsp;{{shortName}}</b></td>
+    </tr> 
+    <tr>
+      <td colspan="3">
+        <table style="border: 0px">
+          <tr>
+            <td class="a" rowspan="2" style="width:40mm; max-width: 40mm; text-align: right; vertical-align: top; padding-right: 1mm">
+              <span *ngIf="price < 100" style="font-size: 60px;  font-family:calibri"><b>{{ price | number: '1.2-2':'tr'}}</b></span>
+              <span *ngIf="price >= 100" style="font-size: 45px;  font-family:calibri"><b>{{ price | number: '1.2-2':'tr'}}</b></span>
+            </td>
+            <td class="a" style="width:28mm; max-width: 28mm; border: none; text-align: left; vertical-align: bottom;">
+              <span *ngIf="topPrice > 0 && topPrice < 100" style="font-size: 40px;  font-family:calibri; text-decoration: line-through;">{{ topPrice | number: '1.2-2':'tr'}}</span>
+              <span *ngIf="topPrice >= 100" style="font-size: 26px;  font-family:calibri; text-decoration: line-through;">{{ topPrice | number: '1.2-2':'tr'}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="a" style="border: none; text-align: left; vertical-align:bottom; padding: 0; margin: 0"> ₺/{{ unitName }} </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" class="a" rowspan="5" style="border-right: 1px solid;">
+        <img *ngIf="domestic" src="\assets\label\yerli.png" style="height:20mm">
+        <img *ngIf="!domestic" src="\assets\label\yerli-ph.png" style="height:20mm"></td>
+      <td class="a" colspan="4" rowspan="5">
+        <table style="width: 100%;border:0px;">
+          <tr>
+            <td class="a"><b>&nbsp;Üretim Yeri&nbsp;:</b>&nbsp;{{country}}</td>
+            <td class="a"><b>&nbsp;Allerjen Uyarısı&nbsp;:&nbsp;&nbsp;</b>{{warning}}</td>
+          </tr>
+          <tr>
+            <td class="a" rowspan="3" valign="top">
+              <b>&nbsp;Ürün İçeriği&nbsp;:&nbsp;</b>&nbsp;{{ content }}
+            </td>
+            <td class="a">
+              <b>&nbsp;T.E. Raf Ömrü&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</b>{{ expiresIn }} Gün
+            </td>
+          </tr>
+          <tr>
+            <td class="a">
+              <b>&nbsp;Fiyat Değ. Tarihi&nbsp;:&nbsp;</b>{{ priceChangeDate | date: 'dd.MM.yyyy' }}
+            </td>
+          </tr>
+          <tr>
+            <td class="a">
+              <b>&nbsp;Birim Fiyatı&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</b>
+              {{ unitPrice | number: '1.2-2':'tr'}} ₺/{{ weightUnitName }}
+            </td>
+          </tr>
+          <tr>
+            <td class="a" valign="center">
+              <b>&nbsp;{{ storageCondition }}</b>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

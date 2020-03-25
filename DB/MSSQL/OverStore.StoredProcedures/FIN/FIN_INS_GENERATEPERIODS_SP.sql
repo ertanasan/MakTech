@@ -1,0 +1,5 @@
+﻿CREATE PROCEDURE [dbo].[FIN_INS_GENERATEPERIODS_SP]
+	@KeepExistingRecords VARCHAR(1)
+AS
+	SELECT @KeepExistingRecords
+RETURN 0

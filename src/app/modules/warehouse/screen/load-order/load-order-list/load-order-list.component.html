@@ -1,0 +1,99 @@
+﻿<ot-list-screen-container [header]="'Load Order List' | translate" [breadcrumbItems]="breadcrumbItems"
+  [showAsDetail]="isEmbedded">
+
+  <kendo-grid [data]="dataService.activeList" [loading]="dataLoading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" 
+    [sortable]="true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)"
+    [navigable]="true" >
+
+    <kendo-grid-column field="SuperGroup1" [title]="'Group 1' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="superGroup1Service.completeList"
+            valueField="SuperGroup1Id"
+            textField="SuperGroup1Name"
+            memberField="SuperGroup1"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.SuperGroup1">
+          {{ dataItem.SuperGroup1 | getName:'SuperGroup1Id':'SuperGroup1Name':superGroup1Service.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="SuperGroup2" [title]="'Group 2' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="superGroup2Service.completeList"
+            valueField="SuperGroup2Id"
+            textField="SuperGroup2Name"
+            memberField="SuperGroup2"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.SuperGroup2">
+          {{ dataItem.SuperGroup2 | getName:'SuperGroup2Id':'SuperGroup2Name':superGroup2Service.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="SuperGroup3" [title]="'Group 3' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="superGroup3Service.completeList"
+            valueField="SuperGroup3Id"
+            textField="SuperGroup3Name"
+            memberField="SuperGroup3"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.SuperGroup3">
+          {{ dataItem.SuperGroup3 | getName:'SuperGroup3Id':'SuperGroup3Name':superGroup3Service.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Category" [title]="'Category' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="categoryService.completeList"
+            valueField="CategoryID"
+            textField="Category"
+            memberField="Category"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.Category">
+          {{ dataItem.Category | getName:'CategoryID':'Category':categoryService.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Subgroup" [title]="'Sub Group' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="subGroupService.completeList"
+            valueField="SubgroupID"
+            textField="SubgroupName"
+            memberField="Subgroup"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.Subgroup">
+          {{ dataItem.Subgroup | getName:'SubgroupID':'SubgroupName':subGroupService.completeList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Code" [title]="'Product Code' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="Name" [title]="'Product Name' | translate" width="150"></kendo-grid-column>
+    <kendo-grid-column field="LoadOrder" [title]="'Load Order' | translate" width="80"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>

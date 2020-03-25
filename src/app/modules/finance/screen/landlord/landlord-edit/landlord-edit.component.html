@@ -1,0 +1,16 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="LandlordId" [caption]="'Landlord Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="AccountingCode" [caption]="'Accounting Code' | translate" [items]="landlordService.mikroLandlordList" valueField="Code" textField="Name1" class="col-12" (valueChange)="onAccountingCodeChange($event)" usePrimitiveValue=true></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="LandlordName" [caption]="'Landlord Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="LandlordType" [caption]="'Landlord Type' | translate" [items]="personOrLegalIdentity" valueField="value" textField="text" class="col-12" usePrimitiveValue=true required [customValidationMessage]="'Landlord type must be selected' | translate"></ot-dropdown-entry>
+    <ot-text-entry formControlName="LandlordAddress" [caption]="'Landlord Address' | translate" rows="7" class="col-12"></ot-text-entry>
+    <ot-text-entry formControlName="ContactInfo" [caption]="'Contact Info' | translate" rows="2" class="col-12"></ot-text-entry>
+    <ot-alpha-entry formControlName="NationalId" [caption]="'National Id' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="TaxpayerId" [caption]="'Taxpayer Id' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="TaxOffice" [caption]="'Tax Office' | translate" class="col-12"></ot-alpha-entry>
+    <ot-check-box [(value)]="hasLegalRep" [caption]="'Has Legal Representative' | translate" class="col-4 form-group" captionWidth="9" editorWidth="3"></ot-check-box>
+    <ot-dropdown-entry *ngIf="hasLegalRep" formControlName="LegalRepresentative" [items]="landlordService.completeList" valueField="LandlordId" textField="LandlordName" [loading]="landlordService.loading" class="col-8" showCaption=false captionWidth="0" editorWidth="12"></ot-dropdown-entry>
+
+  </form>
+</ot-edit-screen-container>

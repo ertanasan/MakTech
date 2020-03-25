@@ -1,0 +1,24 @@
+<ot-data-entry-template caption="{{ caption }}"
+                        [showCaption]="showCaption"
+                        [editorWidth]="editorWidth" 
+                        [captionWidth]="captionWidth"
+                        [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched"
+                        [validationMessages]="getValidationMessages()">
+  <div editor>
+    <ul class="list-group">
+      <li *ngFor="let document of value?.documents" class="list-group-item d-flex list-group-item-action justify-content-between align-items-left">
+        {{ document.fileName }}
+        <span *ngIf="document.isLoading">{{ 'Uploading ...' | translate}}</span>
+        <div *ngIf="document.isLoading" class="lds-css ng-scope"><div style="width:100%;height:100%" class="lds-double-ring"><div></div><div></div></div></div>
+        <span class="input-group-append">
+          <button style="margin: 5px" *ngIf="document.documentId" class="btn btn-info btn-append" type="button" (click)="downloadDocument(document)" title="{{'Download' | translate}}"><i class="fa fa-download"></i></button>
+          <button style="margin: 5px" *ngIf="(document.documentId || document.tempDocumentId) && !readonly" class="btn btn-danger btn-append" type="button" title="{{'Delete' | translate}}" (click)="removeDocument(document)"><i class="fas fa-trash-alt"></i></button>
+        </span>
+      </li>
+    </ul>
+    <div class="custom-file">
+      <input #documentInput type="file" class="custom-file-input" id="inputGroupFile" (change)="fileSelected($event.target.files)" [disabled]="readonly" [value]="fileName" [accept]="accept">
+      <label style="text-align: left;" class="custom-file-label" for="inputGroupFile">{{ browsePrompt }}</label>
+    </div>
+  </div>
+</ot-data-entry-template>

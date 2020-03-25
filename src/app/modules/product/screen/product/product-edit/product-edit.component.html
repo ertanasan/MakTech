@@ -1,0 +1,42 @@
+﻿<ot-edit-screen-container #container size="lg">
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <!-- <ot-alpha-entry formControlName="ProductId" [caption]="'Product Id' | translate" class="col-md-6" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry> -->
+        <div class="row">
+        <ot-alpha-entry formControlName="ProductId" [caption]="'Product Id' | translate" class="col-md-6" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="true"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="Code" [caption]="'Code' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="Name" [caption]="'Name' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="OldCode" [caption]="'Old Code' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="ShortName" [caption]="'Short Name' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-dropdown-entry formControlName="SuperGroup1" [caption]="'Super Group 1' | translate" [items]="superGroup1Service.completeList" textField="SuperGroup1Name" valueField="SuperGroup1Id" usePrimitiveValue="true" class="col-md-6" [loading]="superGroup1Service.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="SeasonType" [caption]="'Season Type' | translate" [items]="seasonTypeService.completeList" textField="SeasonTypeName" valueField="SeasonTypeId" usePrimitiveValue="true" class="col-md-6" [loading]="seasonTypeService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="SuperGroup2" [caption]="'Super Group 2' | translate" [items]="superGroup2Service.completeList" textField="SuperGroup2Name" valueField="SuperGroup2Id" usePrimitiveValue="true" class="col-md-6" [loading]="superGroup2Service.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Category" [(value)]="selectedCategory" (valueChange) = "onCategoryChange($event)" [caption]="'Category' | translate" [items]="categoryService.completeList" textField="Category" valueField="CategoryID" usePrimitiveValue="true" class="col-md-6" [loading]="categoryService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Subgroup" [(value)]="selectedSubGroup" [caption]="'Subgroup' | translate" [items]="selectedCategory?subGroupFilterList:subgroupService.completeList" textField="SubgroupName" valueField="SubgroupID" usePrimitiveValue="true" class="col-md-6" [loading]="subgroupService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="SuperGroup3" [caption]="'Super Group 3' | translate" [items]="superGroup3Service.completeList" textField="SuperGroup3Name" valueField="SuperGroup3Id" usePrimitiveValue="true" class="col-md-6" [loading]="superGroup3Service.loading"></ot-dropdown-entry>
+        <ot-alpha-entry formControlName="GTIPCode" [caption]="'GTIP Code' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-alpha-entry formControlName="LoadOrder" [caption]="'Load Order' | translate" class="col-md-6"></ot-alpha-entry>
+        <ot-dropdown-entry formControlName="Country" [caption]="'Country' | translate" [items]="countryService.completeList" textField="CountryName" valueField="CountryId" usePrimitiveValue="true" class="col-md-6" [loading]="countryService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Warning" [caption]="'Warning' | translate" [items]="warningService.completeList" textField="WarningText" valueField="WarningId" usePrimitiveValue="true" class="col-md-6" [loading]="warningService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="StorageCondition" [caption]="'Storage Condition' | translate" [items]="storageConditionService.completeList" textField="Condition" valueField="StorageConditionId" usePrimitiveValue="true" class="col-md-6" [loading]="storageConditionService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Campaign" [caption]="'Campaign' | translate" [items]="productCampaignService.completeList" textField="Name" valueField="ProductCampaignId" usePrimitiveValue="true" class="col-md-6" [loading]="productCampaignService.loading"></ot-dropdown-entry>
+        </div>
+        <div class="row">
+        <ot-numeric-entry formControlName="PurchaseVAT" [caption]="'Purchase VAT' | translate" class="col-md-3"></ot-numeric-entry>
+        <ot-numeric-entry formControlName="SaleVAT" [caption]="'Sale VAT' | translate" class="col-md-3"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="BarcodeType" [caption]="'Barcode Type' | translate" [items]="barcodeTypeIntService.completeList" textField="BarcodeType" valueField="BarcodeTypeID" usePrimitiveValue="true" class="col-md-3" [loading]="barcodeTypeIntService.loading"></ot-dropdown-entry>
+        <ot-dropdown-entry formControlName="Unit" [caption]="'Unit' | translate" [items]="unitService.completeList" textField="Name" valueField="UnitId" usePrimitiveValue="true" class="col-md-3" [loading]="unitService.loading"></ot-dropdown-entry>
+        <ot-numeric-entry formControlName="ExpiresIn" [caption]="'Expires In' | translate" class="col-md-3"></ot-numeric-entry>
+        <ot-numeric-entry formControlName="ShelfLife" [caption]="'Shelf Life' | translate" class="col-md-3"></ot-numeric-entry>
+        <ot-numeric-entry formControlName="Weight" [caption]="'Weight' | translate" class="col-md-3"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="WeightUnit" [caption]="'Weight Unit' | translate" [items]="unitService.completeList" textField="Name" valueField="UnitId" usePrimitiveValue="true" class="col-md-3" [loading]="unitService.loading"></ot-dropdown-entry>
+        <ot-switch-entry formControlName="Active" [caption]="'Active' | translate" color="primary" labelStyle="check" class="col-md-3" editorWidth=6 captionWidth=6></ot-switch-entry>
+        <ot-switch-entry formControlName="PrivateLabel" [caption]="'Private Label' | translate" color="primary" labelStyle="check" class="col-md-3" editorWidth=6 captionWidth=6></ot-switch-entry>
+        <ot-switch-entry formControlName="eTrade" [caption]="'eTrade' | translate" color="primary" labelStyle="check" class="col-md-3" editorWidth=6 captionWidth=6></ot-switch-entry>
+        <ot-switch-entry formControlName="Domestic" [caption]="'Domestic' | translate" color="primary" labelStyle="check" class="col-md-3" editorWidth=6 captionWidth=6></ot-switch-entry>
+        </div>
+        <ot-text-entry formControlName="Content" [caption]="'Content' | translate" rows="3" class="col-md-12"></ot-text-entry>
+        <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="3" class="col-md-12"></ot-text-entry>
+        <ot-dropdown-entry *ngIf="parentProducts" formControlName="Parent" [caption]="'Parent' | translate" [items]="parentProducts" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-md-6"></ot-dropdown-entry>
+        <ot-numeric-entry formControlName="InitialPrice" [caption]="'Initial Price' | translate" class="col-md-6"></ot-numeric-entry>
+    </form>
+</ot-edit-screen-container>

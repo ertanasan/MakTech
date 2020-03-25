@@ -1,0 +1,10 @@
+.loadingContainer {
+    text-align: center;
+    min-height: 400px;
+}
+
+.loadingIcon {
+    font-size: 100px;
+    color: gray;
+    vertical-align: middle;
+}

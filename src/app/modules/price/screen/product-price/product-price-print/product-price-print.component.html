@@ -1,0 +1,99 @@
+<head>
+    <table class="pageHeaderTable" width="100%">
+      <td width="30%" class="pageHeaderTableRow"> {{ department }} </td>
+      <td width="40%" class="pageHeaderTableRow">
+          <img src="\assets\images\logo\wide-logo-grayscale.png" alt="makbul-logo" height="58" width="180">
+      </td>
+      <td width="30%" class="pageHeaderTableRow"> {{ approveDate | date:'dd.MM.yyyy' }} </td>
+    </table>  
+  </head>
+  
+  <body>
+    <div *ngIf="packageToPrint">
+      <h2 class="divSeperator" style="text-align: center"> {{ mainTitle }} </h2>
+      <table width="80%" class="divSeperator">
+        <tbody>
+          <tr>
+            <td class="td4" width="30%"><b>Paket Id</b></td>
+            <td class="td4" width="5%" ><b>:</b></td>
+            <td class="td4">{{ packageToPrint.PackageId }}</td>
+          </tr>
+          <tr>
+            <td class="td4" width="30%"><b>Paket Adı</b></td>
+            <td class="td4" width="5%" ><b>:</b></td>
+            <td class="td4">{{ packageToPrint.PackageName }}</td>
+          </tr>
+          <tr>
+            <td class="td4"width="30%" ><b>Paket Tipi</b></td>
+            <td class="td4" width="5%" ><b>:</b></td>
+            <td class="td4">{{ packageToPrint.PackageType | getName:'PackageTypeId':'PackageTypeName':packageTypeService.completeList }}</td>
+          </tr>
+          <tr>
+            <td class="td4"width="30%" ><b>Tanımlı Mağaza Sayısı</b></td>
+            <td class="td4" width="5%" ><b>:</b></td>
+            <td *ngIf="packageToPrint.PackageType >= 3" class="td4">{{ packageToPrint.AllStores }} Mağaza</td>
+            <td *ngIf="3 > packageToPrint.PackageType" class="td4">Tüm Mağazalar</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <p class="divSeperator">
+          {{ content }}
+          <br><br>
+      </p>
+    
+      <div *ngIf="packageToPrint.PackageType >= 3" class="divSeperator"> 
+        <table width="100%">
+          <thead>
+            <tr>
+              <th class="td1" colspan="3"><b>Pakete Tanımlı Mağazalar</b></th>
+            </tr>
+            <tr>
+              <th class="td2" width="40%" rowspan="2"><b>Mağaza Adı</b></th>
+              <th class="td2" width="60%" colspan="2"><b>Geçerlilik Dönemi</b></th>
+            </tr>  
+            <tr>
+              <th class="td2" width="30%" ><b>Başlangıç Tarihi</b></th>
+              <th class="td2" width="30%" ><b>Bitiş Tarihi</b></th>
+            </tr>      
+          </thead>
+          <tbody>
+            <tr *ngFor="let store of packageStoresToPrint; let i = index">
+              <td class="td3">{{ store.StoreName }}</td>
+              <td class="td3">{{ store.StartTime | date:'dd.MM.yyyy' }}</td>
+              <td class="td3">{{ store.EndTime | date:'dd.MM.yyyy' }}</td>
+            </tr>
+        </table>
+      </div>
+    
+      <div class="divSeperator">
+        <table width="100%">
+          <thead>
+            <tr>
+              <th class="td1" *ngIf="packageToPrint.PackageType === 1" colspan="6" width="100%" ><b>Değişen Fiyatlar</b></th>
+              <th class="td1" *ngIf="packageToPrint.PackageType !== 1" colspan="6" width="100%"><b>Paket Fiyatları</b></th>
+            </tr>
+            <tr>
+              <th class="td2" width="25%" ><b>Ürün Adı</b></th>
+              <th class="td2" width="15%" ><b>Ürün Kodu</b></th>
+              <th class="td2" width="15%" ><b>Önceki Fiyat</b></th>
+              <th class="td2" width="15%" ><b>Yeni Fiyat</b></th>
+              <th class="td2" width="15%" ><b>Önceki Tavan Fiyat</b></th>
+              <th class="td2" width="15%" ><b>Yeni Tavan Fiyat</b></th>
+            </tr>
+          </thead>  
+          <tbody>
+            <tr *ngFor="let product of productsToPrint; let i = index">          
+              <td class="td3">{{ product.ProductName }}</td>   
+              <td class="td3">{{ product.ProductCodeName }}</td>         
+              <td class="td3">{{ product.CurrentPriceAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</td>          
+              <td class="td3">{{ product.PriceAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</td>
+              <td class="td3">{{ product.OldTopPriceAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</td>          
+              <td class="td3">{{ product.TopPriceAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        
+    </div>
+  </body>

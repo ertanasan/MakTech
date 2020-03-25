@@ -1,0 +1,20 @@
+.refreshtime {
+    font-style: italic;
+}
+
+.insidevalue
+{
+    cursor: pointer;
+}
+
+.map {
+    height:600px; 
+    width:100%;
+}
+
+/* .rowHref:hover
+{
+    cursor: pointer;
+    text-decoration: underline !important;
+    color: #20a8d8;
+} */

@@ -1,0 +1,12 @@
+<kendo-treeview
+  [nodes]="nodes"
+  [textField]="textField"
+  kendoTreeViewExpandable
+  [kendoTreeViewSelectable]="selectable"
+  kendoTreeViewHierarchyBinding
+  [childrenField]="childrenField"
+  [kendoTreeViewCheckable]="checkable"
+  (checkedKeysChange)="handleCheckChange($event)"
+  [checkedKeys]="checkedKeys" 
+>
+</kendo-treeview>

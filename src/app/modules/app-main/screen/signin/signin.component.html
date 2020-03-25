@@ -1,0 +1,65 @@
+<div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v3 kt-login--signin" id="kt_login">
+  <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor"
+    style="background-image: url('./assets/media/bg/bg-3.jpg');">
+    <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+      <div class="kt-login__container">
+        <div class="kt-login__logo">
+          <a href="#">
+            <img src="./assets/images/logo/wide-logo.png">
+          </a>
+        </div>
+        <div class="kt-login__signin" *ngIf="isRemember">
+          <div class="kt-login__head">
+            <h3 class="kt-login__title">{{ 'Welcome to Maktech Store Management' | translate }}</h3>
+            <h3 class="kt-login__title">{{ 'Sign In to your account' | translate }}</h3>
+            <span class="kt-login__desc">
+            </span>
+          </div>
+          <form class="kt-form" *ngIf="isRemember" (ngSubmit)="f.form.valid && signin()" #f="ngForm" action="">
+            <ng-template #alertSignin></ng-template>
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Username" name="email" [(ngModel)]="model.email"
+                #email="ngModel" autocomplete="username" required>
+            </div>
+            <div class="input-group">
+              <input class="form-control form-control-last" type="password" placeholder="Password" name="password"
+                [(ngModel)]="model.password" #password="ngModel" autocomplete="current-password" required>
+            </div>
+            <div class="row kt-login__extra">
+              <div class="col">
+              </div>
+              <div class="col kt-align-right">
+                <a href="javascript:;" id="kt_login_forgot" class="kt-login__link" (click)="forgetPassword()">{{ 'Forgot password?' | translate }}</a>
+              </div>
+            </div>
+            <div class="kt-login__actions">
+              <button id="kt_login_signin_submit" [disabled]="loading" type="submit"
+                class="btn btn-brand btn-elevate kt-login__btn-primary">{{ 'Sign In' | translate }}</button>
+            </div>
+          </form>
+        </div>
+        <div class="kt-login__forgot" *ngIf="!isRemember">
+          <div class="kt-login__head">
+            <h3 class="kt-login__title">{{ 'Send Password Reset Link To E-Mail' | translate }}</h3>
+            <div class="kt-login__desc"></div>
+          </div>
+          <form class="kt-form" *ngIf="!isRemember" (ngSubmit)="n.form.valid && forgotPass()" #n="ngForm" action="">
+            <ng-template #alertForgotPass></ng-template>
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="{{ 'Please enter e-mail address' | translate }}"
+                [(ngModel)]="model.email" name="email" id="kt_email" #email="ngModel" autocomplete="username"
+                required>
+            </div>
+            <div class="kt-login__actions">
+              <button id="kt_login_forgot_submit" type="submit" [disabled]="loading"
+                class="btn btn-brand btn-elevate kt-login__btn-primary">{{ 'Send' | translate }}</button>&nbsp;&nbsp;
+              <button id="kt_login_forgot_cancel" type="button" (click)="backToForm()"
+                class="btn btn-light btn-elevate kt-login__btn-secondary">{{ 'Back' | translate }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

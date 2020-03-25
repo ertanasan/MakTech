@@ -1,0 +1,36 @@
+﻿@media print {
+   @page { 
+      size: A4; 
+      margin: 0.5cm 0.5cm 0.5cm 0.5cm;
+   }
+
+   header nav, footer {display: none;}
+
+   table {
+      border: 1px solid #CCC;
+      border-collapse: collapse;
+      table-layout:fixed;
+      border: 1px solid black;
+      table-layout: fixed;
+      font-family: Arial, Helvetica, sans-serif
+   }
+
+   th {
+      background-color: rgb(181, 187, 181);
+      color: white;
+    }
+
+   tr:nth-child(even) {
+       background-color: rgb(181, 187, 181);
+   }
+
+   .a {
+      border: none; 
+      font-size: 13px; 
+      font-family: Arial, Helvetica, sans-serif;
+   }
+ 
+   .table1 {page-break-after: always;}
+
+}
+

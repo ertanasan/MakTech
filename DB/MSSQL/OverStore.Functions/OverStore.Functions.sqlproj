@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>OverStore.Functions</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{5805c8ad-e22d-44a8-bbff-545961ab24dc}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>OverStore.Functions</RootNamespace>
+    <AssemblyName>OverStore.Functions</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="STR" />
+    <Folder Include="WHS" />
+    <Folder Include="INV" />
+    <Folder Include="MIK" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="STR\STR_GETUSERSTORES_FN.sql" />
+    <Build Include="WHS\WHS_GETSHIPMENTDAY_FN.sql" />
+    <Build Include="STR\STR_EXTRACTTIMEFROMSTATUS_FN.sql" />
+    <Build Include="INV\INV_STOCKDATE_FN.sql" />
+    <Build Include="INV\INV_STOCKOUT_FN.sql" />
+    <Build Include="STR\STR_GETUSERSTORESWHINC_FN.sql" />
+    <Build Include="WHS\WHS_ORDERSUGGESTION_FN.sql" />
+    <Build Include="WHS\WHS_TOCSUGGESTION_FN.sql" />
+    <Build Include="WHS\WHS_TOCSTORECOEFF_FN.sql" />
+    <Build Include="STR\SEC_DEPARTMENTGROUP_FN.sql" />
+    <Build Include="STR\STR_GETUSERCURRENTDATE_FN.sql" />
+    <Build Include="STR\STR_GETUSERSTORESALL_FN.sql" />
+    <Build Include="WHS\WHS_GETCHANGEDSTORES_FN.sql" />
+    <Build Include="INV\INV_STOCKDATE2_FN.sql" />
+    <Build Include="WHS\WHS_PRODUCTRETURNSTATUS_FN.sql" />
+    <Build Include="MIK\MIK_SALES_FN.sql" />
+    <Build Include="WHS\WHS_MATERIALORDERSTATUS_FN.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OverStore.Tables\OverStore.Tables.sqlproj">
+      <Name>OverStore.Tables</Name>
+      <Project>{67abe3b7-a5ed-4c12-af8f-0f053d152704}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OverFrame\DB\MSSQL\Tables\Tables.sqlproj">
+      <Name>Tables</Name>
+      <Project>{3648c149-5d15-48d7-a8fb-f22b93d1d5ed}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OverFrame\DB\MSSQL\Functions\Functions.sqlproj">
+      <Name>Functions</Name>
+      <Project>{c3f0921f-a1c5-4e88-a896-48d04461260d}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\OverStore.Views\OverStore.Views.sqlproj">
+      <Name>OverStore.Views</Name>
+      <Project>{fb9f67f8-cee2-442d-898a-f0b4e7e6f8a2}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="Tables">
+      <DefaultValue>Tables</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>

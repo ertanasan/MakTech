@@ -1,0 +1,245 @@
+<div class="row">
+  <ol class="col-md-12 breadcrumb">
+    <h4 class="ml-3">{{ 'Fiyat Pano '}}</h4>
+  </ol>
+</div>
+<div class="container">
+  <ot-list-screen-container [header]="'Filter Parameters' | translate">
+      <ng-container header-items>
+          <table>
+            <tr>
+              <th><ot-button [caption]="'Clear' | translate" color="primary" size="sm" (click)="onClear()"></ot-button></th>
+              <th><ot-button [caption]="'GetData' | translate" color="primary" size="sm" (click)="onGetPriceDashboardData()"></ot-button></th>
+            </tr>
+          </table>
+      </ng-container>
+    <div class="row">
+      <ot-dropdown-entry [caption]="'Product' | translate" [(value)]="selectedProduct" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" [loading]="productService.loading" class="col-md-6"></ot-dropdown-entry>
+      <ot-dropdown-entry [caption]="'Store' | translate" [(value)]="selectedStore" [items]="storeService.userStores" [defaultItem]="storeFilterDefaultItem" textField="Name" valueField="StoreId" usePrimitiveValue="true" [loading]="storeService.loading" class="col-md-6"></ot-dropdown-entry>
+    </div>
+    <div class="row">
+      <ot-date-entry [(value)]="startDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+      <ot-date-entry [(value)]="endDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-md-6"></ot-date-entry>
+    </div>
+  </ot-list-screen-container>
+  
+  <br>
+
+  <ot-panel [caption]="'Sales Comparison Among Different Price Periods' | translate">
+    <div class="row">  
+      <div class="col-md-12">
+        <kendo-chart *ngIf="salesByPriceGroupsData"  [seriesColors]="chartColors">
+          <kendo-chart-value-axis>
+            <kendo-chart-value-axis-item name="dailyAvrgTransactionsQty_axis"
+                                          [title]="{ text: 'Daily Average Transactions' | translate }">
+            </kendo-chart-value-axis-item>
+            <kendo-chart-value-axis-item name="dailyAvrgSalesAmt_axis"
+                                          [title]="{ text: 'Daily Average Sales (TL)' | translate }"
+                                          color="#20a8d8" >
+            </kendo-chart-value-axis-item>
+          </kendo-chart-value-axis>
+          <kendo-chart-category-axis>
+            <kendo-chart-category-axis-item [categories]="salesByPriceGroupsData.GROUPID"  [axisCrossingValue]="[0,100]">
+            </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series>
+            <kendo-chart-series-item type="line"
+                                    [data]="salesByPriceGroupsData"
+                                    field="SALEDAILYAVRG_AMT"
+                                    categoryField="GROUPID"
+                                    axis="dailyAvrgSalesAmt_axis" >
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{category}}
+                  </div>
+                  <div class="row">
+                      <div class="col-12" style="text-align: center">
+                        {{ value | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}
+                      </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+            <kendo-chart-series-item type="bar"
+                                    [data]="salesByPriceGroupsData"
+                                    field="TRANDAILYAVRG_QTY"
+                                    axis="dailyAvrgTransactionsQty_axis">
+              <kendo-chart-series-item-tooltip>
+                <ng-template let-category="category" let-value="value">
+                  <div class="header font-weight-bold">
+                    {{category}}
+                  </div>
+                  <div class="row">
+                      <div class="col-12" style="text-align: center">
+                        {{ value | number:'1.2-2':'tr'  }}
+                      </div>
+                  </div>
+                </ng-template>
+              </kendo-chart-series-item-tooltip>
+            </kendo-chart-series-item>
+          </kendo-chart-series>
+        </kendo-chart>
+      </div>
+    </div>  
+
+    <br>
+    
+    <div class="col-md-12">
+      <kendo-grid [data]="salesByPriceGroupsActiveList" [loading]="salesByPriceGroupsLoading" [pageable]="false" [pageSize]="1000" [style.maxHeight.px]="400">
+        <kendo-grid-column field="GROUPID" [title]="'GroupId' | translate"  width="60" filter="numeric">
+          <ng-template kendoGridHeaderTemplate>
+            <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="UNITPRICE_AMT" [title]="'Unit Price' | translate" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.UNITPRICE_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="START_TM" [title]="'Start Date' | translate" filter="date">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{utility.toDate(dataItem.START_TM) | date:('dd.MM.yyyy')}}</span>  
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="END_TM"  [title]="'End Date' | translate" filter="date">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{utility.toDate(dataItem.END_TM) | date:('dd.MM.yyyy')}}</span>  
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="DAY_CNT" [title]="'Day Count' | translate" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.DAY_CNT | number:'1.1-1':'tr'}}</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="TRAN_CNT"  [title]="'Transaction Count' | translate" ></kendo-grid-column>
+        <kendo-grid-column field="TRANDAILYAVRG_QTY" [title]="'Daily Average Transactions' | translate" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.TRANDAILYAVRG_QTY | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="SALEDAILYAVRG_AMT" [title]="'Daily Average Sales' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.SALEDAILYAVRG_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-excel [fileName]="getFileName('salesByPriceGroups')"></kendo-grid-excel>
+      </kendo-grid>
+    </div>
+  </ot-panel>
+
+  <ot-panel [caption]="'Sales Trend With Price Changes' | translate">
+    <kendo-chart *ngIf="salesTrendData" [seriesColors]="chartColors">
+      <kendo-chart-value-axis>
+        <kendo-chart-value-axis-item name="dailySale_axis"
+                                      [title]="{ text: 'Daily Sales' | translate }"
+                                      color="#20a8d8">
+        </kendo-chart-value-axis-item>
+        <kendo-chart-value-axis-item name="dailyQty_axis"
+                                      [title]="{ text: 'Daily Quantity' | translate }"
+                                      >
+        </kendo-chart-value-axis-item>
+        <kendo-chart-value-axis-item name="averagePrice_axis"
+                                      [title]="{ text: 'Average Price' | translate }"
+                                      [min]="weightedPriceScales.min" [max]="weightedPriceScales.max"
+                                      color="#4dbd74">
+        </kendo-chart-value-axis-item>
+      </kendo-chart-value-axis>
+      <kendo-chart-category-axis>
+        <kendo-chart-category-axis-item [categories]="salesTrendData.TRANSACTION_DT" baseUnit="days" type="date" [axisCrossingValue]="[0,0,10000]">
+            <kendo-chart-category-axis-item-labels [rotation]="270">
+            </kendo-chart-category-axis-item-labels>
+        </kendo-chart-category-axis-item>
+      </kendo-chart-category-axis>
+      <kendo-chart-series>
+        <kendo-chart-series-item type="line"
+                                [data]="salesTrendData"
+                                field="DAILYSALE"
+                                categoryField="TRANSACTION_DT"
+                                axis="dailySale_axis">
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-category="category" let-value="value">
+              <div class="header font-weight-bold">
+                {{utility.toDate(category) | date:('dd.MM.yyyy')}}
+              </div>
+              <div class="row">
+                  <div class="col-12" style="text-align: center">
+                    {{ value | currency:'TRY':'symbol-narrow':'1.1-1':'tr'}}
+                  </div>
+              </div>
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+        <kendo-chart-series-item type="area"
+                                [data]="salesTrendData"
+                                field="DAILYQTY"
+                                categoryField="TRANSACTION_DT"
+                                axis="dailyQty_axis">
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-category="category" let-value="value">
+              <div class="header font-weight-bold">
+                {{utility.toDate(category) | date:('dd.MM.yyyy')}}
+              </div>
+              <div class="row">
+                  <div class="col-12" style="text-align: center">
+                    {{ value | number:'1.1-1':'tr'}}
+                  </div>
+              </div>
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+        <kendo-chart-series-item type="line"
+                                [data]="salesTrendData"
+                                field="WEIGHTEDAVGPRICE"
+                                categoryField="TRANSACTION_DT"
+                                axis="averagePrice_axis" >
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-category="category" let-value="value">
+              <div class="header font-weight-bold">
+                {{utility.toDate(category) | date:('dd.MM.yyyy')}}
+              </div>
+              <div class="row">
+                <div class="col-12" style="text-align: center">
+                  {{ value | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+                </div>
+              </div>
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>
+      </kendo-chart-series>
+    </kendo-chart>
+
+    <br>
+
+    <kendo-grid [data]="salesTrendActiveList" [loading]="salesTrendLoading" [pageable]="false" [pageSize]="1000" [style.maxHeight.px]="400"
+    [navigable]="true" [sortable]="true" [sort]="salesTrendFilterParams.sort" (dataStateChange)="handleStateChange($event, 'salesTrend')"
+    [filterable]="true" [filter]="salesTrendFilterParams.filter" >
+      <kendo-grid-command-column width="60"> 
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </kendo-grid-command-column>
+      <kendo-grid-column field="TRANSACTION_DT" [title]="'Transaction Date' | translate" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{utility.toDate(dataItem.TRANSACTION_DT) | date:('dd.MM.yyyy')}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="WEIGHTEDAVGPRICE" [title]="'Weighted Unit Price' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.WEIGHTEDAVGPRICE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DAILYSALE" [title]="'Daily Sale' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.DAILYSALE | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="DAILYQTY" [title]="'Daily Quantity' | translate" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.DAILYQTY | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+        </kendo-grid-column>
+      <kendo-grid-excel [fileName]="getFileName('salesTrend')"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel>
+</div>

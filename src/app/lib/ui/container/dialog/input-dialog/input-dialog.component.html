@@ -1,0 +1,15 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ caption }}<ng-content select="[dialog-header]"></ng-content></h4>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close" (click)="close($event)">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-content></ng-content>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" [ngClass]="getColorClasses('btn')" type="button" (click)="onAction.emit($event)">{{ 'Save' | translate }}</button>
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="close($event)">{{ 'Close' | translate }}</button>
+  </div>
+</ng-template>

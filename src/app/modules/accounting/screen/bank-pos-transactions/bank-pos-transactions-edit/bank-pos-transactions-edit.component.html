@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="BankPosTransactionsId" [caption]="'Bank Pos Transactions Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Bank" [caption]="'Bank' | translate" [items]="bankService.completeList" textField="BankName" valueField="BankId" usePrimitiveValue="true" class="col-12" [loading]="bankService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="StoreRef" [caption]="'StoreRef' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="PosRef" [caption]="'PosRef' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="BlockedDate" [caption]="'Blocked Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="ValueDate" [caption]="'Value Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="Quantity" [caption]="'Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CreditAmount" [caption]="'Credit Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="DebitAmount" [caption]="'Debit Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CommissionAmount" [caption]="'Commission Amount' | translate" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="MikroTransferTime" [caption]="'Mikro Transfer Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="MikroStatusCode" [caption]="'Mikro Status Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="MikroTransactionCode" [caption]="'Mikro Transaction Code' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

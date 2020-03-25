@@ -1,0 +1,7 @@
+<kendo-tabstrip (tabSelect)="selectTab($event)">
+  <kendo-tabstrip-tab *ngFor="let tabPage of tabPages; let i = index;" title="{{ tabPage.title }}" selected="{{ tabPage.active }}">
+    <ng-template kendoTabContent>
+      <ng-container [ngTemplateOutlet]="tabPage.tabContent"></ng-container>
+    </ng-template>
+  </kendo-tabstrip-tab>
+</kendo-tabstrip>

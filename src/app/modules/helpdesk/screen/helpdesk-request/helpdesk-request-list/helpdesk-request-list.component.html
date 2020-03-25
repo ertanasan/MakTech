@@ -1,0 +1,115 @@
+﻿<ot-list-screen-container *ngIf="!modeReview" [header]="'Helpdesk Request' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <ng-container header-items>
+      <div class="row float-right m-auto">
+        <kendo-datepicker [(value)]="startDate" captionWidth="0" format="dd.MM.yyyy" class="mr-1"></kendo-datepicker>
+        <kendo-datepicker [(value)]="endDate" captionWidth="0" format="dd.MM.yyyy" class="mr-1"></kendo-datepicker>
+        <kendo-buttongroup [selection]="'multiple'" class="button-group-filter mr-1" >
+          <button kendoButton [toggleable]="true" [selected]="false" (selectedChange)="onAllFlag()" >{{'All' | translate}}</button>
+        </kendo-buttongroup>
+        <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'" class="mr-1">Excel</button>
+        <button kendoButton [primary]="true" (click)="filterList()" [look]="'outline'">Filter</button>
+      </div>
+  </ng-container>
+  <kendo-grid #grid="kendoGrid" [data]="filteredActiveList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" [filterable]= "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+    </ng-template>
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="150" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button color="primary" otTooltip="{{ 'Read' | translate }}" icon="fas fa-search" (onClick)="showDialog(editScreen, 'Read', dataItem)"></ot-light-button>
+          <ot-light-button color="primary" otTooltip="{{ 'History' | translate }}" (onClick)="showDialog(editScreen, 'ShowHistory', dataItem)" icon="fas fa-history"></ot-light-button>
+          <ot-light-button *ngIf="dataItem.UserTask" color="primary" (onClick)="openTask(dataItem.ProcessInstance)" icon="fas fa-cogs"></ot-light-button>
+
+          <!-- <ot-light-button *ngIf="isHeadQuarter" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button> -->
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="HelpdeskRequestId" [title]="'Id' | translate" width="60"></kendo-grid-column>
+    <kendo-grid-column field="StoreName" [title]="'Store' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column field="CreateDate" [title]="'Create Date' | translate" width="140">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CreateDate">{{utilityService.toDate(dataItem.CreateDate) | date:'dd.MM.yyyy HH:mm'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="RequestGroup" [title]="'Request Group' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="requestGroupService.completeList"
+            valueField="RequestGroupId"
+            textField="RequestGroupName"
+            memberField="RequestGroup"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.RequestGroup | getName:'RequestGroupId':'RequestGroupName':requestGroupService.completeList }}
+      </ng-template>  
+    </kendo-grid-column>
+    <kendo-grid-column field="ResponsibleUser" [title]="'Responsible User' | translate" width="210">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <!-- <div *ngIf = "dataItem.ResponsibleUser"> -->
+          <kendo-combobox 
+            [data]="dataItem.UserList" textField="UserFullName" [disabled]="!dataItem.AdminFlag"
+            valueField="ResponsibleUser" [valuePrimitive] = "true" [value] = "dataItem.ResponsibleUser" 
+            (valueChange) = "onResponsibleUserChanged($event, dataItem)" style="width: 180px;">
+          </kendo-combobox>
+        <!-- </div> -->
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="RequestDefinition" [title]="'Request Definition' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="requestDefinitionService.completeList"
+            valueField="RequestDefinitionId"
+            textField="RequestDefinitionName"
+            memberField="RequestDefinition"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.RequestDefinition | getName:'RequestDefinitionId':'RequestDefinitionName':requestDefinitionService.completeList }}
+      </ng-template>  
+    </kendo-grid-column>
+    <kendo-grid-column field="RequestDescription" [title]="'Request Description' | translate" width="250"></kendo-grid-column>
+    <kendo-grid-column field="ActivityName" [title]="'Activity' | translate" width="120"></kendo-grid-column>
+    
+    <kendo-grid-column field="StatusCode" [title]="'Status Code' | translate" width="120">
+
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+          <ot-dropdown-list-filter
+            [data]="requestStatusService.completeList"
+            valueField="RequestStatusId"
+            textField="StatusName"
+            memberField="StatusCode"
+            [filter]="listParams.filter">
+          </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.StatusCode | getName:'RequestStatusId':'StatusName':requestStatusService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-excel [fileName]="getxlsFileName()" [fetchData]="allData">
+      <kendo-excelexport-column field="StoreName" title="Mağaza"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="CreateDate" title="Tarih"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="RequestGroupName" title="Talep Grubu"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="ResponsibleUserName" title="Sorumlu"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="RequestDefinitionName" title="Talep Tipi"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="RequestDescription" title="Açıklama"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="ActivityName" title="Sorumlu Birim"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="StatusCodeName" title="Durum"> </kendo-excelexport-column>
+    </kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-helpdesk-request-edit #editScreen screenName="ot-helpdesk-request-edit"></ot-helpdesk-request-edit>
+<ot-process-history #historyScreen></ot-process-history>
+<ng-template #reviewComponent></ng-template>

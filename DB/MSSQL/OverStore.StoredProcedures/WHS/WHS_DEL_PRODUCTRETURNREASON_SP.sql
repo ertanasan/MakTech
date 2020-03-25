@@ -1,0 +1,18 @@
+﻿CREATE PROCEDURE WHS_DEL_PRODUCTRETURNREASON_SP   @ProductReturnReasonId BIGINT AS
+BEGIN
+
+    SET NOCOUNT OFF
+    UPDATE WHS_PRODUCTRETURNREASON
+       SET DELETED_FL = 'Y',
+           UPDATE_DT = GETDATE()
+     WHERE PRODUCTRETURNREASONID = @ProductReturnReasonId;
+
+    IF @@ROWCOUNT = 0
+    BEGIN
+        SET NOCOUNT ON;
+        THROW 100001, 'Nothing deleted. Delete failed.', 1;
+        RETURN;
+    END;
+    SET NOCOUNT ON;
+
+END;

@@ -1,0 +1,18 @@
+<ot-custom-dialog #customDialog [dialogId]="editorId" [caption]="title" (onClose)="onClose($event)" [size]="size">
+  <ng-template [ngIf]="delegateMessage">
+    <div class="alert alert-warning" role="alert">
+      {{'This task is delegated from another person. See description below' | translate}}
+      <br>
+      {{delegateMessage}}
+    </div>
+  </ng-template>
+  <ng-content></ng-content>
+  <ng-container dialog-actions>
+    <ng-content select="[customActions]"></ng-content>
+    <ot-button  *ngIf="isAcceptable" caption="{{actionName | translate}}" [disabled]="progressVisible? true : null" (onClick)="onAction()"  [color]="customDialog.color" ></ot-button>
+    <ng-template [ngIf]="childActions">
+      <ot-button *ngFor="let action of childActions.split(';')" [caption]="action" [disabled]="progressVisible || form.invalid ? true : null" (onClick)="onAction(action)" ></ot-button>
+    </ng-template>
+    <ot-button caption="{{'Close' | translate}}" [disabled]="progressVisible ? true : null" (onClick)="onClose($event)"></ot-button>   
+  </ng-container>
+</ot-custom-dialog>

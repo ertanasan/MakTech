@@ -1,0 +1,49 @@
+﻿<ot-edit-screen-container #container>
+  <div class="form-horizontal row">
+    <div class="checkbox checkbox-primary col-md-6 ">
+      <input type="checkbox" [(ngModel)]="dataService.scheduleDays.monday"  id="checkbox_Monday" class="scheduleDaysChkBx">
+      <label for="checkbox_Monday"> {{ 'Monday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 ">
+      <input type="checkbox" [(ngModel)]="dataService.scheduleDays.tuesday" id="checkbox_Tuesday" class="scheduleDaysChkBx">  
+      <label for="checkbox_Tuesday"> {{ 'Tuesday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 ">
+      <input type="checkbox"  [(ngModel)]="dataService.scheduleDays.wednesday"  id="checkbox_Wednesday" class="scheduleDaysChkBx"> 
+      <label for="checkbox_Wednesday"> {{ 'Wednesday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 ">
+      <input type="checkbox"  [(ngModel)]="dataService.scheduleDays.thursday"   id="checkbox_Thursday" class="scheduleDaysChkBx">
+      <label for="checkbox_Thursday"> {{ 'Thursday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 "> 
+      <input type="checkbox"  [(ngModel)]="dataService.scheduleDays.friday"    id="checkbox_Friday"  class="scheduleDaysChkBx">
+      <label for="checkbox_Friday"> {{ 'Friday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 "> 
+      <input type="checkbox"  [(ngModel)]="dataService.scheduleDays.saturday"   id="checkbox_Saturday" class="scheduleDaysChkBx">
+      <label for="checkbox_Saturday"> {{ 'Saturday' | translate }}</label>
+    </div>
+    <div class="checkbox checkbox-primary col-md-6 "> 
+      <input type="checkbox"  [(ngModel)]="dataService.scheduleDays.sunday"    id="checkbox_Sunday"  class="scheduleDaysChkBx">
+      <label for="checkbox_Sunday"> {{ 'Sunday' | translate }}</label>
+    </div>
+  </div>  
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <!-- <ot-switch-entry formControlName="Monday"    [caption]="'Monday' | translate"    [value]="dataService.scheduleDays.monday"     optionName="checkbox_Monday"    color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Tuesday"   [caption]="'Tuesday' | translate"   [value]="dataService.scheduleDays.tuesday"    optionName="checkbox_Tuesday"   color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Wednesday" [caption]="'Wednesday' | translate" [value]="dataService.scheduleDays.wednesday"  optionName="checkbox_Wednesday" color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Thursday"  [caption]="'Thursday' | translate"  [value]="dataService.scheduleDays.thursday"   optionName="checkbox_Thursday"  color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Friday"    [caption]="'Friday' | translate"    [value]="dataService.scheduleDays.friday"     optionName="checkbox_Friday"    color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Saturday"  [caption]="'Saturday' | translate"  [value]="dataService.scheduleDays.saturday"   optionName="checkbox_Saturday"  color="primary"   class="col-md-6"></ot-switch-entry>
+    <ot-switch-entry formControlName="Sunday"    [caption]="'Sunday' | translate"    [value]="dataService.scheduleDays.sunday"     optionName="checkbox_Sunday"    color="primary"   class="col-md-6"></ot-switch-entry>     -->    
+    <ot-text-entry formControlName="Comment"  [caption]="'Comment' | translate" rows="3" class="col-md-12"></ot-text-entry>
+  </form>
+  <!-- <ot-check-box [caption]="'Monday' | translate"    [(value)]="dataService.scheduleDays.monday"     optionName="checkbox_Monday"    class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Tuesday' | translate"   [(value)]="dataService.scheduleDays.tuesday"    optionName="checkbox_Tuesday"   class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Wednesday' | translate" [(value)]="dataService.scheduleDays.wednesday"  optionName="checkbox_Wednesday" class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Thursday' | translate"  [(value)]="dataService.scheduleDays.thursday"   optionName="checkbox_Thursday"  class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Friday' | translate"    [(value)]="dataService.scheduleDays.friday"     optionName="checkbox_Friday"    class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Saturday' | translate"  [(value)]="dataService.scheduleDays.saturday"   optionName="checkbox_Saturday"  class="col-md-6"></ot-check-box>
+  <ot-check-box [caption]="'Sunday' | translate"    [(value)]="dataService.scheduleDays.sunday"     optionName="checkbox_Sunday"    class="col-md-6"></ot-check-box> -->  
+</ot-edit-screen-container>

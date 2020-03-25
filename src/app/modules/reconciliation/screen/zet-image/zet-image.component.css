@@ -1,0 +1,10 @@
+.screenShot {
+    border-color: darkgreen;
+    border-style: solid;
+    border-width: thick;
+    border-radius: 12px;
+}
+
+.ssArea {
+    width: 100%;
+}

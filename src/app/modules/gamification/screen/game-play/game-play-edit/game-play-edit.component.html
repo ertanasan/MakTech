@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="GamePlayId" [caption]="'Game Play Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Game" [caption]="'Game' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Player" [caption]="'Player' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="StartTime" [caption]="'Start Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="EndTime" [caption]="'End Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="LastLevel" [caption]="'Last Level' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="QuestionCount" [caption]="'Question Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="Score" [caption]="'Score' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry formControlName="DeviceInfo" [caption]="'DeviceInfo' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

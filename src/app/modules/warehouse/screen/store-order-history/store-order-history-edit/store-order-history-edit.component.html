@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreOrderHistoryId" [caption]="'Store Order History Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="StoreOrder" [caption]="'Store Order' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="HistoryTime" [caption]="'History Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="Status" [caption]="'Status' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

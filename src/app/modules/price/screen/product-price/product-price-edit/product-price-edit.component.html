@@ -1,0 +1,5 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="PriceAmount" [caption]="'Price' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

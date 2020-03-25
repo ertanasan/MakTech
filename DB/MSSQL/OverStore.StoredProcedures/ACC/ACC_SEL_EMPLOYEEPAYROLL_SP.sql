@@ -1,0 +1,10 @@
+﻿CREATE PROCEDURE [dbo].[ACC_SEL_EMPLOYEEPAYROLL_SP] @EmployeeId INT, @Year INT, @Month INT AS
+BEGIN
+
+    SELECT * 
+      FROM ACC_PAYROLL P (NOLOCK)
+     WHERE P.EMPLOYEE = @EmployeeId
+	   AND P.YEAR_CD = @Year
+	   AND P.MONTH_CD = @Month
+
+END;

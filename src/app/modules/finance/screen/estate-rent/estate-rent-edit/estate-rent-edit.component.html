@@ -1,0 +1,44 @@
+﻿<ot-edit-screen-container #container size="lg">
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <ot-alpha-entry formControlName="EstateRentId" [caption]="'Estate Rent Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.actionName === 'Create'}" isReadOnly=true></ot-alpha-entry>
+        <ot-alpha-entry formControlName="EstateName" [caption]="'Estate Name' | translate" class="col-12"></ot-alpha-entry>
+        <ot-dropdown-entry formControlName="ContractDraftVersion" [caption]="'Contract Draft Version' | translate" [items]="contractDraftVersionService.completeList" valueField="ContractDraftVersionId" textField="ContractDraftVersionId" [loading]="contractDraftVersionService.loading" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>
+        <ot-text-entry formControlName="EstateAddress" [caption]="'Estate Address' | translate" rows="3" class="col-12"></ot-text-entry>
+        <ot-text-entry formControlName="RentPurpose" [caption]="'Rent Purpose' | translate" rows="2" class="col-12"></ot-text-entry>
+        <ot-date-entry formControlName="ContractStartDate" [caption]="'Contract Start Date' | translate" format="dd.MM.yyyy" class="col-6" captionWidth="6" editorWidth="6"></ot-date-entry>
+        <ot-date-entry formControlName="ContractEndDate" [caption]="'Contract End Date' | translate" format="dd.MM.yyyy" class="col-6" captionWidth="6" editorWidth="6"></ot-date-entry>
+        <ot-dropdown-entry formControlName="Branch" [caption]="'Branch' | translate" [items]="branchService.completeList" valueField="BranchId" textField="Name" [loading]="branchService.loading" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>
+        <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="3" class="col-12"></ot-text-entry>
+        <ot-folder-entry formControlName="RentFolderHandle"
+                         [readUrl]="downloadUrl"
+                         [deleteUrl]="deleteUrl"
+                         [caption]="'Contract Documents' | translate"
+                         class="col-12"
+                         [readonly]="!container.mainForm.enabled">
+        </ot-folder-entry>
+        <ot-numeric-entry formControlName="Deposit" [caption]="'Deposit' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="DepositCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                           showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+        </ot-dropdown-entry>
+<!--        <ot-text-entry formControlName="DepositDetails" [caption]="'Deposit Details' | translate" rows="2" class="col-12"></ot-text-entry>-->
+        <ot-numeric-entry formControlName="AdditionalDeposit" [caption]="'Additional Deposit' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="AdditionalDepositCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                           showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+        </ot-dropdown-entry>
+        <ot-numeric-entry formControlName="AgentFee" [caption]="'Agent Fee' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="AgentFeeCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                           showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+        </ot-dropdown-entry>
+<!--        <ot-text-entry formControlName="AgentFeeDetail" [caption]="'Agent Fee Detail' | translate" rows="2" class="col-12"></ot-text-entry>-->
+        <ot-numeric-entry formControlName="KeyMoney" [caption]="'Key Money' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="KeyMoneyCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                           showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+        </ot-dropdown-entry>
+<!--        <ot-text-entry formControlName="KeyMoneyDetail" [caption]="'Key Money Detail' | translate" rows="2" class="col-12"></ot-text-entry>-->
+        <ot-numeric-entry formControlName="NonrefundableCost" [caption]="'Nonrefundable Cost' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+        <ot-dropdown-entry formControlName="NonrefundableCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                           showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+        </ot-dropdown-entry>
+<!--        <ot-text-entry formControlName="NonrefundableCostDetail" [caption]="'Nonrefundable Cost Detail' | translate" rows="2" class="col-12"></ot-text-entry>-->
+    </form>
+</ot-edit-screen-container>

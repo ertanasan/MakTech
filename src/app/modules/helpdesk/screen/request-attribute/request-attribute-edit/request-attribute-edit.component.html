@@ -1,0 +1,16 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="RequestAttributeId" [caption]="'Request Attribute Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-switch-entry formControlName="isGroup" [caption]="'Group Attribute' | translate" color="primary" labelStyle="check" class="col-12" [(value)]="isGroup" (valueChange)="onGroupChange()"></ot-switch-entry>
+    <ot-dropdown-entry *ngIf = "isGroup" formControlName="RequestGroup" [caption]="'Request Group' | translate" [items]="requestGroupService.completeList"
+      textField="RequestGroupName" valueField="RequestGroupId" usePrimitiveValue="true" class="col-12" [loading]="requestGroupService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf = "!isGroup" formControlName="RequestDefinition" [caption]="'Request Definition' | translate" [items]="requestDefinitionService.completeList"
+      textField="RequestDefinitionName" valueField="RequestDefinitionId" usePrimitiveValue="true" class="col-12" [loading]="requestDefinitionService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="AttributeName" [caption]="'Attribute Name' | translate" class="col-12"></ot-alpha-entry>  
+    <ot-dropdown-entry formControlName="AttributeType" [caption]="'Attribute Type' | translate" [items]="attributeTypeService.completeList"
+      textField="AttributeTypeName" valueField="AttributeTypeId" usePrimitiveValue="true" class="col-12" [loading]="attributeTypeService.loading"></ot-dropdown-entry>
+    <ot-switch-entry formControlName="EditableFlag" [caption]="'Editable Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry formControlName="RequiredFlag" [caption]="'Required Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-alpha-entry formControlName="DisplayOrder" [caption]="'Display Order' | translate" class="col-12"></ot-alpha-entry>  
+  </form>
+</ot-edit-screen-container>

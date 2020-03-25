@@ -1,0 +1,13 @@
+﻿CREATE PROCEDURE [dbo].[PRD_LST_PRODUCTFILTER_SP]    
+AS    
+BEGIN
+    /*Section="Query"*/ 
+    SELECT -1 AS PRODUCTID, ' *TÜM ÜRÜNLER*' AS NAME_NM
+	UNION 
+	SELECT PRODUCTID, NAME_NM
+      FROM PRD_PRODUCT (NOLOCK)  
+      WHERE DELETED_FL = 'N'  
+	ORDER BY NAME_NM;     
+    
+/*Section="End"*/    
+END; 

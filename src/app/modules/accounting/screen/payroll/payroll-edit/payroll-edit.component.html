@@ -1,0 +1,62 @@
+﻿<ot-edit-screen-container [size] = "'xl'" #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="PayrollId" [caption]="'Payroll Id'" class="col-4" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-alpha-entry formControlName="Employee" [caption]="'Employee'" class="col-4"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="YearCode" [caption]="'Year Code'" class="col-4"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="MonthCode" [caption]="'Month Code'" class="col-4"></ot-alpha-entry> -->
+    <ot-numeric-entry formControlName="WorkingDay" [caption]="'Normal Ç. Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="WorkingHours" [caption]="'Normal Ç. Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PayAmount" [caption]="'Normal Ç.'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AnnualLeave" [caption]="'Yıllık İzin Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AnnualLeaveHours" [caption]="'Yıllık İzin Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AnnualLeavePay" [caption]="'Yıllık İzin'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PaidLeavewithExcuseDayCount" [caption]="'Ücretli İzin Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PaidLeavewithExcuseHours" [caption]="'Ücretli İzin Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PaidLeavewithExcusePayAmount" [caption]="'Ücretli İzin'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LeaveNoPaywithMedicalReportDayCount" [caption]="'Raporlu Ücretsiz İ. Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LeaveNoPaywithMedicalReportHours" [caption]="'Raporlu Ücretsiz İ. Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LeaveNoPaywithoutExcuseDayCount" [caption]="'Ücretsiz İ. Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LeaveNoPaywithoutExcuseHours" [caption]="'Ücretsiz İ. Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AbsenceDayCount" [caption]="'Devamsızlık Gün'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AbsenceHours" [caption]="'Devamsızlık Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LegalHolidayHours" [caption]="'Resmi Tatil Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LegalHolidayPayAmount" [caption]="'Resmi Tatil'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="OvertimeHours" [caption]="'Fazla Mesai Saat'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="OvertimePayAmount" [caption]="'Fazla Mesai'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="CashIndemnityAmount" [caption]="'Kasa Tazminatı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="FoodAllowanceAmount" [caption]="'Yemek Ücreti'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="FoodAllowanceDayCount" [caption]="'Yemek Ücreti Gün Sayısı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="LeavePayAmount" [caption]="'İzin Parası'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AdvanceAmount" [caption]="'Avans'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PayCutAmount" [caption]="'Diğer Kesinti'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="InstallmentPayCutAmount" [caption]="'Taksitli Kesinti'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="InsuranceCutAmount" [caption]="'BES Kesintisi'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AlimonyCutAmount" [caption]="'Nafaka'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ExecutionDeduction1Amount" [caption]="'İcra 1'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ExecutionDeduction2Amount" [caption]="'İcra 2'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="ExecutionDeduction3Amount" [caption]="'İcra 3'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="InsuranceDayCount" [caption]="'Sigorta Günü'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="AssessmentAmount" [caption]="'Sigorta Matrahı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="InsuranceCutWorkerAmount" [caption]="'Sig.Kesinti(İşçi)'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="InsuranceCutEmployerAmount" [caption]="'Sig.Kesinti(İşveren)'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="UnemploymentPremiumWorkerAmount" [caption]="'İşsizlik Primi(İşçi)'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="UnemploymentPremiumEmployerAmount" [caption]="'İşsizlik Primi(İşveren)'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="StampTaxAmount" [caption]="'Damga Vergisi'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="TaxIncentiveAmount" [caption]="'DV-GV Teşvik'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="PreviousTaxAssessmentAmount" [caption]="'Önceki Vergi Matrahı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="TaxAssessmentAmount" [caption]="'Vergi Matrahı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncomeTaxAmount" [caption]="'Gelir Vergisi'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncomeTaxRate" [caption]="'Gelir Vergi Oranı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="TotalWithholdingAmount" [caption]="'Yasal Kesinti Toplamı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="MinimumLivingAllowanceAmount" [caption]="'AGİ'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="NetAmount" [caption]="'Ele Geçen Net'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="TotalGrossRevenueAmount" [caption]="'Brüt Kazançlar Toplamı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncentiveShare5510Amount" [caption]="'Sig.Teşvik 5510'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncentiveShare6111Amount" [caption]="'Sig.Teşvik 6111'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncentiveShare2828Amount" [caption]="'Sig.Teşvik 2828'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncentiveShare27103Amount" [caption]="'Sig.Teşvik 27103'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncentiveShare14857Amount" [caption]="'Sig.Teşvik 14857'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="IncomeTaxIncentiveShareAmount" [caption]="'Gelir Vergisi Teşvik Payı'" class="col-4"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="UnemploymentIncentiveShareAmount" [caption]="'İşsizlik Teşvik Payı'" class="col-4"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

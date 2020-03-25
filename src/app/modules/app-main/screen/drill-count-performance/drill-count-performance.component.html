@@ -1,0 +1,134 @@
+<ot-list-screen-container [header]="'Sondaj Aylık Performans'" >
+  <ng-container header-items>
+    <button kendoButton [primary]="true" (click)="exportToExcel(gridRM)" [look]="'outline'">Excel</button>
+  </ng-container>
+
+  <kendo-grid #gridRM="kendoGrid" [data]="dcPerfActiveList" [height]="500" [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" 
+  [sortable]="true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter" [navigable]="true" 
+  (dataStateChange)="handleDataStateChange($event)"  [loading]="perfLoading">
+    <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+    </ng-template>
+    <kendo-grid-column field="BRANCH_NM" [title]="'Region Name' | translate" width="150"> </kendo-grid-column>
+    <kendo-grid-column field="MANAGER_NM" [title]="'Region Manager' | translate" width="150" class="text-center"> </kendo-grid-column>
+    <!-- <kendo-grid-column field="STORE_NM" [title]="'Store' | translate" width="150" class="text-center"> </kendo-grid-column> -->
+    <kendo-grid-column field="STORE_NM" [title]="'Store' | translate" width="150">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+          <a style="color: blue ; text-decoration: underline" 
+          (click)="onClickStore(dataItem)" [routerLink]="" >{{dataItem.STORE_NM}}</a>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="LASTCOUNTING_DT" [title]="'Last Count Date' | translate" filter="date" width="150"  class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{ dataItem.LASTCOUNTING_DT | date:'dd.MM.yyyy'}} 
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="DAYSPASSED" [title]="'Days Passed' | translate" filter="numeric" width="150" class="text-right">
+    </kendo-grid-column>
+    <kendo-grid-column field="YESTERDAYKPI" [title]="'Yesterday Success PCT' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.YESTERDAYKPI | percent:'1.1-1':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="SUCCESSKPI" [title]="'Success PCT' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.SUCCESSKPI | percent:'1.1-1':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="YESTERDAYGRADE" [title]="'Yesterday Grade' | translate" filter="numeric" width="70" class="text-right"> </kendo-grid-column> -->
+    <kendo-grid-column field="GRADE" [title]="'Grade' | translate" filter="numeric" width="70" class="text-right"> </kendo-grid-column>
+    <kendo-grid-column field="MONTHKPIRANK" [title]="'Rank' | translate" width="60" class="text-center"></kendo-grid-column>
+
+    <kendo-grid-column field="PRODUCT_CNT" [title]="'Product Count' | translate" filter="numeric" width="150"  class="text-right">
+    </kendo-grid-column>
+    <kendo-grid-column field="NOTCOUNTEDPRODUCT_CNT" [title]="'Not Counted Product Count' | translate" filter="numeric" width="150" class="text-right">
+    </kendo-grid-column>
+    <kendo-grid-column field="MINUSSTOCKCOUNT" [title]="'Negative Stock Product Count' | translate" filter="numeric" width="150" class="text-right">
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="isHeadQuarter" field="STOCKSURPLUS_AMT" [title]="'Over Stock Amount' | translate" filter="numeric" width="150"  class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{ dataItem.STOCKSURPLUS_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="isHeadQuarter" field="STOCKDEFICIT_AMT" [title]="'Missing Stock Amount' | translate" filter="numeric" width="150"  class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{ dataItem.STOCKDEFICIT_AMT | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }} 
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-excel [fileName]="getFileName('SondajPerformans')" [fetchData]="allData">
+      <kendo-excelexport-column field="BRANCH_NM" title="Bölge"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="MANAGER_NM" title="Yönetici"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="STORE_NM" title="Şube Adı"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="LASTCOUNTING_DT" title="Son Sayım T."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="DAYSPASSED" title="Geçen Gün S."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="YESTERDAYKPI" title="Dünkü Başarı %"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="SUCCESSKPI" title="Başarı %"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="GRADE" title="Not"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="MONTHKPIRANK" title="Sıra"> </kendo-excelexport-column>
+      <kendo-excelexport-column field="PRODUCT_CNT" title="Ürün S."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="NOTCOUNTEDPRODUCT_CNT" title="Sayılmayan Ürün S."> </kendo-excelexport-column>
+      <kendo-excelexport-column field="MINUSSTOCKCOUNT" title="Eksi Stok Ürün S."> </kendo-excelexport-column>
+      <kendo-excelexport-column *ngIf="isHeadQuarter" field="STOCKSURPLUS_AMT" title="Stok Fazlası"> </kendo-excelexport-column>
+      <kendo-excelexport-column *ngIf="isHeadQuarter" field="STOCKDEFICIT_AMT" title="Stok Eksiği"> </kendo-excelexport-column>
+    </kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+
+<ot-custom-dialog #perfStoreDetail [size] = "'xl'">
+<ot-list-screen-container [header]="'Sondaj Performans Ürün Detayları'" >
+  <ng-container header-items>
+    <button kendoButton [primary]="true" (click)="exportToExcel(gridStores)" [look]="'outline'">Excel</button>
+  </ng-container>
+  <kendo-grid #gridStores="kendoGrid" [data]="dcPerfDetailActiveList" [height]="500" [pageable]="listParamsDetail.pageable" [pageSize]="listParamsDetail.take" [skip]="listParamsDetail.skip" 
+  [sortable]="true" [sort]="listParamsDetail.sort" [filterable]="true" [filter]="listParamsDetail.filter" [navigable]="true" 
+  (dataStateChange)="handleDetailDataStateChange($event)"  [loading]="perfDetailLoading">
+    <ng-template *ngIf = "false" kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+    </ng-template>
+    <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="150"> </kendo-grid-column>
+    <kendo-grid-column field="COUNTING_DT" [title]="'Counting Date' | translate" filter="date" width="150"  class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{ dataItem.COUNTING_DT | date:'dd.MM.yyyy'}} 
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="LASTCOUNTING_DT" [title]="'Last Count Date' | translate" filter="date" width="150"  class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{ dataItem.LASTCOUNTING_DT | date:'dd.MM.yyyy'}} 
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PRODUCTCODE_NM" [title]="'Product Code' | translate" width="150" class="text-center"> </kendo-grid-column>
+    <kendo-grid-column field="PRODUCT_NM" [title]="'Product Name' | translate" width="150" class="text-center"> </kendo-grid-column>
+    <kendo-grid-column field="PRICE_AMT" [title]="'Price' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.PRICE_AMT | currency:'TRY':'symbol-narrow':'1.0-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf = "isHeadQuarter" field="SONDAJSTOK" [title]="'Drill Count' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.SONDAJSTOK | number:'1.0-3':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf = "isHeadQuarter"  field="STOCK" [title]="'Stock' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.STOCK | number:'1.0-3':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf = "isHeadQuarter"  field="DIFF_AMT" [title]="'Difference' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.DIFF_AMT | currency:'TRY':'symbol-narrow':'1.0-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf = "isHeadQuarter"  field="SALE_QTY" [title]="'Sale Quantity' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.SALE_QTY | number:'1.0-3':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf = "isHeadQuarter"  field="SALE_AMT" [title]="'Sale Amount' | translate" filter="numeric" width="100" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        {{dataItem.SALE_AMT | currency:'TRY':'symbol-narrow':'1.0-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-excel [fileName]="getFileName('SondajPerformansDetay')" [fetchData]="allDetailData"></kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+</ot-custom-dialog>

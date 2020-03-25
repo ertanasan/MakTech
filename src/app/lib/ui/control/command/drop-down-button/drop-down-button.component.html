@@ -1,0 +1,12 @@
+<!-- <kendo-dropdownbutton [data]="data" [iconClass]="icon" (itemClick)="itemClickHandler($event)" [look]="look" [primary]="primary">
+  {{ ' '+caption}}
+</kendo-dropdownbutton> -->
+<div ngbDropdown class="d-inline-block">
+  <button class="btn btn-outline-primary" id="dropDownButton-{{ caption.replace(' ', '') }}" ngbDropdownToggle >{{ caption }}<i class="dropdown-button-toggle fas fa-chevron-down"></i></button>
+  <div  ngbDropdownMenu [attr.aria-labelledby]="'dropDownButton-' + caption.replace(' ', '')">
+    <button ngbDropdownItem class="dropdown-item" *ngFor="let item of data" (click)="itemClickHandler(item)">
+      <i [ngClass]="item.icon" *ngIf="item.icon && item.icon !== ''"></i>
+      {{ item.text }}
+    </button>
+  </div>
+</div> 

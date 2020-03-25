@@ -1,0 +1,9 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="DrillProductId" [caption]="'Drill Product Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-date-entry formControlName="CountingDate" [caption]="'Counting Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Product" [caption]="'Product' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="!container.mainForm.get('AllStores').value" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.storeListWithWarehouses" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-switch-entry formControlName="AllStores" [caption]="'All Stores' | translate" color="primary" labelStyle="check" (touch)="onAllStoreBlur()" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

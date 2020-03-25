@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body container" [ngClass]="getCardClasses()">
+    <div [ngClass]="getTitleClasses()"><b>{{ title }}</b></div>
+    <div [ngClass]="getProgressClasses()">
+      <kendo-radialgauge (click)="onGaugeClick.emit($event)" [gaugeArea]="gaugeArea" >
+        <kendo-radialgauge-pointers>
+            <kendo-radialgauge-pointer *ngFor="let pointer of pointers"
+                [value]="pointer.value" [color]="pointer.color" [length]="pointer.length">
+            </kendo-radialgauge-pointer>
+        </kendo-radialgauge-pointers>
+        <kendo-radialgauge-scale [min]="scaleMin"
+                                [max]="scaleMax"
+                                [minorUnit]="minorUnit" 
+                                [majorUnit]="majorUnit"
+                                [majorTicks]="{ visible: showMajorTicks, color: majorTicksColor }"
+                                [minorTicks]="{ visible: showMinorTicks, color: minorTicksColor }"
+                                [reverse]="reverse"
+                                [startAngle]="startAngle"
+                                [endAngle]="endAngle"
+                                [rangePlaceholderColor]="rangePlaceholderColor"
+                                [rangeSize]="rangeSize">
+          <kendo-radialgauge-scale-labels [format]="labelFormat" [color]="labelsColor" [visible]="showLabels">
+          </kendo-radialgauge-scale-labels>
+          <kendo-radialgauge-scale-ranges>
+            <kendo-radialgauge-scale-range *ngFor="let scale of scaleBands" [from]="scale.from" [to]="scale.to" [color]="scale.color">
+            </kendo-radialgauge-scale-range>
+          </kendo-radialgauge-scale-ranges>
+        </kendo-radialgauge-scale>
+      </kendo-radialgauge>
+    </div>
+    <textarea class="descriptionTextArea" [ngClass]="getDescriptionClasses()" rows="3">{{ description }}</textarea>
+  </div>
+</div>

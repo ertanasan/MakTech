@@ -1,0 +1,22 @@
+<ot-data-entry-template 
+  caption="{{ caption }}"
+  [showCaption]="showCaption" 
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  >
+  <kendo-maskedtextbox
+    editor
+    [mask]="mask"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    class="form-control"
+    [(ngModel)]="value"
+    (blur)="touch()"
+    (valueChange)="onChangeHandler($event)"
+  ></kendo-maskedtextbox>
+</ot-data-entry-template>

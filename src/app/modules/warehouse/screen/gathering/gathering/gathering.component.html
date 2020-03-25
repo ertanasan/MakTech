@@ -1,0 +1,131 @@
+<br><br><br>
+<div class="pb-3" style="background-color: white">
+<!--  <div class="row">-->
+<!--    <div class="col-12 text-center">-->
+<!--      <h4 class="ml-3">{{ 'Product Gathering' | translate }}</h4>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <p *ngIf = "!gatheringService.processingGathering" class="k-block" >
+    <kendo-buttongroup *ngIf="gatheringTypeService.completeList" [selection]="'single'" style="height: 60px;">
+      <button *ngFor="let gatheringType of gatheringTypeService.completeList" kendoButton [toggleable]="true" class="mr-3"
+              (selectedChange)="onProductGroupTypeChange($event, gatheringType.GatheringTypeId)" [selected]="selectedType === gatheringType.GatheringTypeId">
+        {{ gatheringType.GatheringTypeName }}
+      </button>
+    </kendo-buttongroup>
+    <kendo-buttongroup *ngIf="gatheringStatusService.completeList" class="float-right" [selection]="'single'" style="height: 60px;">
+      <button *ngFor="let gatheringStatus of gatheringStatusService.completeList" kendoButton [toggleable]="true" class="mr-3"
+              (selectedChange)="onStatusChanged($event, gatheringStatus.GatheringStatusId)" [selected]="selectedStatus === gatheringStatus.GatheringStatusId">
+        {{ gatheringStatus.StatusName }}
+      </button>
+    </kendo-buttongroup>
+  </p>
+  <p *ngIf="activeGatheringList && !gatheringService.processingGathering" class="k-block">
+    <kendo-grid [data]="activeGatheringList"  [loading]="gatheringService.gatheringLoading"
+                [height]="560" [navigable]="true"
+                [sortable]= "true" [sort]="listParams.sort"
+                [filterable]="true" [filter]="listParams.filter"
+                [pageable]="listParams.pageable" [pageSize]="listParams.take"
+                (dataStateChange)="handleDataStateChange($event)">
+      <kendo-grid-column field="StoreOrderName" [title]="'Store Order Name' | translate"></kendo-grid-column>
+      <kendo-grid-column field="OrderTotalKg" [title]="'Order Total Quantity' | translate" width="120">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.OrderTotalKg | number:'1.0-2':'tr' }} {{ ' Kg' }}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="ProductCount" [title]="'Product Count' | translate" width="100">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.ProductCount | number:'1.0-0':'tr' }}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="PackageCount" [title]="'Package Count' | translate" width="100">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.PackageCount | number:'1.0-2':'tr' }}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="GatheringUser" [title]="'User' | translate">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span *ngIf="dataItem.GatheringUser">
+            {{ dataItem.GatheringUser | getName:'UserId':'UserFullName': userService.completeList }}
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column *ngIf="selectedStatus === 9" [title]="'Print Pallet Info'" class="text-center">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton look="flat" [iconClass]="'fa fa-print'"
+                  style="height: 100%; width: 100%; color: #3cb1e3; font-size: 200%;"
+                  (click)="showPrintPalletDialog(dataItem)">
+          </button>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column [title]="'Start Gathering' | translate" class="text-center">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton look="flat" [iconClass]="'fa fa-arrow-right fa-fw'"
+                  style="height: 100%; width: 100%; color: #0ABB87; font-size: 200%;"
+                  (click)="startGathering(dataItem)">
+          </button>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </p>
+
+  <div *ngIf="gatheringService.loading" class="row text-center">
+    <ot-custom-loading-icon></ot-custom-loading-icon>
+  </div>
+
+  <div *ngIf="!gatheringService.loading && gatheringService.processingGathering" class="row text-center">
+    <div class="col-6 text-dark">
+      <div class="row">
+        <div class="col-4 text-left text-nowrap captionInfo">
+          <span class="row ml-2"><u>{{ 'Sipariş' | translate }}: </u></span>
+          <span class="row ml-2">{{ gatheringService.processingGathering.StoreOrder }}</span>
+        </div>
+        <div class="col-8 text-left text-nowrap captionInfo">
+          <span class="row ml-2"><u>{{ 'STORE' | translate }}: </u></span>
+          <span class="row ml-2">{{ gatheringService.processingGathering.StoreName }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 text-right">
+      <kendo-buttongroup [selection]="'multiple'" class="button-group-filter btn-group-lg pr-2">
+        <button kendoButton [toggleable]="true" [selected]="false" (selectedChange)="onListEntryButtonChange()" class="btn btn-lg">Liste Giriş</button>
+      </kendo-buttongroup>
+      <ot-button [caption]="'Abort' | translate" size="lg" color="danger" shape="pill" (onClick)="onAbort()"></ot-button>
+      <ot-button *ngIf="!listEntryFlag" [caption]="completeButtonCaption" size="lg" [color]="getCompleteBtnColor()" shape="pill" (onClick)="onComplete()"></ot-button>
+      <ot-button *ngIf="listEntryFlag" [caption]="'Complete' | translate" size="lg" [color]="getCompleteBtnColor()" shape="pill" (onClick)="onGridComplete()" [disabled]="gatheringService.gatheredProductsPercentage < 100"></ot-button>
+    </div>
+  </div>
+
+</div>
+
+<ot-gathering-tablet-view *ngIf="!listEntryFlag" #tabletViewComponent></ot-gathering-tablet-view>
+<ot-gathering-grid-entry *ngIf="listEntryFlag" #gridEntryComponent></ot-gathering-grid-entry>
+
+<ot-custom-dialog #getConsent>
+  <div>{{consentMessage}}</div>
+  <ng-container dialog-actions>
+    <ot-button caption="{{'Close' | translate}}" (onClick)="onCancelConsert()"></ot-button>
+    <ot-button [caption]="'Confirm' | translate" icon="fa fa-thumbs-up fa-fw" (onClick)="onConsent()" [block]="false" color="primary" ></ot-button>
+  </ng-container>
+</ot-custom-dialog>
+
+
+<ot-custom-dialog #printPalletDialog [caption]="printPalletDialogTitle">
+  <div>{{ 'Which pallet do you want to print out' | translate}} ?</div>
+  <ng-container dialog-actions>
+    <ot-button [caption]="'None' | translate" (onClick)="onCancelPrint()" size="lg"></ot-button>
+    <ot-button *ngFor="let p of palletArray" [caption]="p.PalletNo.toString()" (onClick)="printPallet(p)" color="primary" size="lg"></ot-button>
+<!--    <ot-button [caption]="'All' | translate" (onClick)="printPallet(null)" [block]="false" color="primary" size="lg"></ot-button>-->
+  </ng-container>
+</ot-custom-dialog>
+
+<div #palletPrintContent class="row" hidden=true>
+  <ot-print-pallet *ngFor="let p of printPalletArray"
+                   [storeName]="printingGathering.StoreName"
+                   [gatheringUserName]="printingGathering.GatheringUserName"
+                   [qrCodeUrl]="completeUrl.slice(0, -5) + p.PalletNo.toString()"
+                   [palletNo]="p.PalletNo"
+                   [palletCount]="palletArray.length">
+
+  </ot-print-pallet>
+</div>

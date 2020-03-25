@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ContractDraftVersionId" [caption]="'Contract Draft Version Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.actionName === 'Create'}" isReadOnly=true></ot-alpha-entry>
+    <ot-text-entry formControlName="ChangeDetails" [caption]="'Change Details' | translate" rows="7" class="col-12"></ot-text-entry>
+    <ot-document-entry formControlName="DraftDocument"
+                       [allowDelete]="container.actionName === 'Create'"
+                       [deleteUrl]="deleteUrl"
+                       [readUrl]="downloadUrl"
+                       [caption]="'Contract Draft' | translate" class="col-12"
+                       [isReadOnly]="container.actionName === 'Delete'" >
+    </ot-document-entry>
+  </form>
+</ot-edit-screen-container>

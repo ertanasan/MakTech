@@ -1,0 +1,67 @@
+﻿<ot-list-screen-container [header]="'Store Accounts' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="isEmbedded ? 400 : 575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="dark" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+           <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column *ngIf="!masterId" field="Store" [title]="'Store' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="storeService.completeList"
+              valueField="StoreId"
+              textField="Name"
+              memberField="Store"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AccountType" [title]="'Account Type' | translate" width="180">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeAccountTypeService.completeList"
+          valueField="StoreAccountTypeId"
+          textField="AccountTypeName"
+          memberField="AccountType"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.AccountType | getName:'StoreAccountTypeId':'AccountTypeName':storeAccountTypeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Bank" [title]="'Bank' | translate" width="180">      
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="bankService.completeList"
+              valueField="BankId"
+              textField="BankName"
+              memberField="Bank"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Bank | getName:'BankId':'BankName':bankService.completeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AccountText" [title]="'Account Text' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="AccountDescription" [title]="'Account Description' | translate" width="180"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-store-accounts-edit #editScreen screenName="ot-store-accounts-edit"></ot-store-accounts-edit>

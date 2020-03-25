@@ -1,0 +1,114 @@
+<div class="k-block">
+    <div class="row p-2">
+        <div class="col-4">
+            <ot-dropdown-entry [(value)]="addingGatheringDetail" [captionWidth]="0" [editorWidth]="12"
+                               [items]="gatheringDetailService.addableGatheringDetailList" textField="Name" valueField="ProductId"></ot-dropdown-entry>
+        </div>
+        <div class="col-2">
+            <ot-button [caption]="'Add' | translate" color="primary" (onClick)="addProductToControlList()"></ot-button>
+        </div>
+        <div class="col-6 text-right">
+<!--            <ot-switch-entry [(value)]="isActualUnit" color="primary" [caption]="isActualUnit ? 'Kg veya Adet' : 'Package' | translate" [block]="true" captionWidth=8 editorWidth=4 size="lg" shape="pill"></ot-switch-entry>-->
+            <kendo-buttongroup [selection]="'single'" class="button-group-filter btn-group-lg">
+                <button kendoButton [toggleable]="true" [selected]="isActualUnit" (selectedChange)="onKgPackageChanged(true)"  class="btn btn-lg">Kg-Adet</button>
+                <button kendoButton [toggleable]="true" [selected]="!isActualUnit" (selectedChange)="onKgPackageChanged(false)" class="btn btn-lg">Paket</button>
+            </kendo-buttongroup>
+        </div>
+    </div>
+    <!-- <ot-custom-loading-icon *ngIf="gatheringDetailService.gatheringDetailLoading"></ot-custom-loading-icon> -->
+    <kendo-grid [data]="gatheringDetailService.controlDetailActiveList" [loading]="gatheringDetailService.gatheringDetailLoading" resizable=true  [pageable]="false"
+                [sortable]= "true" [sort]="controlGridLP.sort" [filterable]="true" [filter]="controlGridLP.filter" (dataStateChange)="handleDSCControlGrid($event)">
+        <kendo-grid-column [title]="'Proceed Flag' | translate" width="80" class="text-center">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span *ngIf="dataItem.Proceed" class="k-icon k-i-check text-success" style="font-size: 200%;"></span>
+                <span *ngIf="!dataItem.Proceed" class="k-icon k-i-warning text-danger" style="font-size: 200%;"></span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ProductCode" [title]="'Product Code' | translate" width="120"></kendo-grid-column>
+        <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="OrderQuantity" [title]="'Orderred Package' | translate" width="100" class="text-center">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span *ngIf="!isActualUnit">{{ dataItem.OrderQuantity | number: '1.0-3':'tr' }}</span>
+                <span *ngIf="isActualUnit">{{ dataItem.OrderQuantity * dataItem.PackageUnit | number: '1.0-3':'tr' }}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="GatheredQuantity" [title]="'Gatherred Package' | translate" width="140">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="checkGatheringDetailAsControlled(dataItem, dataItem.GatheredQuantity)" [class]="getButtonClasses(dataItem)">
+                    <span *ngIf="!dataItem.GatheredQuantity">{{ 'None' | translate }}</span>
+                    <span *ngIf="dataItem.GatheredQuantity" >
+                        <span *ngIf="!isActualUnit" style="font-size: 14px; text-align: left">{{ dataItem.GatheredQuantity | number: '1.0-3':'tr' }}</span>
+                        <span *ngIf="isActualUnit" style="font-size: 14px; text-align: left">{{ dataItem.GatheredQuantity * dataItem.PackageUnit | number: '1.0-3':'tr' }}</span>
+                    </span>
+                    <span class="float-right"><span class="fa fa-arrow-right"></span></span>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ControlQuantity" [title]="'Control Package' | translate" width="140">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="showDataEntryDialog(dataItem)" [class]="getButtonClasses(dataItem.Proceed)">
+                    <span *ngIf="dataItem.Proceed">
+                        <span *ngIf="!dataItem.ControlQuantity">{{ 'None' | translate }}</span>
+                        <span *ngIf="dataItem.ControlQuantity">
+                            <span *ngIf="!isActualUnit" style="font-size: 14px; text-align: left">{{ dataItem.ControlQuantity | number: '1.0-3':'tr' }}</span>
+                            <span *ngIf="isActualUnit" style="font-size: 14px; text-align: left">{{ dataItem.ControlQuantity * dataItem.PackageUnit | number: '1.0-3':'tr' }}</span>
+                        </span>
+                    </span>
+                    <span *ngIf="!dataItem.Proceed" class="fa fa-ellipsis-h"></span>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+        <!--    <kendo-grid-column field="PalletNo" [title]="'Pallet No' | translate" width="60">-->
+        <!--      <ng-template kendoGridCellTemplate let-dataItem>-->
+        <!--        <button (click)="showDataEntryDialog(dataItem, 'PalletEntry')" [class]="getButtonClasses(true)">-->
+        <!--          <span style="font-size: 14px; text-align: center">{{ dataItem.PalletNo | number: '1.0-0':'tr' }}</span>-->
+        <!--        </button>-->
+        <!--      </ng-template>-->
+        <!--    </kendo-grid-column>-->
+    </kendo-grid>
+</div>
+
+
+
+
+<ot-custom-dialog #dataEntryDialog color="primary" [caption]="dataEntryDialogTitle" size="sm" (onClose)="hideDataEntryDialog()">
+    <div *ngIf="gatheringDetailService.activeGatheringDetail" class="row align-content-around text-center">
+        <div class="col-9 d-flex justify-content-center">
+            <input *ngIf="!isActualUnit"
+                   [value]="gatheringDetailService.activeGatheringDetail.Proceed ?
+                            gatheringDetailService.activeGatheringDetail.ControlQuantity :
+                            gatheringDetailService.activeGatheringDetail.GatheredQuantity
+                            | number:'1.0-3':'tr'"
+                   (blur)="controlQtyChange($event.srcElement.value)"
+                   type="number"
+                   class="inputCircle col-12">
+            <input *ngIf="isActualUnit"
+                   [value]="(gatheringDetailService.activeGatheringDetail.Proceed ?
+                            gatheringDetailService.activeGatheringDetail.ControlQuantity :
+                            gatheringDetailService.activeGatheringDetail.GatheredQuantity) *
+                            gatheringDetailService.activeGatheringDetail.PackageUnit
+                            | number:'1.0-3':'tr'"
+                   (blur)="controlQtyChange($event.srcElement.value)"
+                   type="number"
+                   class="inputCircle col-12">
+        </div>
+        <div class="col-3 d-flex justify-content-around flex-column" style="height: 180px;">
+            <ot-button icon="fa fa-arrow-up"
+                       (onClick)="controlQtyChange((gatheringDetailService.activeGatheringDetail.ControlQuantity * (isActualUnit ? gatheringDetailService.activeGatheringDetail.PackageUnit : 1)) + 1)"
+                       [block]="false"
+                       color="secondary" >
+            </ot-button>
+            <ot-button icon="fa fa-arrow-right"
+                       (onClick)="hideDataEntryDialog()"
+                       [block]="true"
+                       color="primary" >
+            </ot-button>
+            <ot-button icon="fa fa-arrow-down"
+                       (onClick)="controlQtyChange((gatheringDetailService.activeGatheringDetail.ControlQuantity * (isActualUnit ? gatheringDetailService.activeGatheringDetail.PackageUnit : 1)) - 1)"
+                       [block]="false"
+                       color="secondary" >
+            </ot-button>
+        </div>
+    </div>
+</ot-custom-dialog>
+

@@ -1,0 +1,249 @@
+<div class="row">
+  <ol class="col-md-12 breadcrumb">
+    <h4 class="ml-3">{{ 'Sale Comparison Dashboard' | translate }}</h4>
+  </ol>
+</div>
+<!-- <div class="container"> -->
+  <ot-list-screen-container [header]="'Filter Parameters' | translate">
+    <ng-container header-items>
+        <table>
+          <tr>
+            <!-- <th class="headerButton"><ot-check-box [caption]="'Compare' | translate" color="primary" size="sm" [(value)]="compareFlag"></ot-check-box></th> -->
+            <th><ot-button [caption]="'Clear' | translate" color="primary" size="sm" (click)="onClear()"></ot-button></th>
+            <th><ot-button [caption]="'GetData' | translate" color="primary" size="sm" (click)="onGetSaleComparisonDashboardData()"></ot-button></th>
+          </tr>
+        </table>
+    </ng-container>
+    <div class="row">
+      <ot-dropdown-entry [caption]="'Store' | translate" [(value)]="selectedStore" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" [loading]="storeService.loading" [defaultItem]="storeFilterDefaultItem" class="col-md-4">
+        
+      </ot-dropdown-entry>
+      <ot-date-entry [(value)]="startDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-md-4"></ot-date-entry>
+      <ot-date-entry [(value)]="endDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-md-4"></ot-date-entry>
+      <!-- <ot-dropdown-entry *ngIf="compareFlag" [caption]="'Comparing Store' | translate" [(value)]="comparingStore" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" [loadsing]="storeService.loading" class="col-md-6"></ot-dropdown-entry> -->
+    </div>
+    <div class="row">
+      <span class="col-md-4"></span>
+      <ot-date-entry [(value)]="comparingStartDate" [caption]="'Comparing Start Date' | translate" format="dd.MM.yyyy" class="col-md-4"></ot-date-entry>
+      <ot-date-entry [(value)]="comparingEndDate" [caption]="'Comparing End Date' | translate" format="dd.MM.yyyy" class="col-md-4"></ot-date-entry>
+    </div>
+    <div class="row">
+      
+      
+    </div>
+  </ot-list-screen-container>
+  
+  <!-- <br>
+
+  <ot-panel [caption]="'Sales Summary' | translate">
+    <kendo-grid [data]="salesAggregateActiveList" [loading]="salesAggregateLoading" [pageable]="false" [pageSize]="1000" [style.maxHeight.px]="400"
+    [navigable]="true" [sortable]="true" [sort]="salesAggregateFilterParams.sort" (dataStateChange)="handleStateChange($event, 'saleAggregate')">
+      <kendo-grid-column field="STORE_ID" width="60" filter="numeric">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span *ngIf="dataItem.STORE_ID > 0"> {{ dataItem.STORE_ID }} </span>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="STORE_NAME" [title]="'Store Name' | translate" width="150" ></kendo-grid-column>
+      <kendo-grid-column field="SALE_QTY" [title]="'Transaction Count' | translate" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="SALE" [title]="'Sale' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.SALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="CASH_QTY" [title]="'Cash Count' | translate" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="CASH" [title]="'Cash' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.CASH | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="CARD_QTY" [title]="'Card Count' | translate" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="CARD" [title]="'Card' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.CARD | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="REFUND_QTY" [title]="'Refund Count' | translate" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="REFUND" [title]="'Refund' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.REFUND | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="CANCELLED_QTY" [title]="'Cancelled Count' | translate" filter="numeric"></kendo-grid-column>
+      <kendo-grid-column field="CANCELLED_TOTAL" [title]="'Cancelled' | translate" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.CANCELLED_TOTAL | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-excel [fileName]="getFileName('salesSummary')"></kendo-grid-excel>
+    </kendo-grid>
+  </ot-panel> 
+
+  <br> -->
+  
+  <ot-panel [caption]="'Sales Comparison' | translate">
+      <!-- <kendo-chart [seriesColors]="chartColors">
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item name="dailySale_axis"
+                                        [title]="{ text: 'Daily Sales' | translate }"
+                                        color="#20a8d8">
+          </kendo-chart-value-axis-item>
+          <kendo-chart-value-axis-item name="averagePrice_axis"
+                                        [title]="{ text: 'Average Price' | translate }">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+        <kendo-chart-category-axis>
+          <kendo-chart-category-axis-item [categories]="salesComparisonData.TRANSACTION_DT" baseUnit="days" type="date" [axisCrossingValue]="[0,10000]">
+              <kendo-chart-category-axis-item-labels [rotation]="270">
+              </kendo-chart-category-axis-item-labels>
+          </kendo-chart-category-axis-item>
+        </kendo-chart-category-axis>
+        <kendo-chart-series>
+          <kendo-chart-series-item type="line"
+                                  [data]="salesComparisonData"
+                                  field="DAILYSALE"
+                                  categoryField="TRANSACTION_DT"
+                                  axis="dailySale_axis">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{utility.toDate(category) | date:('dd.MM.yyyy')}}
+                </div>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                      {{ value | currency:'TRY':'symbol-narrow':'1.1-1':'tr'}}
+                    </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+          <kendo-chart-series-item type="line"
+                                  [data]="salesComparisonData"
+                                  field="WEIGHTEDAVGPRICE"
+                                  categoryField="TRANSACTION_DT"
+                                  axis="averagePrice_axis" >
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-category="category" let-value="value">
+                <div class="header font-weight-bold">
+                  {{utility.toDate(category) | date:('dd.MM.yyyy')}}
+                </div>
+                <div class="row">
+                  <div class="col-12" style="text-align: center">
+                    {{ value | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+  
+      <br> -->
+  
+      <kendo-grid [data]="salesComparisonActiveList" [loading]="salesComparisonLoading" [pageable]="false" [pageSize]="1000" [style.maxHeight.px]="400"
+      [navigable]="true" [sortable]="true" [sort]="salesComparisonFilterParams.sort" (dataStateChange)="handleStateChange($event, 'saleComparison')">
+      <!-- [filterable]="true" [filter]="salesComparisonFilterParams.filter" > -->
+        
+        <kendo-grid-column field="STOREID" width="60" filter="numeric">
+            <ng-template kendoGridHeaderTemplate>
+              <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+            </ng-template>
+          </kendo-grid-column>
+        <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="150" ></kendo-grid-column>
+        <kendo-grid-column field="REGIONMANAGER_NM" [title]="'Region Manager' | translate" width="150" ></kendo-grid-column>
+        <kendo-grid-column field="GROWTH_PCT" [title]="'Growth' | translate" filter="numeric" >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.GROWTH_PCT | number:'1.2-2':'tr'}}</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column-group [title]="mainColumnGroupHeader" >
+          <kendo-grid-column field="SALE" [title]="'Sale' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.SALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="SALE_QTY" [title]="'Müşteri S.'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.SALE_QTY| number:'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="ATV" [title]="'FBS'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.ATV | number:'1.2-2':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="UPT" [title]="'FBU'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.UPT | number:'1.2-2':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="DAY_CNT" [title]="'Gün S.'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.DAY_CNT | number:'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="CASH" [title]="'Cash' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.CASH | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="CARD" [title]="'Card' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.CARD | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="REFUND" [title]="'Refund' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.REFUND | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid-column-group>
+        <kendo-grid-column-group [title]="comparingColumnGroupHeader" >
+          <kendo-grid-column field="compSALE" [title]="'Sale' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compSALE | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compSALE_QTY" [title]="'Müşteri S.' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compSALE_QTY | number:'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compATV" [title]="'FBS'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compATV | number:'1.2-2':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compUPT" [title]="'FBU'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compUPT | number:'1.2-2':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compDAY_CNT" [title]="'Gün S.'" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compDAY_CNT | number:'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compCASH" [title]="'Cash' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compCASH | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compCARD" [title]="'Card' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compCARD | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="compREFUND" [title]="'Refund' | translate" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>{{dataItem.compREFUND | currency:'TRY':'symbol-narrow':'1.0-0':'tr'}}</span>  
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid-column-group>
+        
+        <kendo-grid-excel [fileName]="getFileName('salesComparison')"></kendo-grid-excel>
+      </kendo-grid>
+    </ot-panel>
+<!-- </div> -->

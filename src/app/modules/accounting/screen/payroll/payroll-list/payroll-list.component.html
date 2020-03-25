@@ -1,0 +1,125 @@
+﻿<ot-list-screen-container [header]="'Payroll' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+    <ng-container header-items>
+        <table>
+            <tr>
+              <th class="col-md-5">
+                <kendo-numerictextbox
+                  [(value)]="selectedYear" [decimals]="0" [format]="'#'" [min]="2019" [max]="2050">
+                </kendo-numerictextbox>
+              </th>
+              <th class="col-md-5">
+                  <kendo-numerictextbox
+                    [(value)]="selectedMonth" [decimals]="0" [format]="'#'" [min]="1" [max]="12">
+                  </kendo-numerictextbox>
+              </th>
+              <th>
+                <ot-button class="col-md-2" [caption]="'Filter' | translate" color="primary" size="sm" (click)="getMonthList()"></ot-button>  
+              </th>               
+              <th>
+                <ot-button [caption]="'Load' | translate" color="primary" size="sm" (click)="fileInput.click()"> </ot-button>
+              </th>
+              <th>
+                <kendo-dropdownbutton [primary]="true" size="sm" [data]="settings" (itemClick)="onMikro($event)"> Mikro </kendo-dropdownbutton>
+              </th>
+            </tr>
+        </table>
+    </ng-container>
+  <kendo-grid [data]="payrollActiveList" [loading]="dataService.loading" [height]="650"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]= "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="Employee" [title]="'SicilNo'" width="80"></kendo-grid-column>
+    <kendo-grid-column field="EmployeeName" [title]="'Adı Soyadı'" width="210"></kendo-grid-column>
+    <kendo-grid-column field="YearCode" [title]="'Yıl'" width="60"></kendo-grid-column>
+    <kendo-grid-column field="MonthCode" [title]="'Ay'" width="60"></kendo-grid-column>
+    <kendo-grid-column field="DepartmentName" [title]="'İşyeri'" width="120"></kendo-grid-column>
+    <kendo-grid-column field="ExpenseCenter" [title]="'Masraf M.'" width="120"></kendo-grid-column>
+    <kendo-grid-column field="WorkingType" [title]="'Sigorta Durumu'" width="150"></kendo-grid-column>
+
+    <!-- <kendo-grid-column field="WorkingDay" [title]="'Working Day' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="WorkingHours" [title]="'Working Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="PayAmount" [title]="'Normal Ç.'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="AnnualLeave" [title]="'Annual Leave' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="AnnualLeaveHours" [title]="'Annual Leave Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="AnnualLeavePay" [title]="'Yıllık İzin'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="PaidLeavewithExcuseDayCount" [title]="'Paid Leave with Excuse Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="PaidLeavewithExcuseHours" [title]="'Paid Leave with Excuse Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="PaidLeavewithExcusePayAmount" [title]="'Ücretli İzin'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="LeaveNoPaywithMedicalReportDayCount" [title]="'Leave No Pay with Medical Report Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="LeaveNoPaywithMedicalReportHours" [title]="'Leave No Pay with Medical Report Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="LeaveNoPaywithoutExcuseDayCount" [title]="'Leave No Pay without Excuse Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="LeaveNoPaywithoutExcuseHours" [title]="'Leave No Pay without Excuse Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="AbsenceDayCount" [title]="'Absence Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="AbsenceHours" [title]="'Absence Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="LegalHolidayHours" [title]="'Legal Holiday Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="LegalHolidayPayAmount" [title]="'Resmi Tatil'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="OvertimeHours" [title]="'Overtime Hours' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="OvertimePayAmount" [title]="'Fazla Mesai'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="CashIndemnityAmount" [title]="'Kasa Tazminatı'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="FoodAllowanceAmount" [title]="'Yemek Parası'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="FoodAllowanceDayCount" [title]="'Food Allowance Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="LeavePayAmount" [title]="'İzin Parası'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="AdvanceAmount" [title]="'Avans'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="PayCutAmount" [title]="'Diğer Kesinti'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="InstallmentPayCutAmount" [title]="'Taksitli Kesinti'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="InsuranceCutAmount" [title]="'OTO.BES'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="AlimonyCutAmount" [title]="'Nafaka'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ExecutionDeduction1Amount" [title]="'İcra 1'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ExecutionDeduction2Amount" [title]="'İcra 2'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ExecutionDeduction3Amount" [title]="'İcra 3'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="InsuranceDayCount" [title]="'Insurance Day Count' | translate" width="80" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="AssessmentAmount" [title]="'Assessment Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="InsuranceCutWorkerAmount" [title]="'Sig.Kesinti(İşçi)'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="InsuranceCutEmployerAmount" [title]="'Sig.Kesinti(İşveren)'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="InsuranceCutTotal" [title]="'Sig.Kesinti(Toplam)'" width="120" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.InsuranceCutWorkerAmount + dataItem.InsuranceCutEmployerAmount | number:'1.2-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="UnemploymentPremiumWorkerAmount" [title]="'İşsizlik Primi(İşçi)'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="UnemploymentPremiumEmployerAmount" [title]="'İşsizlik Primi(İşveren)'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="UnemploymentPremium" [title]="'İşsizlik Primi(Toplam)'" width="120" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.UnemploymentPremiumWorkerAmount + dataItem.UnemploymentPremiumEmployerAmount | number:'1.2-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+
+
+    <kendo-grid-column field="StampTaxAmount" [title]="'Damga Vergisi'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="TaxIncentiveAmount" [title]="'DV-GV Teşvik'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="PreviousTaxAssessmentAmount" [title]="'Previous Tax Assessment Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="TaxAssessmentAmount" [title]="'Tax Assessment Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="IncomeTaxAmount" [title]="'Gelir Vergisi'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="IncomeTaxRate" [title]="'Income Tax Rate' | translate" width="100" filter="numeric"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="TotalWithholdingAmount" [title]="'Total Withholding Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+    <kendo-grid-column field="MinimumLivingAllowanceAmount" [title]="'AGİ Tutarı'" width="120" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="NetAmount" [title]="'Ele Geçen Net'" width="120" filter="numeric"></kendo-grid-column>
+    <!-- <kendo-grid-column field="TotalGrossRevenueAmount" [title]="'Total Gross Revenue Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncentiveShare5510Amount" [title]="'Incentive Share 5510 Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncentiveShare6111Amount" [title]="'Incentive Share 6111 Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncentiveShare2828Amount" [title]="'Incentive Share 2828 Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncentiveShare27103Amount" [title]="'Incentive Share 27103 Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncentiveShare14857Amount" [title]="'Incentive Share 14857 Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="IncomeTaxIncentiveShareAmount" [title]="'Income Tax Incentive Share Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="UnemploymentIncentiveShareAmount" [title]="'Unemployment Incentive Share Amount' | translate" width="180" filter="numeric"></kendo-grid-column> -->
+  </kendo-grid>
+</ot-list-screen-container>
+<input [hidden]="true" #fileInput type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+<ot-payroll-edit #editScreen screenName="ot-payroll-edit"></ot-payroll-edit>

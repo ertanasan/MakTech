@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>OverStore.Views</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{fb9f67f8-cee2-442d-898a-f0b4e7e6f8a2}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>OverStore.Views</RootNamespace>
+    <AssemblyName>OverStore.Views</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="PRC" />
+    <Folder Include="WHS" />
+    <Folder Include="SLS" />
+    <Folder Include="STR" />
+    <Folder Include="PRD" />
+    <Folder Include="INV" />
+    <Folder Include="HDK" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OverFrame\DB\MSSQL\Tables\Tables.sqlproj">
+      <Name>Tables</Name>
+      <Project>{3648c149-5d15-48d7-a8fb-f22b93d1d5ed}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\OverStore.Tables\OverStore.Tables.sqlproj">
+      <Name>OverStore.Tables</Name>
+      <Project>{67abe3b7-a5ed-4c12-af8f-0f053d152704}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OverStore.Tables.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="PRC\PRC_ACTIVEPACKAGEPRICES_VW.sql" />
+    <Build Include="WHS\WHS_ORDERSTATUSHISTORY_VW.sql" />
+    <Build Include="SLS\SLS_ZET_VW.sql" />
+    <Build Include="STR\STR_STORE_VW.sql" />
+    <Build Include="PRD\PRD_PRODUCT_VW.sql" />
+    <Build Include="STR\STR_SCALEPRICE_VW.sql" />
+    <Build Include="STR\STR_WINCORPRICE_VW.sql" />
+    <Build Include="PRC\PRC_PRICECHANGE_VW.sql" />
+    <Build Include="PRD\PRD_SEARCHCODE_VW.sql" />
+    <Build Include="SLS\SLS_SALEZETCOMPARE_VW.sql" />
+    <Build Include="SLS\SLS_SALEZETCRCOMPARE_VW.sql" />
+    <Build Include="STR\STR_STOREALL_VW.sql" />
+    <Build Include="INV\INV_STORETRANSACTIONS_VW.sql" />
+    <Build Include="WHS\WHS_STOCKTAKINGRESULT_VW.sql" />
+    <Build Include="INV\INV_STOCK_VW.sql" />
+    <Build Include="INV\INV_CURRENTSTOCK_VW.sql" />
+    <Build Include="PRD\PRD_STOCKGROUPPURCHASE_VW.sql" />
+    <Build Include="WHS\WHS_TOC_VW.sql" />
+    <Build Include="INV\INV_WAREHOUSESTOCK_VW.sql" />
+    <Build Include="STR\STR_STOREREGION_VW.sql" />
+    <Build Include="STR\STR_CASHREGISTER_VW.sql" />
+    <Build Include="SLS\SLS_MIKROCOMP_VW.sql" />
+    <Build Include="STR\STR_REGIONMANAGERS_VW.sql" />
+    <Build Include="STR\STR_STOREWHINC_VW.sql" />
+    <Build Include="WHS\WHS_STOCKDIFF_VW.sql" />
+    <Build Include="PRD\PRD_STOCKGROUP_VW.sql" />
+    <Build Include="PRC\PRC_SALEPRICE_VW.sql" />
+    <Build Include="PRD\PRD_PRODUCTGROUP_VW.sql" />
+    <Build Include="WHS\WHS_COUNTINGSTOCK_VW.sql" />
+    <Build Include="WHS\WHS_GATHERING_VW.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLET_VW.sql" />
+    <Build Include="WHS\WHS_GATHERINGDETAIL_VW.sql" />
+    <Build Include="INV\INV_STOCKHIST_VW.sql" />
+    <Build Include="WHS\WHS_GATHERINGPALLET2_VW.sql" />
+    <Build Include="HDK\BPM_ACTION_VW.sql" />
+    <Build Include="WHS\WHS_GATHERSUMMARY_VW.sql" />
+    <Build Include="WHS\WHS_GATHERINGDURATION_VW.sql" />
+  </ItemGroup>
+</Project>

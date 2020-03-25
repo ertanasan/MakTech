@@ -1,0 +1,32 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StorePackageId" [caption]="'Store Package Id' | translate" class="col-12"
+      [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Package" [caption]="'Package' | translate" [items]="container.masterId ? [container.masterObject] : pricePackageService.completeList"
+      textField="PackageName" valueField="PackageId" usePrimitiveValue="true" class="col-12" [loading]="pricePackageService.loading" [isReadOnly] = "container.actionName !== 'Create' || mainScreen.isEmbedded"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="container.mainForm.get('Store').value" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList"
+      textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading" isReadOnly = "true"></ot-dropdown-entry>
+    <ot-multi-select-entry *ngIf="!container.mainForm.get('Store').value" summaryLimit=1 formControlName="StoreList" [caption]="'Store' | translate" [items]="storeService.completeList"
+      textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading">
+      <ng-container summaryTemplate>
+        <!-- <span class="k-icon k-i-arrow-s"></span> -->
+        <!-- {{ dataItems.length }} item(s) selected -->
+        Çoklu seçim yapıldı
+      </ng-container>
+    </ot-multi-select-entry>
+    <ot-switch-entry *ngIf="!container.mainForm.get('Store').value" formControlName="AllStores" [caption]="'All Stores' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+
+    <ot-date-entry formControlName="StartTime" [caption]="'Start Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="EndTime" [caption]="'End Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="PriorityNumber" [caption]="'Priority Number' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+    <div *ngIf="container.actionName === 'Read'" class="col-12" style="text-align: center">
+      <h5> {{ 'Log Information' | translate }} </h5>
+    </div>
+    <ot-dropdown-entry *ngIf="container.actionName === 'Read' && !container.initialItem.UpdateUser" formControlName="CreateUser" [caption]="'Create User' | translate" class="col-12" isReadOnly = "true"
+    [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="container.actionName === 'Read' && container.initialItem.UpdateUser" formControlName="UpdateUser" [caption]="'Last Update User' | translate" class="col-12" isReadOnly = "true"
+    [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true"></ot-dropdown-entry>
+    <ot-date-entry *ngIf="container.actionName === 'Read' && !container.initialItem.UpdateUser" formControlName="CreateDate" [caption]="'Creation Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    <ot-date-entry *ngIf="container.actionName === 'Read' && container.initialItem.UpdateUser" formControlName="UpdateDate" [caption]="'Last Transaction Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+  </form>
+</ot-edit-screen-container>

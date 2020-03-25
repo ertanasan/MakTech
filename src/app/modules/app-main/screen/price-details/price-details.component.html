@@ -1,0 +1,65 @@
+<div class="row">
+  <ol class="col-12 breadcrumb">
+    <h4 class="ml-3">{{ 'Fiyat : '}}{{deviceName}} </h4>
+  </ol>
+</div>
+
+  <div class="m-3 row parent-container">
+    <ot-panel caption="Mağazalar" >
+      <kendo-chart *ngIf = "priceLoadTotals" class="chart-container" [seriesColors]="chartColors" >
+          <kendo-chart-area [height]="300"> </kendo-chart-area>
+          <kendo-chart-category-axis>
+              <kendo-chart-category-axis-item [categories]="priceLoadTotals.StoreName" type="text">
+                  <kendo-chart-category-axis-item-labels [rotation]="300">
+                  </kendo-chart-category-axis-item-labels>
+              </kendo-chart-category-axis-item>
+          </kendo-chart-category-axis>
+          <kendo-chart-series> 
+              <kendo-chart-series-item  type="column" [stack]="true" [data]="priceLoadTotals" field="Data[0]" categoryField="StoreName"> 
+                  <kendo-chart-series-item-tooltip></kendo-chart-series-item-tooltip>
+              </kendo-chart-series-item>  
+              <kendo-chart-series-item  type="column" [data]="priceLoadTotals" field="Data[1]" categoryField="StoreName">  
+                  <kendo-chart-series-item-tooltip></kendo-chart-series-item-tooltip>
+              </kendo-chart-series-item>  
+          </kendo-chart-series>
+      </kendo-chart>
+    </ot-panel>
+  </div>
+  <div class="m-3 row">
+    <div class="col-md-6">
+      <ot-panel caption="Gönderim Yapılamayanlar">
+        <kendo-grid [data]="priceStatus_ActiveList" [height]="400" [pageable]="false" [pageSize]="1000" [filterable]="true" [navigable]="true" [sortable]="true"
+        [sort]="listParams.sort" [filter]="listParams.filter" (dataStateChange)="handleDataStateChange($event)" >
+        <kendo-grid-command-column width="40">
+            <ng-template kendoGridHeaderTemplate>
+              <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+            </ng-template>
+          </kendo-grid-command-column>
+
+          <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+          <kendo-grid-column field="IPADDRESS_TXT" [title]="'Id'" width="150"></kendo-grid-column>
+          <kendo-grid-excel [fileName]="'GonderimYapilmayanlar.xlsx'"></kendo-grid-excel>
+        </kendo-grid>
+      </ot-panel>
+    </div>
+    <div class="col-md-6">
+      <ot-panel caption="Son Fiyat Alış Zamanı">
+        <kendo-grid [data]="priceOKTime_ActiveList" [height]="400" [pageable]="false" [pageSize]="1000" [filterable]="true" [navigable]="true" [sortable]="true"
+          [sort]="OKListParams.sort" [filter]="OKListParams.filter" (dataStateChange)="OKHandleDataStateChange($event)" >
+          <kendo-grid-command-column width="40">
+          <ng-template kendoGridHeaderTemplate>
+            <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+            </ng-template>
+          </kendo-grid-command-column>
+          <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="150"></kendo-grid-column>
+          <kendo-grid-column field="IPADDRESS_TXT" [title]="'Id'" width="150"></kendo-grid-column>
+          <kendo-grid-column field="LOAD_TM" [title]="'Yükleme Zamanı'" width="150" filter="date">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+              {{ dataItem.LOAD_TM | date:'dd.MM.yyyy HH:mm:ss'}} 
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-excel [fileName]="'SonFiyatAlisZamani.xlsx'"></kendo-grid-excel>
+        </kendo-grid>
+      </ot-panel>
+    </div>
+  </div>

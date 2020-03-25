@@ -1,0 +1,14 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 [id]="dialogId" class="modal-title">{{ caption | translate }}<ng-content select="[dialog-header]"></ng-content></h4>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close" (click)="close($event)" > 
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-content></ng-content>
+  </div>
+  <div class="modal-footer">
+    <ng-content select="[dialog-actions]"></ng-content>
+  </div>
+</ng-template>

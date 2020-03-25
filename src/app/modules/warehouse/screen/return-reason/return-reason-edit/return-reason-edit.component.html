@@ -1,0 +1,10 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ReturnReasonId" [caption]="'Return Reason Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ReasonName" [caption]="'Reason Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Parent" [caption]="'Parent' | translate" 
+      [items]="dataService.completeList" textField="ReasonName" valueField="ReturnReasonId" 
+      usePrimitiveValue="true" class="col-12" [loading]="dataService.loading">
+    </ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

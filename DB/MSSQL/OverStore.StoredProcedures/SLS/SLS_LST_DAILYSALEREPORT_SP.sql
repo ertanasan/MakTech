@@ -1,0 +1,145 @@
+﻿CREATE PROCEDURE [dbo].[SLS_LST_DAILYSALEREPORT_SP]
+    @Store INT = NULL,
+	@TransactionDate DATE = NULL
+AS
+BEGIN
+    /*Section="Organization"*/
+    -- Get the caller organization from session context
+    DECLARE @Organization INT;
+	IF @TransactionDate IS NULL
+		SET @TransactionDate = GETDATE()
+	DECLARE @yesterdayDate DATE = DATEADD(DAY, -1, @TransactionDate)
+	DECLARE @twodaysagoDate DATE = DATEADD(DAY, -1, @yesterdayDate)
+
+
+    SELECT @Organization = dbo.SYS_GETCURRENTORGANIZATION_FN();
+    IF dbo.SYS_ISSYSTEMORGANIZATION_FN() = 1
+    BEGIN
+      -- Current organization is system. This is a batch or system process.
+      SET @Organization = null;
+    END
+
+    /*Section="Query"*/
+   SELECT	ROW_NUMBER() OVER(ORDER BY S.STORE) [ROW_NO]
+		, S.STORE							[STORE_ID]
+		, MAX(ST.STORE_NM)					[STORE_NAME]
+		, MAX(RM.MANAGER_NM)				[REGION_MANAGER]
+		, MAX(ST.OPENING_DT)				[ESTABLISHMENT_DATE]
+		
+		-- REPORT FOR 2 DAYS AGO 
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SP.CARD_AMT = 0 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [CASH_2] 
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND SP.CARD_AMT > 0 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [CARD_2] 
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE = 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [REFUND_2]
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [SALE_2]
+		, COUNT(DISTINCT CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.SALE 
+				END) [SALE#_2]
+		, (SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END)) 
+			/ (COUNT(DISTINCT CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @twodaysagoDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.SALE 
+				END)) [AVRG_TRANSACTION_2]
+
+		-- REPORT FOR YESTERDAY 
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SP.CARD_AMT = 0 
+					AND SD.CANCEL_FL = 'N'
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [CASH_1] 
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND SP.CARD_AMT > 0 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [CARD_1]  
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND S.TRANSACTIONTYPE = 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END)[REFUND_1]
+		, SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END) [SALE_1]
+		, COUNT(DISTINCT CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.SALE 
+				END) [SALE#_1]
+		, (SUM(CASE WHEN 
+					CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+					AND S.TRANSACTIONTYPE != 5 
+					AND SD.CANCEL_FL = 'N' 
+				THEN SD.PRICE 
+				ELSE 0 
+				END)) 
+			/ (COUNT(DISTINCT CASE WHEN 
+						CONVERT(DATE, S.TRANSACTION_DT) = @yesterdayDate 
+						AND S.TRANSACTIONTYPE != 5 
+						AND SD.CANCEL_FL = 'N' 
+					THEN SD.SALE 
+					END)) [AVRG_TRANSACTION_1]
+
+	  FROM SLS_SALE S (NOLOCK)
+		JOIN SLS_SALEDETAIL (NOLOCK) SD				ON S.SALEID = SD.SALE
+		JOIN SLS_SALEPAYMENT (NOLOCK) SP			ON S.SALEID = SP.SALE
+		JOIN PRD_PRODUCT (NOLOCK) P					ON SD.PRODUCT = P.PRODUCTID
+		LEFT JOIN STR_STORE (NOLOCK) ST				ON S.STORE = ST.STOREID
+		LEFT JOIN STR_REGIONMANAGERS (NOLOCK) RM	ON ST.REGIONMANAGER = RM.REGIONMANAGERSID
+
+	  WHERE (@Organization IS NULL OR S.ORGANIZATION = @Organization)
+		AND S.TRANSACTION_DT >= @twodaysagoDate
+		AND S.TRANSACTION_DT <= @yesterdayDate
+		AND S.DELETED_FL = 'N'
+		AND SD.DELETED_FL = 'N'
+		AND SP.DELETED_FL = 'N'
+	  
+	  GROUP BY S.STORE
+    /*Section="End"*/
+END;

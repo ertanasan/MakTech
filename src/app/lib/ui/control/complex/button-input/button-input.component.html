@@ -1,0 +1,11 @@
+<span class="k-numeric-wrap">
+  <input
+    kendoTextBox
+    class="form-control k-input"
+    [(ngModel)]="value"
+    [readonly]="readonly"
+    [disabled]="disabled"
+    (blur)="onBlur.emit($event)"
+  >
+  <button type="button" kendoButton iconClass='{{icon}}' (click)="onButtonClick.emit($event)">{{buttonText | translate}}</button>
+</span>

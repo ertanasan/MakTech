@@ -1,0 +1,349 @@
+﻿<ot-list-screen-container [header]="'Reconciliation' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded" [hasCustomHeader]="true" >
+    <ng-container header-items>
+        <div class="ml-md-auto col-md-4 mx-xs-auto col-sm-12">
+            <ot-dropdown-entry [items]="storeList" textField="Name" valueField="StoreId" 
+            usePrimitiveValue="true" [loading]="storeListLoading" [(value)]="selectedStoreId" 
+            (valueChange)="onStoreSelected($event)" [isReadOnly]="storeReadOnly"></ot-dropdown-entry>
+        </div>
+    </ng-container>
+
+    <ot-panel *ngIf="screenNo === 1" caption="Tarih Seçiniz" >
+
+        <div class="mx-auto text-center mb-3">
+          <kendo-calendar [value]="recDate" [navigation]="false" [disabled]="true"></kendo-calendar>
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate" caption="{{'Prev' | translate}}" [disabled]="true" color="warning" ></ot-button>   
+          <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(1)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 2" caption="İptal Açıklamaları" >
+        <div class="mx-auto text-center mb-3">
+        <kendo-grid [data]="cancelReasonsActiveList" [navigable]="true" (keyup.enter)="onEnterClicked($event)"
+            (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)"
+            [sortable]= "true" [sort]="listParamsCancel.sort"
+            (dataStateChange)="handleDataStateChange($event)"
+            [height]="400">
+            <kendo-grid-column field="SaleCashRegister" [title]="'Kasa Kodu'" width="80" ></kendo-grid-column>
+            <kendo-grid-column field="ProductName" [title]="'Ürün Adı'" width="150" ></kendo-grid-column>
+            <kendo-grid-column field="SaleTransactionTime" [title]="'İşlem Zamanı'" width="120" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.SaleTransactionTime | date:'dd.MM.yyyy HH:mm'}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Price" [title]="'İşlem Tutarı'" width="120" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.Price | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CashierName" [title]="'Kasiyer Adı Soyadı'" width="100" ></kendo-grid-column>
+            <kendo-grid-column field="ReasonText" [title]="'Açıklama'" width="200" ></kendo-grid-column>
+        </kendo-grid>
+        </div>
+
+        <div *ngIf = "cancelReasons" class="mx-auto text-center mb-3">
+            <ng-container class="mx-auto float-center" dialog-actions>
+                <ot-button *ngIf="authenticate" caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(2)"></ot-button>   
+                <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(2)"  color="success" ></ot-button>
+            </ng-container>
+        </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 3" caption="Kasa Farkları Bilgisi" >
+
+        <ot-numeric-entry [caption]="'Toplam Kasa Eksiği'" class="col-12 mb-2" [isReadOnly]="true" [value]="selectedStore.Advance - prevRec.CurrentAdvance - prevRec.TotalOpenExpense"></ot-numeric-entry>
+        <ot-numeric-entry [caption]="'Devreden Masraf Alacağınız'" class="col-12 mb-2" [isReadOnly]="true" [value]="prevRec.TotalOpenExpense"></ot-numeric-entry>
+    
+        <ot-numeric-entry [caption]="'Tazmin Edilen Tutar'" class="col-12 mb-2" [(value)]="rec.RecoveredAmount" 
+        [isReadOnly]="recoverAmountReadonly" (valueChange)="onRecoveredAmountChange($event)"></ot-numeric-entry>
+        <ot-alpha-entry [caption]="'Geciken Tazmin Gün Sayısı '" class="col-12 mb-2" [isReadOnly]="true" [value]="prevRec.DeficitCycleCount"></ot-alpha-entry>
+    
+    
+        <div class="mx-auto text-center mb-3">
+            <ng-container class="mx-auto float-center" dialog-actions>
+                <ot-button *ngIf="authenticate" caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(3)"></ot-button>   
+                <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(3)"  color="success" ></ot-button>
+            </ng-container>
+        </div>
+
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 4" caption="Nakit Mevcudu Bilgisi" >
+
+        <div class="mx-auto text-center mb-3">
+          Avans dahil kasanızdaki tüm nakit miktarını yazınız. Masraf fişlerini nakit olarak yazmayınız.
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+        <kendo-grid [data]="bankNotes" [height]="575">
+            <kendo-grid-column field="BanknoteAmount" [title]="'Banknot / Madeni Para'" width="180" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.BanknoteAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Quantity" [title]="'Adet'" width="180" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <kendo-numerictextbox *ngIf="dataItem.CoinFlag===false" [(ngModel)]="dataItem.Quantity" kendoGridFocusable name="Quantity" 
+                    (change)="onQuantityChanged(dataItem)" (valueChange)= "onQuantityChanged(dataItem)" required>
+                    </kendo-numerictextbox>
+                  <div *ngIf="dataItem.CoinFlag===true"> {{dataItem.Quantity | number:'1.0-0':'tr'}} </div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Amount" [title]="'Tutar'" width="180" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <kendo-numerictextbox *ngIf="dataItem.CoinFlag===true" [(ngModel)]="dataItem.Amount" kendoGridFocusable name="Amount" 
+                    (change)="onAmountChanged(dataItem)" (valueChange)= "onAmountChanged(dataItem)" required>
+                    </kendo-numerictextbox>
+                    <div *ngIf="dataItem.CoinFlag===false"> {{dataItem.Amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </div>
+                </ng-template>
+                <ng-template kendoGridFooterTemplate let-column="column"> {{rec.CashAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(4)"></ot-button>   
+          <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(4)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 5" caption="Z Raporlarınızı Alınız" >
+        <div class="mx-auto text-center mb-3">
+            <h4 class="zExp">Şimdi kasadan Z raporlarınızı alabilirsiniz. Z raporlarının sisteme düşmesi 10 dk. civarında bir süre alacaktır. Z raporları sisteme düştüğünde aşağıya mesajı düşecektir.</h4>
+            <br>
+            <br>
+            <h2 [ngClass]="{'zSuccess': zClassOK, 'zStop':!zClassOK }">{{zReportStatus}}</h2>
+        </div>
+        <div class="mx-auto text-center mb-3">
+            <ng-container class="mx-auto float-center" dialog-actions>
+                <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(5)"></ot-button>   
+                <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(5)"  color="success" ></ot-button>
+            </ng-container>
+        </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 6" caption="Mağaza Masraf ve Düzeltme Bilgisi" >
+
+        <div class="row">
+            <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+              <ot-simple-widget
+                [padding]="0"
+                caption="Bugünkü Masraf Tutarı"
+                text="{{expenseTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+              ></ot-simple-widget>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+              <ot-simple-widget
+                [padding]="0"
+                caption="Bugün Geri Ödenen Masraf"
+                text="{{expensePayment | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+              ></ot-simple-widget>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-3 insidevalue">
+              <ot-simple-widget
+                [padding]="0"
+                caption="E-Fatura/Arşiv Tutarı"
+                text="{{invoiceTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+              ></ot-simple-widget>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-3">
+              <ot-simple-widget
+                [padding]="0"
+                caption="Düzeltme Tutarı"
+                text="{{adjustmentTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}"
+              ></ot-simple-widget>
+            </div>
+        </div>
+
+        <!-- <div class="card text-white bg-primary">
+          <div class="card-body pb-0 mx-auto text-center ">
+              <div class="text-value">{{expenseTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+              <div>Bugünkü Masraf Tutarı</div>
+              <div class="text-value">{{expensePayment | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+              <div>Bugün Geri Ödenen Masraf</div>
+              <div class="text-value">{{invoiceTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+              <div>E-Fatura/Arşiv Tutarı</div>
+              <div class="text-value">{{adjustmentTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+              <div>Düzeltme Tutarı</div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:70px;"> </div>
+        </div> -->
+        
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(6)"></ot-button>   
+          <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(6)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+  
+
+    <ot-panel *ngIf="screenNo === 7" caption="Kredi Kartı Hasılat Bilgisi" >
+
+        <div class="mx-auto text-center mb-3">
+        <kendo-grid [data]="rec.CardDist" [height]="300">
+            <kendo-grid-column field="CardGroupName" [title]="'Pos Cihazları'" width="180" > </kendo-grid-column>
+            <kendo-grid-column field="CardZetAmount" [title]="'Tutar'" width="180" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <kendo-numerictextbox [(ngModel)]="dataItem.CardZetAmount" kendoGridFocusable name="CardZetAmount" 
+                    (change)="onTotalChanged()" (valueChange)= "onTotalChanged()" required>
+                    </kendo-numerictextbox>
+                </ng-template>
+                <ng-template kendoGridFooterTemplate let-column="column"> {{rec.CardAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+            <h2>Açıklamalar</h2>
+            <p>1 - Her bir POS Cihazı için Günsonu raporu tutarlarını ayrı ayrı giriniz.</p>
+            <p>2 - Eğer Mobil POS Cihazınız var ise Günsonu raporu tutarlarını giriniz.</p>
+            <p>3 - Gün içerisinde Tek bir kasaya bağlı pos cihazından birden fazla günsonu raporu almanız durumunda tüm günsonu raporlarının toplamını ilgili kasa alanına yazınız.</p>
+        </div>
+          
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(7)"></ot-button>   
+          <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(7)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 8" caption="Kasa Farkları Bilgisi" >
+
+            <!-- <ot-numeric-entry [caption]="'Toplam Kasa Eksiği'" class="col-12" [isReadOnly]="true" [value]="totalCashDeficit"></ot-numeric-entry> -->
+            <ot-numeric-entry [caption]="'Günlük Kasa Eksiği'" class="col-12 mb-2" [isReadOnly]="true" [value]="dailyCashDeficit"></ot-numeric-entry>
+            <ot-numeric-entry [caption]="'Kasa Fazlası'" class="col-12 mb-2" [isReadOnly]="true" [value]="dailyCashSurplus"></ot-numeric-entry>
+    
+            <ot-multi-select-entry summaryLimit=2 [caption]="'Fark Nedeni'" [items]="xdiffReasons" [isReadOnly]="diffReadonly"
+              textField="ReasonName" valueField="DiffReasonId" usePrimitiveValue="true" class="col-12 mb-2" [(value)]="diffReasonCodes">
+            </ot-multi-select-entry>
+    
+            <ot-text-entry [caption]="'Fark Açıklaması'" class="col-12 mb-2" [(value)]="rec.DiffReason" [isReadOnly]="diffReadonly"></ot-text-entry> 
+            <!-- <ot-numeric-entry [caption]="'Tazmin Edilen Tutar'" class="col-12" [(value)]="rec.RecoveredAmount" 
+            [isReadOnly]="recoverAmountReadonly" (valueChange)="onRecoveredAmountChange($event)"></ot-numeric-entry>
+            <ot-alpha-entry [caption]="'Geciken Tazmin Gün Sayısı '" class="col-12" [isReadOnly]="true" [value]="deficitCount"></ot-alpha-entry> -->
+    
+    
+            <div class="mx-auto text-center mb-3">
+            <ng-container class="mx-auto float-center" dialog-actions>
+              <ot-button *ngIf="authenticate" caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(8)"></ot-button>   
+              <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(8)"  color="success" ></ot-button>
+            </ng-container>
+            </div>
+    </ot-panel>
+
+    <ot-panel *ngIf="screenNo === 9" caption="Banka Nakit Teslimat Bilgisi" >
+
+        <!-- <div class="mx-auto text-center mb-3">
+            <h4>BANKAYA GÖNDERİLECEK TUTAR</h4>
+            <p>Banka ile mutabık kalabilmeniz için aşağıdaki tutarı eksiksiz olarak bankaya göndermeniz gerekmektedir. </p>
+            <p *ngIf="allSent" class="zStop"> *** Nakit girişi yaptığınız kağıt para ve 1 liraların toplamı bankaya gönderilmesi gereken miktarı karşılamamaktadır. </p>
+        </div> -->
+
+        <kt-portlet class="kt-portlet--border-bottom-primary">
+            <kt-portlet-body>
+                <div class="kt-widget24">
+                  <div class="kt-widget24__details">
+                      <div class="kt-widget24__info">
+                          <h3 class="kt-widget24__title kt-font-primary">
+                            {{ "BANKAYA GÖNDERİLECEK TUTAR" }}
+                          </h3>
+                          <!-- <h4 *ngIf="hasAlternativeTitle()" class="kt-widget24__title kt-font-{{ coloredTitleAlternative ? color : '' }}">
+                            {{ titleAlternative }}
+                          </h4> -->
+                          <span class="kt-widget24__desc">
+                              {{ "Banka ile mutabık kalabilmeniz için bu tutarı eksiksiz olarak bankaya göndermeniz gerekmektedir." }}
+                              <p *ngIf="allSent" class="zStop"> *** Nakit girişi yaptığınız kağıt para ve 1 liraların toplamı bankaya gönderilmesi gereken miktarı karşılamamaktadır. </p>
+                          </span>
+                      </div>
+                      <span class="kt-widget24__stats kt-font-{{ color }}">
+                        {{ cashForBank | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}
+                      </span>
+                  </div>
+              </div>
+              </kt-portlet-body>
+          </kt-portlet>
+        <!-- <div class="card text-white bg-primary">
+            <div class="card-body m-auto text-center ">
+                <div class="text-value">{{cashForBank | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</div>
+            </div>
+        </div> -->
+
+
+        <div class="mx-auto text-center mb-3">
+        <kendo-grid [data]="bankNotesForBank" [height]="575">
+            <kendo-grid-column field="BanknoteAmount" [title]="'Banknot / Madeni Para'" width="180" >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.BanknoteAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Quantity" [title]="'Adet'" width="180" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <kendo-numerictextbox [(ngModel)]="dataItem.Quantity" kendoGridFocusable name="Quantity" 
+                    (change)="onBankQuantityChanged(dataItem)" (valueChange)= "onBankQuantityChanged(dataItem)" required>
+                    </kendo-numerictextbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="Amount" [title]="'Tutar'" width="180" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div> {{dataItem.Amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </div>
+                </ng-template>
+                <ng-template kendoGridFooterTemplate let-column="column"> {{rec.BankAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(9)"></ot-button>   
+          <ot-button caption="{{'Next' | translate}}" [disabled]="false" (onClick)="onNext(9)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+
+    
+
+    <ot-panel *ngIf="screenNo === 10" caption="Devreden Kasa Avansı Bilgisi" >
+
+        <div class="mx-auto text-center mb-3">
+            <kendo-grid [data]="bankNotesinHand" [height]="575">
+                <kendo-grid-column field="BanknoteAmount" [title]="'Banknot / Madeni Para'" width="180" >
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                      {{dataItem.BanknoteAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Quantity" [title]="'Adet'" width="180" >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.Quantity | number:'1.0-0':'tr'}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="Amount" [title]="'Tutar'" width="180" >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.Amount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column="column"> {{totalBankNotesinHand | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+
+        <div class="mx-auto text-center mb-3">
+        <ng-container class="mx-auto float-center" dialog-actions>
+          <ot-button *ngIf="authenticate"  caption="{{'Prev' | translate}}" [disabled]="false" color="warning" (onClick)="onPrev(10)"></ot-button>   
+          <ot-button caption="{{'Kredi Kartı Değiştir'}}" [disabled]="false" (onClick)="onNext(6)"  color="warning" ></ot-button>
+          <ot-button caption="{{'Mutabakatı Bitir'}}" [disabled]="false" (onClick)="onNext(10)"  color="success" ></ot-button>
+        </ng-container>
+        </div>
+    </ot-panel>
+
+</ot-list-screen-container>
+
+<ot-message-dialog [caption]="'Z Raporu Kontrolü'" #warningMessageDialog (onAction)="onActionWarningMessage($event)">
+    {{warningMessage}}
+</ot-message-dialog>

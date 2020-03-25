@@ -1,0 +1,26 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="MaterialOrderId" [caption]="'Material Order Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <!-- <ot-alpha-entry formControlName="OrderName" [caption]="'Order Name' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-date-entry formControlName="OrderDate" [caption]="'Order Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry> -->
+    <!-- <ot-alpha-entry formControlName="OrderStatusCode" [caption]="'Order Status Code' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="ProcessInstanceNumber" [caption]="'Process Instance Number' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="MikroStatusCode" [caption]="'Mikro Status Code' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="MikroReference" [caption]="'Mikro Reference' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-date-entry formControlName="MikroTime" [caption]="'Mikro Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry> -->
+    <!-- <ot-dropdown-entry formControlName="MikroUser" [caption]="'Mikro User' | translate" [items]="userService.completeList" textField="Name" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry> -->
+    <ot-dropdown-entry formControlName="Material" [caption]="'Material' | translate" [items]="materialService.completeList" 
+    textField="MaterialName" valueField="MaterialId" usePrimitiveValue="true" class="col-12" [isReadOnly]="statusCode>2"
+    (valueChange) = "materialChange($event)" [loading]="materialService.loading"></ot-dropdown-entry>
+
+    <ot-dropdown-entry formControlName="MaterialInfo" [caption]="'Material Info' | translate" [items]="materialInfoList" [isReadOnly]="statusCode>2"
+    textField="ShortName" valueField="MaterialInfoId" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>
+
+    <ot-numeric-entry [isReadOnly]="statusCode>1" formControlName="OrderQuantity" [caption]="'Order Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry *ngIf = "statusCode>1" [isReadOnly]="statusCode>2 || !callee.isHeadQuarter" formControlName="RevisedQuantity" [caption]="'Revised Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry *ngIf = "statusCode>2" [isReadOnly]="statusCode>3 || !callee.isDepot" formControlName="ShippedQuantity" [caption]="'Shipped Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry *ngIf = "statusCode>3" [isReadOnly]="statusCode>4 || !callee.isStore" formControlName="IntakeQuantity" [caption]="'Intake Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-text-entry [isReadOnly]="statusCode>1" formControlName="Note" [caption]="'Note' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

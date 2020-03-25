@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[SLS_STOREDAILYPRODUCT_SYN](
+	[TRANSACTION_DT] [date] NULL,
+	[STORE] [int] NOT NULL,
+	[PRODUCT] [int] NOT NULL,
+	[QUANTITY] [numeric](38, 7) NULL,
+	[PRICE] [numeric](38, 6) NULL
+) ON [PRIMARY]

@@ -1,0 +1,196 @@
+﻿<ot-list-screen-container [header]="'Expense' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+    <ng-container header-items>
+        <table>
+            <tr>
+              <th>
+                  <ot-date-entry [captionWidth]="0" [(value)]="startDate" format="dd.MM.yyyy"></ot-date-entry>
+              </th>
+              <th>
+                  <ot-date-entry [captionWidth]="0" [(value)]="endDate" format="dd.MM.yyyy"></ot-date-entry>
+              </th>
+              <th>
+                  <ot-button [caption]="'Filter' | translate" color="primary" size="sm" (click)="onFilter()"> </ot-button>
+              </th>
+              <th>
+                  <button kendoButton [primary]="true" (click)="exportToExcel(grid)" [look]="'outline'">Excel</button>  
+                  <!-- <ot-button [caption]="'Print' | translate" color="primary" size="sm" (click)="onPrint()"> </ot-button> -->
+              </th>
+            </tr>
+        </table>
+    </ng-container>
+    <!-- <div class="row">
+        <ot-date-entry [(value)]="startDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-md-6">
+        </ot-date-entry>
+        <ot-date-entry [(value)]="endDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-md-6">
+        </ot-date-entry>
+    </div> -->
+  <kendo-grid #grid="kendoGrid" [data]="recActiveList" [loading]="recLoading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+          <ot-light-button *ngIf="false" color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="onExpenseLogList(dataItem.ExpenseId)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="authorization==='HQ'" color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="ExpenseId" [title]="'Expense ID' | translate" width="120"> </kendo-grid-column>
+    <kendo-grid-column field="ExpenseTypeName" [title]="'Expense Type' | translate" width="180"> </kendo-grid-column>
+
+    <!-- <kendo-grid-column field="ExpenseType" [title]="'Expense Type' | translate" width="180">      
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="expenseTypeService.completeList"
+              valueField="ExpenseTypeId"
+              textField="ExpenseTypeName"
+              memberField="ExpenseType"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+          </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.ExpenseType | getName:'ExpenseTypeId':'ExpenseTypeName':expenseTypeService.completeList }}
+      </ng-template>
+    </kendo-grid-column> -->
+    
+    <kendo-grid-column field="StoreName" [title]="'Store' | translate" width="180"> </kendo-grid-column>
+    <kendo-grid-column field="RegionManager" [title]="'Region' | translate" width="180">      
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="regionManagerList"
+              valueField="RegionManagersId"
+              textField="RegionManagerName"
+              memberField="RegionManager"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+          </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.RegionManager">
+          {{ dataItem.RegionManager | getName:'RegionManagersId':'RegionManagerName':regionManagerList }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CreateUserName" [title]="'Create User Name' | translate" width="180"> </kendo-grid-column>
+    <kendo-grid-column field="CreateDate" [title]="'Create Date' | translate" width="180"> 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CreateDate">{{dataItem.CreateDate | date:'dd.MM.yyyy HH:mm'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="RegionManagerName" [title]="'Region Manager' | translate" width="180"> </kendo-grid-column>
+    <!-- <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">      
+        <ng-template kendoGridFilterCellTemplate let-dataItem>
+            <ot-dropdown-list-filter
+              [data]="storeList"
+              valueField="StoreId"
+              textField="Name"
+              memberField="Store"
+              [filter]="listParams.filter">
+            </ot-dropdown-list-filter>
+          </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.Store | getName:'StoreId':'Name':storeList }}
+      </ng-template>
+    </kendo-grid-column> -->
+
+    <kendo-grid-column field="ExpenseDate" [title]="'Expense Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.ExpenseDate">{{dataItem.ExpenseDate | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ExpenseAmount" [title]="'Expense Amount' | translate" width="180" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ReceiptNo" [title]="'ReceiptNo' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="OpenFlag" [title]="'Ödeme Durum'" width="120">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="paymentStatus"
+          valueField="StatusValue"
+          textField="StatusText"
+          memberField="OpenFlag"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.OpenFlag?'Ödenmedi':'Ödendi'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PayOffDate" [title]="'PayOff Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.PayOffDate">{{dataItem.PayOffDate | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="HasReceipt" [title]="'Documented' | translate" width="90" filter="boolean">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-check-box [value]="dataItem.HasReceipt" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ExpenseDescription" [title]="'Expense Description' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="VATRate" [title]="'VAT Rate' | translate" width="100">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="vatGroupService.completeList"
+          valueField="VatRate"
+          textField="VatRate"
+          memberField="VATRate"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.VATRate}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MikroTransactionCode" [title]="'Mikro' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.MikroTransactionCode">MBS-{{dataItem.MikroTransactionCode}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-excel [fileName]="getxlsFileName()" [fetchData]="allData"></kendo-grid-excel>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-expense-edit #editScreen screenName="ot-expense-edit"></ot-expense-edit>
+
+<ot-custom-dialog #expenseLog size="xl">
+  <kendo-grid [data]="expenseLogList" [height]="200">
+    <kendo-grid-column field="LOG_DT" [title]="'İşlem Zamanı'" width="160" >
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.LOG_DT | date:'dd.MM.yyyy HH:mm:ss'}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="USERFULL_NM" [title]="'İşlem Yapan'" width="180" > </kendo-grid-column>
+    <kendo-grid-column field="EXPENSETYPE_NM" [title]="'Masraf Tipi'" width="180" > </kendo-grid-column>
+    <kendo-grid-column field="EXPENSE_DT" [title]="'Masraf Tarihi'" width="100" > 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.EXPENSE_DT | date:'dd.MM.yyyy'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="EXPENSE_AMT" [title]="'Masraf Tutarı'" width="100" > 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.EXPENSE_AMT | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="RECEIPTNO_TXT" [title]="'Fiş No'" width="70" > </kendo-grid-column>
+    <kendo-grid-column field="PAYOFF_DT" [title]="'Ödeme Tarihi'" width="100" > 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.PAYOFF_DT | date:'dd.MM.yyyy'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="VAT_RT" [title]="'KDV Oranı'" width="70" > 
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.VAT_RT | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="OPEN_FL" [title]="'Ödeme Durum'" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div>{{dataItem.OPEN_FL=='Y'?'Ödenmedi':'Ödendi'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-custom-dialog>

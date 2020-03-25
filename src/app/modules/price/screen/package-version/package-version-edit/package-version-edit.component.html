@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="PackageVersionId" [caption]="'Package Version Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-alpha-entry formControlName="Package" [caption]="'Package' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-date-entry formControlName="VersionDate" [caption]="'Version Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-switch-entry formControlName="ActiveFlag" [caption]="'Active Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-date-entry *ngIf="!form.value.ActiveFlag" formControlName="ActivationTime" [caption]="'Activation Time' | translate" format="dd.MM.yyyy HH:mm" class="col-12"></ot-date-entry>
+    
+    <!-- <div class="ml-1 form-group row">
+      <label class="captionBS col-form-label col-6">Act. Time</label>
+      <kendo-timepicker [(value)]="activationTime" class="col-6"></kendo-timepicker>
+    </div> -->
+
+    <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="3" class="col-12"></ot-text-entry>
+  </form>
+
+</ot-edit-screen-container>

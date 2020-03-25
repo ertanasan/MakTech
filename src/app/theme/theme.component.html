@@ -1,0 +1,38 @@
+<!-- <ot-enterprise-layout wideLogo="../../assets/images/logo/wide-logo.png" narrowLogo="../../assets/images/logo/narrow-logo.png" mainModule="OverStoreMain">
+  <ng-container  layoutHeader>    
+    <ul class="nav navbar-nav">
+            <li class="nav-item topRightButtons" style="padding-right: 6px;">
+                <button routerLink="/OverStoreMain/Inbox/Index" class="btn btn-danger"> <i class="fa fa-tasks"></i><span class="buttonTexts"> {{'My Tasks'| translate}} </span></button>
+            </li>
+            <li class="nav-item topRightButtons" style="padding-right: 6px;">
+                <button routerLink="/OverStoreMain/Workqueue/Index" class="btn btn-success"> <i class="fa fa-briefcase"></i><span class="buttonTexts"> {{'Workqueues'| translate}} </span></button>
+            </li>            -->
+            <!-- <li class="nav-item topRightButtons" style="padding-right: 6px;">
+              <button routerLink="/Announcement/NotificationHistory/Index" class="btn btn-danger"> <i class="fa fa-tasks"></i><span class="buttonTexts"> {{'Read Notifications'| translate}} </span></button>
+          </li>
+    </ul>    
+  </ng-container>
+  <ng-container layoutToolbar>
+    <div *ngIf="iconVisible" class="insidevalue" (click)="onSuggestionIconClick()" [routerLink]="['/Announcement/Suggestion/Index', 'theme']">
+      <fa-icon [icon]="faLightbulb" spin="true" size="lg" style="color: #A26BA2;"></fa-icon>
+    </div>
+    <li class="nav-item dropdown ot-header-notification-overstore" mainModule="OverStoreMain" dropdown placement="bottom right">
+    </li>
+  </ng-container>        
+</ot-enterprise-layout> -->
+<ot-loading-screen></ot-loading-screen>
+<kt-base mainModule="OverStoreMain" [showNotification]="false">
+  
+    <ng-container  layoutToolbar>
+        <div *ngIf="iconVisible" class="kt-header__topbar-item">           
+            <div  class="kt-header__topbar-wrapper insidevalue" (click)="onSuggestionIconClick()" [routerLink]="['/Announcement/Suggestion/Index', 'theme']">             
+              <span class="kt-header__topbar-icon" [ngClass]="'kt-header__topbar-icon--success'">
+                  <fa-icon [icon]="faLightbulb" size="lg" style="color: #A26BA2;"></fa-icon>
+                </span>
+            </div>           
+        </div>
+      <ot-header-notification-overstore [mainModule]="'OverStoreMain'" [bgImage]="'./assets/media/misc/bg-1.jpg'" [pulse]="true" [skin]="'dark'" [icon]="'./assets/media/icons/svg/Code/Compiling.svg'" [useSVG]="true">
+      </ot-header-notification-overstore>
+    </ng-container>
+       
+</kt-base>

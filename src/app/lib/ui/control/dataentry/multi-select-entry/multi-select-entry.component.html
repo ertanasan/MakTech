@@ -1,0 +1,47 @@
+<ot-data-entry-template 
+  caption="{{ caption }}"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  [showCaption]="showCaption"
+  [editorWidth]="editorWidth"
+  [captionWidth]="captionWidth"
+  [hasFormControl]="ngControl"
+  >
+  <kendo-multiselect
+    #input
+    editor
+    [data]="itemList" 
+    [disabled]="ngControl ? ngControl.control.disabled : disabled"
+    [ngClass]="getControlClasses()"
+    [(ngModel)]="value"   
+    [textField]="textField"
+    [valueField]="valueField"
+    [valuePrimitive]="usePrimitiveValue"
+    [autoClose]="autoClose"
+    [kendoDropDownFilter]="filterSettings"
+    [kendoMultiSelectSummaryTag]="summaryLimit">
+    <ng-template [ngIf]="useAsync">
+      <ng-template kendoMultiSelectItemTemplate let-dataItem>
+        {{ dataItem[textField] | translate }}
+      </ng-template>
+      <ng-template kendoMultiSelectValueTemplate let-dataItem>
+        {{ dataItem ? (dataItem[textField] | translate) : ''}}
+      </ng-template>
+    </ng-template>
+    <ng-template kendoMultiSelectNoDataTemplate>
+      <div *ngIf="loading;else noData" class="k-loading-mask" style="width:100%;height:100%">
+        <span class="k-loading-text">{{ loadingMessage | translate }}</span>
+        <div class="k-loading-image">
+          <div class="k-loading-color"></div>
+        </div>
+      </div>
+      <ng-template #noData>
+        <h4><span class="k-icon k-i-warning"></span><br /><br /> {{ 'No data found' | translate }}</h4>
+      </ng-template>
+    </ng-template>
+    <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
+      <ng-content select="[summaryTemplate]">
+      </ng-content>
+    </ng-template>
+  </kendo-multiselect>
+</ot-data-entry-template>

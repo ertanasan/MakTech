@@ -1,0 +1,85 @@
+<div class="row">
+  <ol class="col-md-10 breadcrumb">
+    <h4 class="ml-3">{{ 'Label Print Report _ Last 2 Weeks' | translate }}</h4>
+  </ol>
+  <div class="col-md-2 breadcrumb">
+      <div class="row float-right m-auto" *ngIf="priceLabelPrintService.printedLabelsActiveList"  >
+        <ot-button [caption]="'Reload Data' | translate" color="primary" size="sm" (click)="onReLoadData()"></ot-button>
+      </div>
+  </div>
+</div>
+
+<div class="m-3 row parent-container">
+  <ot-panel *ngIf="priceLabelPrintService.printedLabelsActiveList" [caption]="'Not Printed Labels' | translate">
+    <kendo-chart class="chart-container" (seriesClick)="onStoreSeriesClick($event)" [seriesColors]="chartColors">
+      <kendo-chart-area [height]="300"> </kendo-chart-area>
+      <kendo-chart-category-axis>
+        <kendo-chart-value-axis-item [min]="0" [max]="1">
+        </kendo-chart-value-axis-item>
+        <kendo-chart-category-axis-item [categories]="priceLabelPrintService.printedLabelsActiveList.data.STORE_NM" type="text">
+          <kendo-chart-category-axis-item-labels [rotation]="300">
+          </kendo-chart-category-axis-item-labels>
+        </kendo-chart-category-axis-item>
+      </kendo-chart-category-axis>
+      <kendo-chart-series> 
+        <kendo-chart-series-item  type="column" [stack]="{ type: '100%' }" [data]="priceLabelPrintService.printedLabelsActiveList.data" field="PRINTEDLABEL_CN" categoryField="STORE_NM"> 
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-dataItem="dataItem">
+              {{ 'Printed' | translate }}: {{ dataItem.PRINTEDLABEL_CN }} / {{ dataItem.CHANGEDPRODUCT_CN }}
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>  
+        <kendo-chart-series-item  type="column" [data]="priceLabelPrintService.printedLabelsActiveList.data" field="NOTPRINTEDLABELS"> 
+          <kendo-chart-series-item-tooltip>
+            <ng-template let-dataItem="dataItem">
+              {{ 'Not Printed' | translate }}: {{ dataItem.NOTPRINTEDLABELS }} / {{ dataItem.CHANGEDPRODUCT_CN }}
+            </ng-template>
+          </kendo-chart-series-item-tooltip>
+        </kendo-chart-series-item>  
+      </kendo-chart-series>
+    </kendo-chart>
+  </ot-panel>
+</div>
+
+<div class="m-3 row" *ngIf="priceLabelPrintService.printedLabelsActiveList" >
+  <div class="col-md-6">
+    <ot-panel [caption]="'Store Details' | translate">
+      <kendo-grid *ngIf = "priceLabelPrintService.printedLabelsActiveList" [data]="priceLabelPrintService.printedLabelsActiveList" [height]="400" [pageable]="false" [pageSize]="1000"
+      [sortable]="true" [sort]="storeDetailListParams.sort" [navigable]="true" (dataStateChange)="handleDataStateChange($event)" [loading]="priceLabelPrintService.loading">  
+        <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="120">
+          <ng-template kendoGridHeaderTemplate>
+            <ot-light-button color="success" kendoGridExcelCommand icon="fas fa-download"></ot-light-button>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.STORE | getName:'StoreId':'Name':storeService.completeList }} 
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CHANGEDPRODUCT_CN" [title]="'Price Changed Labels' | translate" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="PRINTEDLABEL_CN" [title]="'Printed Labels' | translate" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="NOTPRINTEDLABELS" [title]="'Not Printed Labels' | translate" filter="numeric"></kendo-grid-column>
+        <kendo-grid-column field="AVERAGEWAITINGTIME" [title]="'Average Printing Duration' | translate" filter="numeric"></kendo-grid-column>
+        <kendo-grid-excel [fileName]="getFileName('printedLabels')"></kendo-grid-excel>
+      </kendo-grid>
+    </ot-panel>
+  </div>
+  <div class="col-md-6">
+    <ot-panel [caption]="getPanelCaption('Not Printed Label Details')">
+      <kendo-grid *ngIf = "labelDetails" [data]="labelDetails" [height]="400" [pageable]="false" [pageSize]="1000"
+      [navigable]="true" [loading]="labelDetailsLoading">  
+        <kendo-grid-column field="PRODUCTCODE_NM" [title]="'Product Code' | translate" width="100">
+          <ng-template kendoGridHeaderTemplate>
+            <ot-light-button color="success" kendoGridExcelCommand icon="fas fa-download"></ot-light-button>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="PRODUCT_NM" [title]="'Product Names' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="VERSION_TM" [title]="'Price Loaded Time' | translate" width="100" filter="date">
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            {{ dataItem.VERSION_TM | date:'dd.MM.yyyy'}} 
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="SALEPRICE_AMT" [title]="'Current Price' | translate" width="100" filter="numeric"></kendo-grid-column>
+        <kendo-grid-excel [fileName]="getFileName('labelDetails')"></kendo-grid-excel>
+      </kendo-grid>
+    </ot-panel>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<span *ngFor="let d of dashboardList, let i=index">
+    <ot-button *ngIf="d.show && activeDashboard !== d.name"
+               [caption]="d.caption"
+               (onClick)="router.navigate(d.link)"
+               [outline]="true"
+               class="mr-1" >
+    </ot-button>
+</span>

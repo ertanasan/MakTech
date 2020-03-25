@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="WorkingHoursId" [caption]="'Working Hours Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="StoreCode" [caption]="'Store Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="StoreName" [caption]="'Store Name In Report' | translate" class="col-12"></ot-alpha-entry>
+    <ot-date-entry formControlName="OpeningTime" [caption]="'Opening Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="ClosingTime" [caption]="'Closing Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-alpha-entry formControlName="OpenUserName" [caption]="'Open User Name In Report' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="CloseUserName" [caption]="'Close User Name In Report' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="OpenUser" [caption]="'Open User' | translate" [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="CloseUser" [caption]="'Close User' | translate" [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry>
+    <ot-text-entry formControlName="Note" [caption]="'Note' | translate" rows="3" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

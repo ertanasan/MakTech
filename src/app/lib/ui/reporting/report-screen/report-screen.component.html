@@ -1,0 +1,16 @@
+<kt-portlet>
+  <kt-portlet-header [sticky]="true" title="{{reportName | translate}}" >
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <ng-template [ngIf]="report">
+            <ot-report-panel *ngFor="let reportPanel of report.ReportPanels; let i = index" reportName="{{reportName}}"
+              panelName="{{reportPanel.PanelName}}" [reportPanel]="report.ReportPanels[i]"></ot-report-panel>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>

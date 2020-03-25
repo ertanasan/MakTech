@@ -1,0 +1,46 @@
+﻿CREATE PROCEDURE STR_LST_CASHREGISTER_SP  
+    @Store INT = NULL  
+AS  
+BEGIN  
+    DECLARE @Organization INT;  
+    SELECT @Organization = dbo.SYS_GETCURRENTORGANIZATION_FN();  
+    IF dbo.SYS_ISSYSTEMORGANIZATION_FN() = 1  
+    BEGIN  
+      SET @Organization = null;  
+    END  
+    SELECT C.CASHREGISTERID,  
+           C.ORGANIZATION,  
+           C.DELETED_FL,  
+           C.CREATE_DT,  
+           C.UPDATE_DT,  
+           C.CREATEUSER,  
+           C.UPDATEUSER,  
+           C.CASHREGISTER_NM,  
+           C.STORE,  
+           C.CASHREGISTERMODEL,  
+           C.PRICEFILEPATH_TXT,  
+           C.SALEFILEPATH1_TXT,  
+           C.SALEFILEPATH2_TXT,  
+           C.SALEFILEPATH3_TXT,  
+           C.CURRENTPRICEVERSION,  
+           C.CURRENTPRICELOAD_TM,  
+           C.PRIVATEPRICEVERSION,  
+           C.PRIVATEPRICELOAD_TM,  
+		   M.MODEL_NM,  
+		   B.CASHREGISTERBRANDID,  
+		   B.BRAND_NM,  
+           C.CREATEPRICEFILE_FL,  
+           C.IPADDRESS_TXT,  
+           C.STATUS_FL,  
+           C.STATUS_TXT,
+		   C.GIBDEVICENO_TXT,
+           C.SERIALNO_TXT
+      FROM STR_CASHREGISTER C (NOLOCK)  
+   	  JOIN STR_CASHREGISTERMODEL M (NOLOCK) on C.CASHREGISTERMODEL = m.CASHREGISTERMODELID  
+	  JOIN STR_CASHREGISTERBRAND B (NOLOCK) on m.BRAND = b.CASHREGISTERBRANDID  
+     WHERE (@Store IS NULL OR C.STORE = @Store)  
+       AND (@Organization IS NULL OR C.ORGANIZATION = @Organization)  
+       AND DELETED_FL = 'N'  
+     ORDER BY CASHREGISTER_NM;  
+ 
+END;  

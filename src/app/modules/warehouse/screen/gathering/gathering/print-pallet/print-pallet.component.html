@@ -1,0 +1,76 @@
+<!--<table>-->
+<!--    <tbody>-->
+<!--        <tr class="row-header">-->
+<!--            <td style="width: 50%">-->
+<!--                MAĞAZA ADI-->
+<!--            </td>-->
+<!--            <td style="width: 25%">-->
+<!--                PALLET NO-->
+<!--            </td>-->
+<!--            <td style="width: 25%">-->
+<!--                QR CODE-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr class="row-content">-->
+<!--            <td style="width: 50%">-->
+<!--                {{ storeName }}-->
+<!--            </td>-->
+<!--            <td style="width: 25%">-->
+<!--                {{ palletNo.toString() }}-->
+<!--            </td>-->
+<!--            <td style="width: 25%">-->
+<!--                <ngx-qrcode #qrCodeImage [qrc-element-type]="'url'" [qrc-value]="qrCodeUrl"></ngx-qrcode>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr class="row-header">-->
+<!--            <td>-->
+<!--                TOPLAYICI-->
+<!--            </td>-->
+<!--            <td colspan="2">-->
+<!--                KONTROLCÜ-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr class="row-content">-->
+<!--            <td >-->
+<!--                {{ gatheringUserName }}-->
+<!--            </td>-->
+<!--            <td colspan="2">-->
+<!--                {{ controlUserName }}-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+
+<table>
+    <tbody>
+    <tr class="row-header">
+        <td style="width: 50%"></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+    </tr>
+    <tr class="row-content">
+        <td style="width: 50%; text-align: center">
+            {{ storeName }}
+        </td>
+        <td style="width: 25%; text-align: center">
+            {{ palletNo.toString() }}
+        </td>
+        <td style="width: 25%; text-align: center">
+            {{ palletCount.toString() }}
+        </td>
+    </tr>
+    <tr class="row-header">
+        <td></td>
+        <td colspan="2"></td>
+    </tr>
+    <tr class="row-content">
+        <td >
+            {{ gatheringUserName }}
+        </td>
+        <td colspan="2">
+            <ngx-qrcode #qrCodeImage [qrc-element-type]="'url'" [qrc-value]="qrCodeUrl"></ngx-qrcode>
+<!--            {{ controlUserName }}-->
+        </td>
+    </tr>
+    </tbody>
+</table>

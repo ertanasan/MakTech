@@ -1,0 +1,28 @@
+<ot-data-entry-template
+  caption="{{ caption }}"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched" 
+  [validationMessages]="getValidationMessages()"
+  [editorWidth]="editorWidth" 
+  [captionWidth]="captionWidth" 
+  >
+  <kendo-combobox 
+    editor
+    [(ngModel)]="value" 
+    (blur)="touch()"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    class="form-control"
+    [textField]="textField"
+    [valueField]="valueField"
+    [valuePrimitive]="true"
+    [data]="manualMode ? dataList : (searchService ? searchService.activeList.data : [])"
+    [filterable]="true"
+    (filterChange)="filterChanged($event)">
+    <ng-template kendoDropDownListItemTemplate let-dataItem>
+      {{ dataItem[textField] }}
+    </ng-template>
+    <ng-template kendoDropDownListNoDataTemplate>
+      <ng-container [ngTemplateOutlet]="emptyDataTemplate"></ng-container>
+    </ng-template>
+  </kendo-combobox>
+</ot-data-entry-template>

@@ -1,0 +1,14 @@
+smallerfontsize {
+    font-size: 75%;
+}
+
+
+button.group3.k-button.k-state-active {
+    background-color: green;
+}
+
+button.group2.k-button.k-state-active {
+    background-color: blue;
+}
+
+

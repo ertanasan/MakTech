@@ -1,0 +1,17 @@
+﻿<ot-edit-screen-container #container>
+    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+        <!-- <ot-dropdown-entry formControlName="Notification" [caption]="'Notification' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : notificationService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="NotificationId" valueField="NotificationId" usePrimitiveValue="true" class="col-12" [loading]="notificationService.loading"></ot-dropdown-entry> -->
+        <!-- <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : storeService.completeList"
+      [isReadOnly]="container.rightRelationId" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+        <ot-alpha-entry formControlName="ProcessInstance" [caption]="'Process Instance' | translate" class="col-12" isReadOnly="true"></ot-alpha-entry>
+        <ot-multi-select-entry *ngIf="container.actionName === 'Create'" summaryLimit=1 formControlName="StoreList" [caption]="'Store' | translate" [items]="storeService.completeList"
+                               textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading">
+            <ng-container summaryTemplate>
+                Çoklu seçim yapıldı
+            </ng-container>
+        </ot-multi-select-entry>
+        <ot-switch-entry *ngIf="container.actionName === 'Create'" [(value)]="allStoresFlag" [caption]="'All Stores' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    </form>
+    <p *ngIf="container.actionName === 'Delete'" class="text-center"> {{ 'Are you sure you want to delete this item?' | translate}} </p>
+</ot-edit-screen-container>

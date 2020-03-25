@@ -1,0 +1,54 @@
+﻿<ot-list-screen-container [header]="'Rent Payment Plan' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataLoading" [height]="450"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth + 40" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+          <ot-light-button color="primary" otTooltip="{{ 'Generator' | translate }}" icon="fas fa-bolt" (onClick)="getConsent.show()"></ot-light-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="createEnabled" color="primary" otTooltip="{{ 'Copy' | translate }}" icon="fas fa-clone" (onClick)="cloneRow(dataItem)"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column *ngIf="!masterId" field="RentPeriod" [title]="'Rent Period' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="PaymentOrder" [title]="'Payment Order' | translate" width="80" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="DueDate" [title]="'Due Date' | translate" width="100" filter="date">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.DueDate">{{utilityService.toDate(dataItem.DueDate) | date:'dd.MM.yyyy'}}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="PaymentAmount" [title]="'Payment Amount' | translate" width="180" filter="numeric" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.PaymentAmount | currency:dataItem.Currency:'symbol-narrow':'1.2-2' }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="AdditionalPaymentAmount" [title]="'Additional Payment Amount' | translate" width="180" filter="numeric" class="text-right">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span *ngIf="dataItem.AdditionalPaymentAmount">{{ dataItem.AdditionalPaymentAmount | currency:dataItem.AdditionalPaymentCurrency:'symbol-narrow':'1.2-2' }}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Comment" [title]="'Comment' | translate"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-rent-payment-plan-edit #editScreen screenName="ot-rent-payment-plan-edit"></ot-rent-payment-plan-edit>
+
+<ot-custom-dialog #getConsent>
+  <!--  <h3>{{ 'Are you sure you want to generate payment plans' | translate }}?</h3>-->
+  <!--  <ot-check-box [caption]="'Keep Existing Payments' | translate" [(value)]="isKeepExistingPayments"></ot-check-box>-->
+  <!--  <p *ngIf="!isKeepExistingPayments">{{ 'Existing period records will be lost' | translate }}!</p>-->
+  <h3>Ödeme Planı Oluşturucu Henüz Aktif Değildir</h3>
+  <ng-container dialog-actions>
+    <ot-button caption="{{'Close' | translate}}" (onClick)="onCancelConsent()"></ot-button>
+    <!--    <ot-button [caption]="'Confirm' | translate" icon="fa fa-thumbs-up fa-fw" (onClick)="onConsent()" [block]="false" color="primary" ></ot-button>-->
+  </ng-container>
+</ot-custom-dialog>
+

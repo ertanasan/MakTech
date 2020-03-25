@@ -1,0 +1,36 @@
+<!--<div class="row my-6">-->
+<!--    <div class="col-md-3 col-sm-6  text-center">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12">-->
+<!--                <ot-button [caption]="'New Suggestion' | translate" size="lg"  color="info" [block]="true" (onClick)="showFormContainer('Create')"></ot-button>-->
+<!--            </div>-->
+<!--            <div class="col-12">-->
+<!--                <ot-alpha-entry [(value)]="suggestionId" [placeholder]="'SuggestionId' | translate" [showCaption]="false" [editorWidth]="   12" [isDigitOnly]="true"  class="col-12"></ot-alpha-entry>-->
+<!--                <ot-button [caption]="'Trace A Suggestion Status' | translate" size="lg" color="info"  [block]="true" (onClick)="getSuggestionById()"></ot-button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<ot-edit-screen-container #container size="lg">-->
+<!--    <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">-->
+<!--        <ot-alpha-entry formControlName="SuggestionId" [caption]="'Suggestion Id' | translate" class="col-12"></ot-alpha-entry>-->
+<!--        <ot-dropdown-entry formControlName="Status" [caption]="'Status' | translate" [items]="suggestionStatusService.completeList" textField="StatusName" valueField="SuggestionStatusId" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>-->
+<!--        <ot-text-entry formControlName="SuggestionText" [caption]="'Suggestion Text' | translate" rows="14" class="col-12"></ot-text-entry>-->
+<!--    </form>-->
+<!--</ot-edit-screen-container>-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <ot-text-entry [(value)]="suggestionText" [caption]="'Suggestion Text' | translate" rows="14" editorWidth="12" captionWidth="12" class="col-12"></ot-text-entry>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-3">
+            <ot-button [caption]="'Save' | translate" size="lg"  color="info" [block]="true" (onClick)="saveSuggestion()"></ot-button>
+        </div>
+    </div>
+</div>
+
+<ot-message-dialog #msgDialog [caption]="dialogCaption" [message]="dialogMessage" [color]="dialogColor"></ot-message-dialog>

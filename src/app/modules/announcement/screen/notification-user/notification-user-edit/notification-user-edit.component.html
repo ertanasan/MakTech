@@ -1,0 +1,39 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <!-- <ot-dropdown-entry formControlName="Notification" [caption]="'Notification' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : notificationService.completeList"
+      [isReadOnly]="container.leftRelationId" textField="NotificationId" valueField="NotificationId" usePrimitiveValue="true" class="col-12" [loading]="notificationService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="User" [caption]="'User' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : userService.completeList"
+      [isReadOnly]="container.rightRelationId" textField="Name" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading"></ot-dropdown-entry> -->
+
+    <ot-alpha-entry *ngIf="container.actionName !== 'Create'" formControlName="ProcessInstance" [caption]="'Process Instance' | translate" class="col-12" isReadOnly="true"></ot-alpha-entry>
+    <!-- <ot-radio-entry [items]="choiceByItems"></ot-radio-entry> -->
+    <div *ngIf="container.actionName === 'Create'" class="row m-auto justify-content-center">
+      <div *ngFor="let item of choiceByItems" class="radio icheck-primary icheck-inline">
+        <input type="radio" id="chckbox_{{ item.value }}" name="chckbox_{{ item.value }}" [checked]="item.value === choiceBy" (change)="choiceBy = item.value" class="k-radio"/>
+        <label for="chckbox_{{ item.value }}" class="k-radio-label">{{ item.text | translate }}</label>
+      </div>
+    </div>
+    <br><br>
+    <ot-multi-select-entry *ngIf="container.actionName === 'Create' && choiceBy == 'User'" summaryLimit=1 formControlName="UserList" [caption]="'Users' | translate" [items]="dataService.activeUsers"
+                           textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-12" [loading]="userService.loading">
+        <ng-container summaryTemplate>
+            Çoklu seçim yapıldı
+        </ng-container>
+    </ot-multi-select-entry>
+    <ot-multi-select-entry *ngIf="container.actionName === 'Create' && choiceBy == 'Store'" summaryLimit=1 formControlName="StoreList" [caption]="'Stores' | translate" [items]="dataService.activeStores"
+                           textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading">
+        <ng-container summaryTemplate>
+            Çoklu seçim yapıldı
+        </ng-container>
+    </ot-multi-select-entry>
+    <ot-multi-select-entry *ngIf="container.actionName === 'Create' && choiceBy == 'Group'" summaryLimit=1 formControlName="GroupList" [caption]="'Notification Groups' | translate" [items]="notificationGroupService.completeList"
+                           textField="GroupName" valueField="NotificationGroupId" usePrimitiveValue="true" class="col-12" [loading]="notificationGroupService.loading">
+        <ng-container summaryTemplate>
+            Çoklu seçim yapıldı
+        </ng-container>
+    </ot-multi-select-entry>
+    <ot-switch-entry *ngIf="container.actionName === 'Create' && choiceBy == 'User'" [(value)]="allUsersFlag" [caption]="'All Staff' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-switch-entry *ngIf="container.actionName === 'Create' && choiceBy == 'Store'" [(value)]="allStoresFlag" [caption]="'Store Staff' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+  <p *ngIf="container.actionName === 'Delete'" class="text-center"> {{ 'Are you sure you want to delete this item?' | translate}} </p>
+</ot-edit-screen-container>

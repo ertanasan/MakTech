@@ -1,0 +1,49 @@
+﻿CREATE PROCEDURE [dbo].[GAM_SEL_PLAYERID_SP] @UserId INT, @Organization INT, @UserName VARCHAR(100) AS
+BEGIN
+	
+	DECLARE @PlayerCount INT
+	IF @UserId > 0 
+	BEGIN
+		SELECT @PlayerCount = COUNT(*)
+		  FROM GAM_PLAYER
+		 WHERE USERID = @UserId 
+		IF @PlayerCount = 0 
+		BEGIN
+			INSERT INTO GAM_PLAYER
+			(PLAYER_NM, BRANCH, USERID)
+			SELECT USERFULL_NM, BRANCH, USERID
+			  FROM SEC_USER
+			 WHERE USERID = @UserId
+		END
+		SELECT *
+		  FROM GAM_PLAYER
+		 WHERE USERID = @UserId
+		RETURN;
+	END
+	ELSE
+	BEGIN
+		SELECT @PlayerCount = COUNT(*)
+		  FROM GAM_PLAYER
+		 WHERE BRANCH = @Organization
+		   AND PLAYER_NM = @UserName
+		IF @PlayerCount = 0 
+		BEGIN
+			INSERT INTO GAM_PLAYER
+			(PLAYER_NM, BRANCH)
+			VALUES
+			(@UserName, @Organization)
+
+			DECLARE @PlayerId INT
+			SELECT @PlayerId = SCOPE_IDENTITY();
+			SELECT *
+			  FROM GAM_PLAYER
+			 WHERE PLAYERID = @PlayerId
+			RETURN;
+		END
+		SELECT TOP 1 *
+		  FROM GAM_PLAYER
+		 WHERE BRANCH = @Organization
+		   AND PLAYER_NM = @UserName
+	END
+
+END

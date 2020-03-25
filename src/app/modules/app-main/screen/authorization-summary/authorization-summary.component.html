@@ -1,0 +1,136 @@
+<div class="row">
+  <ol class="col-md-12 breadcrumb">
+    <h4 class="ml-3">{{ 'Authentication Summary' | translate }}</h4>
+  </ol>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <ot-list-screen-container [header]="'Filter Parameters' | translate">
+      <ng-container header-items>
+        <kendo-buttongroup class="col-md-6" [selection]="'single'">
+          <button kendoButton [toggleable]="true" [selected]="true" (selectedChange)="queryBy = 'Screen'" >{{ 'By Screen' | translate }}</button>
+          <button kendoButton [toggleable]="true" [selected]="false" (selectedChange)="queryBy = 'User'">{{ 'By User' | translate }}</button>
+        </kendo-buttongroup>
+      </ng-container>
+      <div *ngIf="queryBy === 'Screen'" class="pb-2">
+        <ot-dropdown-entry [caption]="'Screen' | translate" [items]="allScreenList" textField="SCREEN_NM" 
+                              valueField="SCREENID" usePrimitiveValue="true" [(value)]="selectedScreenId">
+        </ot-dropdown-entry>
+      </div>
+      <div *ngIf="queryBy === 'User'" class="pb-2">
+        <ot-dropdown-entry [caption]="'User' | translate" [items]="allUserList" textField="USERFULL_NM" 
+                            valueField="USERID" usePrimitiveValue="true" [(value)]="selectedUserId">
+        </ot-dropdown-entry> 
+      </div>
+      <div class="pb-2">
+        <ot-dropdown-entry [caption]="'Program' | translate" [items]="programList" textField="PROGRAM_NM" valueField="PROGRAMID" 
+                            usePrimitiveValue="true" [(value)]="selectedProgramId" [isReadOnly]="true">
+        </ot-dropdown-entry>
+      </div>
+      <div class="text-right pb-2">
+        <ot-button [caption]="'GetData' | translate" color="primary" size="sm" (click)="refreshData()"></ot-button>
+      </div>
+    </ot-list-screen-container>
+  </div>
+</div>
+<div *ngIf="queryBy === 'Screen'" class="row">
+  <div class="col-md-12">
+    <ot-list-screen-container [header]="'Authenticated Users By Screen' | translate">
+      <kendo-grid [data]="userList" [height]="500">
+        <kendo-grid-column field="USERID" [title]="'User Id' | translate" width="50" filter="numeric">
+        </kendo-grid-column>
+        <kendo-grid-column field="USER_NM" [title]="'User Name' | translate" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="USERFULL_NM" [title]="'User Full Name' | translate" width="150">
+        </kendo-grid-column>
+      </kendo-grid>
+    </ot-list-screen-container>
+  </div>
+</div>
+<div *ngIf="queryBy === 'User'"  class="row">
+  <div class="col-12">
+    <ot-list-screen-container [header]="'Accesible Screens By User' | translate">
+      <kendo-grid [data]="screenList" [height]="500">
+        <kendo-grid-column field="SCREEN" [title]="'Screen Id' | translate" width="40" filter="numeric">
+        </kendo-grid-column>
+        <kendo-grid-column field="SCREEN_NM" [title]="'Screen Name' | translate" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="MODULE_NM" [title]="'Module  Name' | translate" width="100">
+        </kendo-grid-column>
+        <kendo-grid-column field="Index" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.Index !== -9" [value]="dataItem.Index" optionName="checkbox_{{ dataItem.SCREEN }}_Index" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.Index === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Create" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.Create !== -9" [value]="dataItem.Create" optionName="checkbox_{{ dataItem.SCREEN }}_Create" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.Create === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="AddRight" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.AddRight !== -9" [value]="dataItem.AddRight" optionName="checkbox_{{ dataItem.SCREEN }}_AddRight" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.AddRight === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="AddLeft" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.AddLeft !== -9" [value]="dataItem.AddLeft" optionName="checkbox_{{ dataItem.SCREEN }}_AddLeft" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.AddLeft === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Update" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.Update !== -9" [value]="dataItem.Update" optionName="checkbox_{{ dataItem.SCREEN }}_Update" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.Update === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Delete" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.Delete !== -9" [value]="dataItem.Delete" optionName="checkbox_{{ dataItem.SCREEN }}_Delete" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.Delete === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Read" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.Read !== -9" [value]="dataItem.Read" optionName="checkbox_{{ dataItem.SCREEN }}_Read" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.Read === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="List" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.List !== -9" [value]="dataItem.List" optionName="checkbox_{{ dataItem.SCREEN }}_List" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.List === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="GetReport" width="40" filter="numeric">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ot-check-box *ngIf="dataItem.GetReport !== -9" [value]="dataItem.GetReport" optionName="checkbox_{{ dataItem.SCREEN }}_GetReport" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+            <span *ngIf="dataItem.GetReport === -9">-</span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- 3 DEPLOY
+        Login 
+        Logoff
+        
+        1-3 FRAME & DEPLOY
+        CreateDetail
+        UpdateDetail
+
+        1 FRAME
+        AccountLogin
+        AccountLogoff
+        SaveAttachment
+        RemoveAttachment
+        ReadImageOfSession
+        ListDocumentsOfSession
+        ListDocumentsOfFolder
+        DownloadAttachment -->
+
+      </kendo-grid>
+    </ot-list-screen-container>
+  </div>
+</div>

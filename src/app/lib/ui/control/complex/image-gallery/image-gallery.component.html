@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-12">
+    <input *ngIf="!isReadOnly" type="file" accept="image/*;capture=camera" multiple (change)="imagesAdded($event)" [(ngModel)]="fileInput">
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <kendo-scrollview
+      [data]="items"
+      [width]="imageWidth"
+      [height]="imageHeight"
+      [pageable]="true"
+      [arrows]="true"
+      [activeIndex]="activeIndex"
+      (itemChanged)="scrollItemChanged($event)">
+      <ng-template let-item="item">
+        <div [ngStyle]="{'line-heigth': imageHeight, 'height': imageHeight}">
+          <img src="{{ item.image || './assets/images/wait.png' }}" [ngStyle]="{'minWidth': imageWidth}" draggable="false" class="img-fluid mx-auto" />
+        </div>
+      </ng-template>
+    </kendo-scrollview>
+  </div>
+</div>
+<div *ngIf="thumbWidth > 0 && thumbHeight > 0" class="row">
+  <div class="col-12">
+    <button kendoButton type="button" iconClass="fa fa-angle-left"></button>
+    <img *ngFor="let item of items" 
+      src="{{ item.thumb || item.image }}" 
+      [style.width.px]="thumbWidth"
+      [style.height.px]="thumbHeight"
+      (click)="thumbClick(item)"
+    />
+    <button kendoButton type="button" iconClass="fa fa-angle-right"></button>
+  </div>
+</div>

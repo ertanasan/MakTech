@@ -1,0 +1,38 @@
+﻿<ot-edit-screen-container #container size="xl" [childActions]="modeContext?modeContext.childActions:null">
+  <form  #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ReturnOrderId" [caption]="'Return Order Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Store" [caption]="'Store' | translate" 
+    [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" 
+    class="col-12" [loading]="storeService.loading" [(value)]="detailScreen.storeId" ></ot-dropdown-entry>
+    <!-- <ot-multi-select-entry *ngIf="container.actionName === 'Create'" summaryLimit=2 [(value)]="StoreList" [caption]="'Store' | translate" [items]="storeService.userStores"
+                               textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading" [disabled] = "storeListReadOnly">
+      <ng-container summaryTemplate>
+        Çoklu seçim yapıldı
+      </ng-container>
+    </ot-multi-select-entry> -->
+    <!-- <ot-switch-entry *ngIf="container.actionName === 'Create'" [(value)]="allStoresFlag" [caption]="'All Stores' | translate" color="primary" labelStyle="check" class="col-12" (valueChange)="onAllStoresChanged()"></ot-switch-entry> -->
+    <!-- <ot-dropdown-entry *ngIf="container.actionName !== 'Create'" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.userStores" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+    <!-- <ot-dropdown-entry formControlName="Status" isReadOnly="true" [caption]="'Status' | translate" [items]="returnStatusService.completeList" textField="StatusName" valueField="ReturnStatusId" usePrimitiveValue="true" class="col-12" [loading]="returnStatusService.loading"></ot-dropdown-entry> -->
+    <!-- <ot-alpha-entry formControlName="actionComment" [caption]="'Comment' | translate" class="col-12" ></ot-alpha-entry> -->
+  </form>
+
+  <kendo-grid *ngIf="viewDetails" [data]="history" [height]="300">
+      <kendo-grid-column field="BRANCH_NM" [title]="'Birim'" width="150"> </kendo-grid-column>
+      <kendo-grid-column field="USERFULL_NM" [title]="'Kullanıcı'" width="100"> </kendo-grid-column>
+      <kendo-grid-column field="CREATE_DT" [title]="'Tarih'" width="150"> 
+          <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.CREATE_DT | date : 'dd.MM.yyyy HH:mm' }}
+          </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="OPCODE" [title]="'İşlem'" width="80"> </kendo-grid-column>
+      <kendo-grid-column field="STATUS_NM" [title]="'Statü'" width="120"> </kendo-grid-column>
+      <kendo-grid-column field="COMMENT_TXT" [title]="'Açıklama'" width="200"> </kendo-grid-column>
+  </kendo-grid>
+
+  <div>
+    <ot-product-return-list #detailScreen ></ot-product-return-list>
+  </div>
+
+</ot-edit-screen-container>
+
+<ot-return-order-dialog #dialogScreen screenName="ot-return-order-dialog"></ot-return-order-dialog>

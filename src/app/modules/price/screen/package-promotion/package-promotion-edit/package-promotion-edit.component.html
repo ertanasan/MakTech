@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-dropdown-entry formControlName="Package" [caption]="'Package' | translate" [items]="container.leftRelationId ? [container.leftRelationObject] : pricePackageService.completeListExceptGeneral"
+      [isReadOnly]="container.leftRelationId" textField="PackageName" valueField="PackageId" usePrimitiveValue="true" class="col-12" [loading]="pricePackageService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="PromotionType" [caption]="'Promotion Type' | translate" [items]="container.rightRelationId ? [container.rightRelationObject] : promotionTypeService.completeList"
+      [isReadOnly]="container.rightRelationId" textField="PromotionName" valueField="PromotionTypeId" usePrimitiveValue="true" class="col-12" [loading]="promotionTypeService.loading"></ot-dropdown-entry>
+  </form>
+</ot-edit-screen-container>

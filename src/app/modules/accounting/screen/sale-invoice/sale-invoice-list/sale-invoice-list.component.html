@@ -1,0 +1,76 @@
+﻿<ot-list-screen-container *ngIf="!modeReview" [header]="'Sale Invoice' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" [filterable]= "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || updateEnabled || deleteEnabled" title="" [width]="140" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fas fa-plus" (onClick)="showDialog(editScreen, 'Create')" [outline]="true" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="dataItem.StatusCode > 0" color="primary" otTooltip="{{ 'Read' | translate }}" icon="fas fa-search" (onClick)="showDialog(editScreen, 'Read', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled && dataItem.StatusCode < 2" color="primary" otTooltip="{{ 'Update' | translate }}" icon="fas fa-edit" (onClick)="showDialog(editScreen, 'Update', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled && dataItem.StatusCode === 0" color="danger" otTooltip="{{ 'Delete' | translate }}" icon="fas fa-trash-alt" (onClick)="showDialog(editScreen, 'Delete', dataItem)"></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled && dataItem.StatusCode === 0" color="success" otTooltip="{{ 'Send' | translate }}" (onClick)="sendtoAccounting(dataItem)" icon="fa fa-rocket"></ot-light-button>
+        </ng-template>
+
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="EInvoiceFlag" [title]="'EInvoice' | translate" width="80" filter="boolean">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-check-box [value]="dataItem.EInvoiceFlag" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CustomerIdNumber" [title]="'Id Number' | translate" width="100" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="Title" [title]="'Title' | translate" width="300"></kendo-grid-column>
+    <!-- <kendo-grid-column field="Email" [title]="'Email' | translate" width="180"></kendo-grid-column> -->
+    <kendo-grid-column field="SaleDate" [title]="'Sale Date' | translate" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.SaleDate | date: 'dd.MM.yyyy'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="SaleStore" [title]="'Store' | translate" width="120">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="storeList"
+          valueField="StoreId"
+          textField="Name"
+          memberField="SaleStore"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.SaleStore | getName:'StoreId':'Name':storeList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="SaleRef" [title]="'Sale Ref' | translate" width="220"></kendo-grid-column>
+    <kendo-grid-column field="SaleAmount" [title]="'Sale Amount' | translate" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.SaleAmount | number: '1.2-2':'tr'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Status" [title]="'Status' | translate" width="120">
+      <ng-template kendoGridFilterCellTemplate let-dataItem>
+        <ot-dropdown-list-filter
+          [data]="eInvoiceStatusList"
+          valueField="value"
+          textField="text"
+          memberField="StatusCode"
+          [filter]="listParams.filter">
+        </ot-dropdown-list-filter>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.StatusCode | getName:'value':'text':eInvoiceStatusList }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Sale" [title]="'Maktech Sale ID' | translate" width="80"></kendo-grid-column>
+    <kendo-grid-column field="PhoneNumber" [title]="'Phone Number' | translate" width="120"></kendo-grid-column>
+    <!-- <kendo-grid-column field="EInvoiceClient" [title]="'EInvoice Client' | translate" width="180"></kendo-grid-column> -->
+    <!-- <kendo-grid-column field="Address" [title]="'Address' | translate" width="180"></kendo-grid-column> -->
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-sale-invoice-edit #editScreen screenName="ot-sale-invoice-edit"></ot-sale-invoice-edit>

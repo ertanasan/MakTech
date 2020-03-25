@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ExpenseCenterId" [caption]="'Expense Center Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ExpenseCenterName" [caption]="'Expense Center Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="ExpenseCenterCode" [caption]="'Expense Center Code' | translate" class="col-12"></ot-alpha-entry>
+    <ot-radio-entry formControlName="ExpenseCenterGroup" [caption]="'Expense Center Group' | translate" optionName="CenterGroup" 
+    [items]="CenterGroupList"  [(value)]="centerGroup"></ot-radio-entry>
+    <!-- <ot-numeric-entry formControlName="ExpenseCenterGroup" [caption]="'Expense Center Group' | translate" class="col-12"></ot-numeric-entry> -->
+    <ot-dropdown-entry *ngIf="centerGroup === 2" formControlName="RegionManager" [caption]="'Region Manager' | translate" [items]="regionManagerService.completeList" textField="RegionManagerName" valueField="RegionManagersId" usePrimitiveValue="true" class="col-12" [loading]="regionManagerService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry *ngIf="centerGroup === 3" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-switch-entry formControlName="ActiveFlag" [caption]="'Active Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,57 @@
+.inputCircle {
+  height: 180px;
+  width: 180px;
+  background-color: #bbb;
+  border-radius: 100%;
+  display: inline-block;
+  font-size: 40px;
+  text-align: center;
+  outline: none;
+  border: none;
+  vertical-align: middle;
+}
+
+.inputCircle:hover {
+  outline: none;
+  background-color:#ddd;
+  box-shadow: #fff;
+}
+
+/* .inputCircle:focus {
+  outline: none;
+  background-color: rgb(34, 109, 179);
+  box-shadow: #bbb;
+  color: white;
+} */
+
+.captionInfo {
+  font-size: 150%
+}
+
+.inputCircleMobile {
+  height: 100px;
+  width: 100px;
+  background-color: #bbb;
+  border-radius: 100%;
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  outline: none;
+  border: none;
+  vertical-align: middle;
+}
+
+.inputCircleMobile:hover {
+  outline: none;
+  background-color:#ddd;
+  box-shadow: #fff;
+}
+
+.gathering-info-text {
+  font-size: 40px;
+}
+
+kendo-scrollview.k-scrollview-wrap .k-scrollview-next span,
+kendo-scrollview.k-scrollview-wrap .k-scrollview-prev span {
+  color: #999999;
+}

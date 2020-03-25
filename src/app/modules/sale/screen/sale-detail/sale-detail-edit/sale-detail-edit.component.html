@@ -1,0 +1,18 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="SaleDetailId" [caption]="'Sale Detail Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-alpha-entry formControlName="SaleID" [caption]="'Sale ID' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="TransactionID" [caption]="'Transaction ID' | translate" class="col-12"></ot-alpha-entry> -->
+    <!-- <ot-date-entry #transactionDate formControlName="TransactionDate" [caption]="'Transaction Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry> -->
+    <ot-alpha-entry formControlName="Barcode" [caption]="'Barcode' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="ProductID" [caption]="'Product ID' | translate" [items]="productService.completeList" textField="Name" valueField="ProductId" usePrimitiveValue="true" class="col-12" [loading]="productService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="ProductCode" [caption]="'Product Code' | translate" class="col-12"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry #storeID formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry> -->
+    <ot-numeric-entry formControlName="Price" [caption]="'Price' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="VATRate" [caption]="'VAT Rate' | translate" class="col-12"></ot-numeric-entry>
+    <ot-numeric-entry formControlName="Quantity" [caption]="'Quantity' | translate" class="col-12"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="Unit" [caption]="'Unit' | translate" [items]="unitService.completeList" textField="Name" valueField="UnitId" usePrimitiveValue="true" class="col-12" [loading]="unitService.loading"></ot-dropdown-entry>
+    <ot-switch-entry formControlName="CancelFlag" [caption]="'Cancel Flag' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry>
+    <ot-numeric-entry formControlName="UnitPrice" [caption]="'Unit Price' | translate" class="col-12"></ot-numeric-entry>
+  </form>
+</ot-edit-screen-container>

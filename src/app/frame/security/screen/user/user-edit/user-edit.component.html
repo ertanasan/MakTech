@@ -1,0 +1,25 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="UserId" [caption]="'User Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Organization" [caption]="'Organization' | translate" [items]="organizationService.completeList" textField="Name" valueField="OrganizationId" usePrimitiveValue="true" class="col-12" [loading]="organizationService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="Name" [caption]="'Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Password" [caption]="'Password' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="SecurityStamp" [caption]="'Security Stamp' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="UserFullName" [caption]="'User Full Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Department" [caption]="'Department' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="Branch" [caption]="'Branch' | translate" class="col-12"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Profession" [caption]="'Profession' | translate" [items]="professionService.completeList" textField="Name" valueField="ProfessionId" usePrimitiveValue="true" class="col-12" [loading]="professionService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Title" [caption]="'Title' | translate" [items]="titleService.completeList" textField="Name" valueField="TitleId" usePrimitiveValue="true" class="col-12" [loading]="titleService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Manager" [caption]="'Manager' | translate" [items]="dataService.completeList" textField="dataService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="TechnicalManager" [caption]="'Technical Manager' | translate" [items]="dataService.completeList" textField="dataService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Location" [caption]="'Location' | translate" [items]="locationService.completeList" textField="Name" valueField="LocationId" usePrimitiveValue="true" class="col-12" [loading]="locationService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="Gender" [caption]="'Gender' | translate" [items]="dataService.genders" textField="Text" valueField="Value" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry>
+    <ot-text-entry formControlName="EMail" [caption]="'E-Mail' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-text-entry formControlName="Description" [caption]="'Description' | translate" rows="3" class="col-12"></ot-text-entry>
+    <ot-numeric-entry formControlName="AccessDeniedCount" [caption]="'Access Denied Count' | translate" class="col-12"></ot-numeric-entry>
+    <ot-switch-entry formControlName="Active" [caption]="'Active' | translate" color="primary" labelStyle="check" color="primary" class="col-12"></ot-switch-entry>
+    <ot-alpha-entry formControlName="UserOSName" [caption]="'User OS Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-alpha-entry formControlName="NationalIdentityNo" [caption]="'National Identity No' | translate" class="col-12"></ot-alpha-entry>
+    <ot-text-entry formControlName="PhoneNumber" [caption]="'Phone Number' | translate" rows="7" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

@@ -1,0 +1,76 @@
+<ot-list-screen-container [header]="'Mikro Data' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  
+  <ng-container header-items>
+    <div class="row float-right mr-2">
+      <kendo-datepicker class="mr-2" [(value)]="startDate" format="dd.MM.yyyy" ></kendo-datepicker>
+      <kendo-datepicker class="mr-2" [(value)]="endDate" format="dd.MM.yyyy" ></kendo-datepicker>
+      <ot-check-box class="mr-2" [(value)]="checkDate" [caption]="'Tüm Kayıtlar'"  ></ot-check-box>
+      <ot-button class="mr-2" [caption]="'Filter' | translate" color="primary" size="md" (click)="getRecList()" ></ot-button>    
+    </div>
+  </ng-container>
+
+  <kendo-grid [data]="recActiveList" [loading]="mikroLoading" [height]="625"
+    [pageable]="true" [pageSize]="10" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable] = "true" [filter]="listParams.filter"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="45" locked="true">
+
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button otTooltip="{{ 'Transfer' | translate }}" (onClick)="loadMikro(dataItem)" color="primary"><i class="fa fa-arrow-right"></i></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="STOREID" [title]="'Store Id' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="STORE_NM" [title]="'Store Name' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="TERMINAL" [title]="'Terminal' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="TRANSACTION_DT" [title]="'Transaction Date' | translate" width="120" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.TRANSACTION_DT | date:'dd.MM.yyyy'}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="MAKTECHTOTAL" [title]="'Maktech Total' | translate" width="120" filter="numeric">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.MAKTECHTOTAL | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="MAKTECHRETURN" [title]="'Maktech Return' | translate" width="120" filter="numeric">
+     <ng-template kendoGridCellTemplate let-dataItem>
+         <span>{{dataItem.MAKTECHRETURN | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+     </ng-template>
+    </kendo-grid-column>
+
+     <kendo-grid-column field="MIKROTOTAL" [title]="'Mikro Total' | translate" width="120" filter="numeric">
+       <ng-template kendoGridCellTemplate let-dataItem>
+           <span>{{dataItem.MIKROTOTAL | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+       </ng-template>
+     </kendo-grid-column>
+
+     <kendo-grid-column field="MIKRORETURN" [title]="'Mikro Return' | translate" width="120" filter="numeric">
+       <ng-template kendoGridCellTemplate let-dataItem>
+           <span>{{dataItem.MIKRORETURN | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+       </ng-template>
+     </kendo-grid-column>
+
+     <kendo-grid-column field="ZETTOTAL" [title]="'Zet Total' | translate" width="120" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.ZETTOTAL | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="ZETRETURN" [title]="'Zet Return' | translate" width="120" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.ZETRETURN | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    
+    <kendo-grid-column field="DIFF" [title]="'Difference' | translate" width="120" filter="numeric">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <span>{{dataItem.DIFF | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>

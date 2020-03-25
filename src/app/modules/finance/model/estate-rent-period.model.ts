@@ -1,0 +1,47 @@
+﻿// Created by OverGenerator
+/*Section="Imports"*/
+import { ModelBase } from '@otmodel/model-base';
+import { RelationId } from '@otmodel/relation-id.model';
+
+/*Section="ClassHeader"*/
+export class EstateRentPeriod extends ModelBase {
+    public EstateRentPeriodId = 0;
+    public Organization = 0;
+    public Deleted = false;
+    public CreateDate = new Date();
+    public UpdateDate?: Date;
+    public CreateUser = 0;
+    public UpdateUser?: number;
+    public EstateRent: number;
+    public PeriodOrder: number;
+    public PeriodStartDate: Date;
+    public PeriodEndDate: Date;
+    public ContractRentAmount?: number;
+    public ContractRentCurrency = 'TRY';
+    public AdditionalRentAmount?: number;
+    public AdditionalRentCurrency = 'TRY';
+    public PlannedRentRaise?: string;
+    public NegotiationDate?: Date;
+    public Comment?: string;
+
+    constructor() {
+        super();
+    }
+
+    /*Section="Method-setId"*/
+    setId(id: number) {
+        this.EstateRentPeriodId = id;
+    }
+
+    /*Section="Method-getId"*/
+    getId(): number | RelationId {
+        return this.EstateRentPeriodId;
+    }
+
+    /*Section="CustomCodeRegion"*/
+    //#region Customized
+    // Keep your custom code in this region.
+    //#endregion Customized
+
+    /*Section="ClassFooter"*/
+}

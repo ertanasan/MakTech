@@ -1,0 +1,21 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="EstateRentPeriodId" [caption]="'Estate Rent Period Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.actionName === 'Create'}" isReadOnly=true></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="EstateRent" [caption]="'Estate Rent' | translate" [items]="container.masterId ? [container.masterObject] : estateRentService.completeList"
+      [isReadOnly]="container.masterId" textField="EstateName" valueField="EstateRentId" usePrimitiveValue="true" class="col-12" [loading]="estateRentService.loading"></ot-dropdown-entry>
+    <ot-numeric-entry formControlName="PeriodOrder" [caption]="'Period Order' | translate" decimals=0 format="N0" class="col-12"></ot-numeric-entry>
+    <ot-date-entry formControlName="PeriodStartDate" [caption]="'Period Start Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-date-entry formControlName="PeriodEndDate" [caption]="'Period End Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-numeric-entry formControlName="ContractRentAmount" [caption]="'Contract Rent Amount' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="ContractRentCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                       showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+    </ot-dropdown-entry>
+    <ot-numeric-entry formControlName="AdditionalRentAmount" [caption]="'Additional Rent Amount' | translate" class="col-9" captionWidth="4" editorWidth="8"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="AdditionalRentCurrency" [items]="currencies" textField="text" valueField="text" usePrimitiveValue="true"
+                       showCaption=false captionWidth="0" editorWidth="12" class="col-3">
+    </ot-dropdown-entry>
+    <ot-text-entry formControlName="PlannedRentRaise" [caption]="'Planned Rent Raise' | translate" rows="2" class="col-12"></ot-text-entry>
+    <ot-date-entry formControlName="NegotiationDate" [caption]="'Negotiation Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-text-entry formControlName="Comment" [caption]="'Comment' | translate" rows="5" class="col-12"></ot-text-entry>
+  </form>
+</ot-edit-screen-container>

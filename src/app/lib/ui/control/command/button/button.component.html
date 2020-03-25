@@ -1,0 +1,7 @@
+<button
+  [type]="actionType"
+  [hidden]="hidden"
+  [disabled]="disabled"
+  [ngClass]="getButtonClasses()"
+  (click)="onClickHandler($event)"
+><i *ngIf="icon" [class]="icon"></i> {{ caption }} </button>

@@ -1,0 +1,30 @@
+.refreshtime {
+    font-style: italic;
+}
+
+.insidevalue
+{
+    cursor: pointer;
+}
+
+.k-grid .no-padding {
+    padding: 0;
+  }
+   .whole-cell {
+     display: block;
+     padding: 8px 12px; /*depends on theme */
+   }
+
+   .k-grid-header .no-header{
+    display: none;
+  }   
+
+  .parent-container {
+    overflow-y: scroll; 
+    width: 100%;
+}
+
+.chart-container {
+  overflow: auto; 
+  width: 3000px;
+}

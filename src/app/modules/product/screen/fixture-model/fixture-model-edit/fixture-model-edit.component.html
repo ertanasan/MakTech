@@ -1,0 +1,8 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="FixtureModelId" [caption]="'Fixture Model Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-dropdown-entry formControlName="Brand" [caption]="'Brand' | translate" [items]="masterId ? [masterObject] : fixtureBrandService.completeList"
+      textField="BrandName" valueField="FixtureBrandId" usePrimitiveValue="true" class="col-12" [loading]="fixtureBrandService.loading"></ot-dropdown-entry>
+    <ot-alpha-entry formControlName="ModelName" [caption]="'Model Name' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

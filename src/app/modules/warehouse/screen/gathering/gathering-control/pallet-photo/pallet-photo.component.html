@@ -1,0 +1,105 @@
+<ot-custom-dialog #dialog size="lg" (onClose)="onDialogClose($event)">
+    <ot-custom-loading-icon *ngIf="gatheringPalletPhotoService.loading"></ot-custom-loading-icon>
+    <span *ngIf="!gatheringPalletPhotoService.loading">
+        <div *ngIf="calledFrom === 'GATHERINGCONTROL'" class="row pb-2">
+          <div *ngIf="cameraStatus === 3" class="col-md-12 text-center">
+              <ot-button [caption]="'Add Photo' | translate" color="primary" size="lg" (click)="openCamera()"><i class="k-i-plus"></i></ot-button>
+          </div>
+
+          <div class="col-md-12 text-center">
+            <div [hidden]="cameraStatus !== 1" class="col-md-12">
+                <video #video autoplay playsinline [height]="photoArea.height" class="screenShot"></video>
+                <br>
+                <div class="row text-center pb-2">
+                    <div class="col-md-12 col-lg-6 text-center">
+                        <ot-button  color="primary" (click)="capture()" size="lg" shape="pill" icon="fa fa-camera"></ot-button>
+                    </div>
+                </div>
+                <div class="row justify-content-lg-center pb-2">
+                    <div class="col-md-12 col-lg-6 text-center">
+                        <kendo-buttongroup [selection]="'single'">
+                          <button *ngFor="let btn of qualitySelectionButtons" kendoButton [toggleable]="true" class="mr-3"
+                                  (selectedChange)="compressQualityLevel = btn.value" [selected]="btn.value === compressQualityLevel">
+                            {{ btn.text }}
+                          </button>
+                        </kendo-buttongroup>
+                    </div>
+                </div>
+            </div>
+            <div [hidden]="cameraStatus !== 2" class="col-md-12">
+                <div class="row">
+                  <div class="col-10 offset-1">
+                    <canvas #canvas id="canvas" [height]="photoArea.height" [width]="photoArea.width" class="screenShot"></canvas>
+                  </div>
+                </div>
+                <br>
+                <div class="row justify-content-lg-center pb-2">
+                  <div class="col-md-12 col-lg-6 text-center">
+                    <ot-button caption="{{'Retake' | translate}}" color="secondary" icon="fa fa-refresh" (onClick)="openCamera()"></ot-button>
+                    <ot-button caption="{{'Upload' | translate}}" color="success" icon="fa fa-upload" (onClick)="uploadPhoto()"></ot-button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row text-center pb-2">
+            <div class="col-12 text-center">
+                <kendo-buttongroup [selection]="'multiple'" class="button-group-filter pr-2">
+                    <button kendoButton [toggleable]="true" [selected]="showExistingPhotos"
+                            (selectedChange)="onShowPhotoBtnClicked()"
+                            class="btn">{{ 'Show Photos' | translate }}</button>
+                </kendo-buttongroup>
+            </div>
+        </div>
+
+        <div *ngIf="showExistingPhotos">
+            <div *ngIf="!palletPhoto.PhotoContent && cameraStatus === 3" class="row">
+              <div class="col-xs-12 justify-content-center">
+                <p [ngStyle]="{'color': utility.getColor('danger')}">
+                    {{ 'There is no uploaded photo for this pallet' | translate }}
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="palletPhoto.PhotoContent">
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <ot-light-button color="primary" (onClick)="getPhotoByIndex(-1)" icon="fas fa-chevron-left"></ot-light-button>
+                    </div>
+                    <div class="col-10 text-center">
+                        <img [src]="palletPhoto.PhotoContent" [alt]="'Pallet Photo' | translate" [height]="photoArea.height" [width]="photoArea.width">
+                    </div>
+                    <div class="col-1 text-center">
+                        <ot-light-button color="primary" (onClick)="getPhotoByIndex(1)" icon="fas fa-chevron-right"></ot-light-button>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-4 offset-1 text-center">
+                    <div>
+                        {{ 'Create User: ' | translate }} {{ palletPhoto.CreateUser | getName:'UserId':'UserFullName':userService.completeList }}
+                    </div>
+                    <div>
+                        {{ 'Create Date: ' | translate }} {{ palletPhoto.CreateDate | date: "dd.MM.yyyy HH:mm" }}
+                    </div>
+                  </div>
+                  <div class="col-4 text-center">
+                    <div>
+                        {{ 'Gahtering Type: ' | translate }} {{ palletPhoto.GatheringTypeName }}
+                    </div>
+                    <div>
+                        {{ 'Pallet No: ' | translate }} {{ palletPhoto.PalletNo }}
+                    </div>
+                  </div>
+                  <div class="col-2 text-right">
+                    <ot-light-button *ngIf="calledFrom === 'STOREORDER'" color="primary" otTooltip="{{ 'Download' | translate }}" (onClick)="downloadPhoto(palletPhoto)" icon="fas fa-download"></ot-light-button>
+                    &nbsp;
+                    <ot-light-button color="danger" otTooltip="{{ 'Delete' | translate }}" (onClick)="deletePhoto(palletPhoto)" icon="fas fa-trash-alt"></ot-light-button>
+                  </div>
+                  <br>
+                </div>
+            </div>
+        </div>
+
+    </span>
+</ot-custom-dialog>

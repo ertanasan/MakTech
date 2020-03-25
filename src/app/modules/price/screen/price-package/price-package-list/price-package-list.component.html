@@ -1,0 +1,108 @@
+﻿<ot-list-screen-container [header]="'Price Package' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <div class="row">
+    <div class="col-md-3 offset-md-9 text-right">
+      <ot-check-box [label]="'Include Inactives' | translate" color="primary" size="sm" captionWidth=0 editorWidth=12
+                    [(value)]="includeInactives" (click)="onIncludeInactivesChcBxClicked()">
+      </ot-check-box>
+    </div>
+  </div>
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataService.loading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort" (dataStateChange)="handleDataStateChange($event)"
+>
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="100" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <!-- <ot-light-button color="primary" (click)="showPrintSettings(dataItem)"><i class="fa fa-print"></i></ot-light-button> -->
+          <ot-light-button *ngIf="updateEnabled" color="primary" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled && dataItem.PackageName !== 'GENEL FİYATLAR'" color="primary" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+          <ot-light-button *ngIf="dataItem.Image" color="primary" (onClick)="onPreviewBtnClicked(dataItem)" icon="fa fa-search"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column field="PackageName" [title]="'Package Name' | translate" width="140"></kendo-grid-column>
+    <kendo-grid-column field="PackageType" [title]="'Package Type' | translate" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.PackageType | getName:'PackageTypeId':'PackageTypeName':packageTypeService.completeList }}
+      </ng-template>
+    </kendo-grid-column>    
+    <kendo-grid-column field="Comment" [title]="'Comment' | translate" width="180"></kendo-grid-column>
+    <kendo-grid-column field="AllStores" [title]="'Defined Store Count' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="ActiveStores" [title]="'Active Store Count' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="CreateUser" filter="numeric" [title]="'Create User' | translate" width="75">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CreateUser">{{ dataItem.CreateUser | getName:'UserId':'UserFullName':userService.completeList }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CreateDate" filter="date" [title]="'Create Date' | translate" width="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.CreateDate">{{ dataItem.CreateDate | date: 'dd.MM.yyyy HH:mm' }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="UpdateUser" filter="numeric" [title]="'Last Update User' | translate" width="75">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.UpdateUser">{{ dataItem.UpdateUser | getName:'UserId':'UserFullName':userService.completeList }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="UpdateUser" filter="date" [title]="'Last Update Date' | translate" width="100">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div *ngIf="dataItem.UpdateUser">{{ dataItem.UpdateDate | date: 'dd.MM.yyyy HH:mm' }}</div>
+        </ng-template>
+    </kendo-grid-column>
+
+    <ng-template kendoGridDetailTemplate let-dataItem>
+      <ot-tab-strip>
+        <ot-tab-page [title]="'Package Versions' | translate" active="true">
+          <ot-package-version-list [isEmbedded]="true" [masterId]="dataItem.PackageId" [masterObject]="dataItem"></ot-package-version-list>
+        </ot-tab-page>
+        <ot-tab-page [title]="'Package Stores' | translate">
+          <ot-store-package-list [isEmbedded]="true" [masterId]="dataItem.PackageId" [masterObject]="dataItem"></ot-store-package-list>
+        </ot-tab-page>
+        <ot-tab-page [title]="'Promotions' | translate">
+          <ot-package-promotion-list [isEmbedded]="true" [leftRelationId]="dataItem.PackageId" [leftRelationObject]="dataItem"></ot-package-promotion-list>
+        </ot-tab-page>
+      </ot-tab-strip>
+    </ng-template>
+  </kendo-grid>
+</ot-list-screen-container>
+
+<ot-input-dialog #printSettingsDialog caption="PAKET YAZDIRMA SEÇENEKLERİ" (onAction)="printPackage(selectedPackage)">
+  <ot-dropdown-entry [(value)]="selectedVersion" [caption]="'Package Version' | translate" [items]="packageVersions" textField="VersionDate" valueField="PackageVersionId" usePrimitiveValue="true" class="col-md-12" [loading]="packageVersionService.loading"></ot-dropdown-entry>
+  <ot-date-entry [(value)]="selectedDate" [caption]="'Document Date' | translate" format="dd.MM.yyyy" class="col-md-12"></ot-date-entry>
+  <ot-alpha-entry [(value)]="enterredDepartment" [caption]="'Department' | translate" class="col-md-12"></ot-alpha-entry>
+  <ot-alpha-entry [(value)]="enterredTitle" [caption]="'Title' | translate" class="col-md-12"></ot-alpha-entry>
+  <ot-alpha-entry [(value)]="enterredContent" [caption]="'Content' | translate" rows="3" class="col-12"></ot-alpha-entry>
+  <ot-alpha-entry [(value)]="enterredAuthor" [caption]="'Author' | translate" class="col-md-12"></ot-alpha-entry>
+  <ot-alpha-entry [(value)]="enterredApprover" [caption]="'Approver' | translate" class="col-md-12"></ot-alpha-entry>
+</ot-input-dialog>
+
+<div #packagePrint class="row" hidden="true">
+  <ot-price-package-print class="col-12 mx-auto" 
+                          [packageToPrint]="selectedPackage" 
+                          [packageStoresToPrint]="selectedPackageStores" 
+                          [productsToPrint]="selectedPackageProducts"
+                          [packageVersionNo] = "selectedVersion"
+                          [approveDate] = "selectedDate"
+                          [department] = "enterredDepartment"
+                          [mainTitle] = "enterredTitle"
+                          [content] = "enterredContent"
+                          [author] = "enterredAuthor"
+                          [approver] = "enterredApprover"
+                          > 
+  </ot-price-package-print>
+</div>
+
+<ot-price-package-edit #editScreen screenName="ot-price-package-edit"></ot-price-package-edit>
+
+<ot-custom-dialog #packageImageDialog [caption]="'Package Image' | translate" (close)="packageImageInfo.isOpen = false">
+    <div class="row">
+        <div class="col-12 text-center">
+            <img *ngIf="packageImageInfo.isOpen" [src]="packageImageInfo.imageFileSrc" [height]="200" [width]="200" [alt]="'Package Image Photo' | translate">
+        </div>
+    </div>
+</ot-custom-dialog>

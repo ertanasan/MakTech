@@ -1,0 +1,34 @@
+﻿<ot-list-screen-container [header]="'Notification Store' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataLoading" [height]="250"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort"
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled && !notificationPublished">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <!-- <ot-light-button *ngIf="readEnabled" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button> -->
+          <ot-light-button *ngIf="updateEnabled" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled && !notificationPublished" color="primary" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+    <kendo-grid-column *ngIf="!leftRelationId" field="Notification" [title]="'Notification' | translate">      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.NotificationNotificationId }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="!rightRelationId" field="Store" [title]="'Store' | translate">      
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{ dataItem.StoreName }}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ProcessInstance" [title]="'Process Instance' | translate"></kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+<ot-notification-store-edit #editScreen screenName="ot-notification-store-edit"></ot-notification-store-edit>

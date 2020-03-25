@@ -1,0 +1,64 @@
+<ot-tab-strip>
+  <ot-tab-page [title]="'Process Information' | translate" active="true">
+    <div class="row">
+      <ot-alpha-entry [ngModel]="dataItem.ProcessInstanceId" [caption]="'Process Instance Id' | translate" class="col-6" [captionWidth]="4" [editorWidth]="8"></ot-alpha-entry>
+      <ot-alpha-entry [ngModel]="dataItem.ProcessDefinition" [caption]="'Definition' | translate" class="col-6" [captionWidth]="4" [editorWidth]="8"></ot-alpha-entry>
+      <ot-alpha-entry [ngModel]="dataItem.Status" [caption]="'Status' | translate" class="col-6" [captionWidth]="4" [editorWidth]="8"></ot-alpha-entry>
+      <ot-alpha-entry [ngModel]="dataItem.InstanceReference" [caption]="'Instance Reference' | translate" class="col-6" [captionWidth]="4" [editorWidth]="8"></ot-alpha-entry>
+      <ot-date-entry  [ngModel]="dataItem.StartDate" [caption]="'Start Date' | translate"  class="col-6"   format="dd.MM.yyyy"></ot-date-entry>
+      <ot-date-entry  [ngModel]="dataItem.FinishDate" [caption]="'Finish Date' | translate"  class="col-6" format="dd.MM.yyyy"></ot-date-entry>
+    </div>
+  </ot-tab-page>
+  <ot-tab-page [title]="'Action History' | translate">
+    <kendo-grid [data]="dataItem.ActionHistoryItems"   [sortable]= "true" sortChange="handleSortChange($event)">
+        <kendo-grid-column field="ActivityName" [title]="'Activity Name' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="ActionPerformer" [title]="'Action Performer' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="Choice" [title]="'Choice' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="UserComment" [title]="'User Comment' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="StartDate" [title]="'Start Date' | translate" width="180"></kendo-grid-column>
+        <kendo-grid-column field="FinishDate" [title]="'Start Date' | translate" width="180"></kendo-grid-column>
+      </kendo-grid>
+  </ot-tab-page> 
+  <ot-tab-page [title]="'Activities' | translate">
+      <kendo-grid [data]="dataItem.Activities"   [sortable]= "true" sortChange="handleSortChange($event)">
+      <kendo-grid-column field="ActivityInstanceId" [title]="'Activity Id' | translate" width="180"></kendo-grid-column>
+      <kendo-grid-column field="Name" [title]="'Name' | translate" width="180"></kendo-grid-column>
+      <kendo-grid-column field="ActivityNo" [title]="'Activity No' | translate" width="180"></kendo-grid-column>
+      <kendo-grid-column field="ActivityType" [title]="'Activity Type' | translate" width="180">
+          <ng-template kendoGridCellTemplate let-activityGridItem>
+              {{ activityGridItem.ActivityType | getName:'ActivityTypeId':'Name':activityTypeService.completeList }}
+            </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Status" [title]="'Status' | translate" width="180">
+          <ng-template kendoGridCellTemplate let-statusGridItem>
+              {{ statusGridItem.Status | getName:'StatusId':'Name':processStatusService.activityStatusList }}
+            </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="StartTime" [title]="'Start Time' | translate" width="180"></kendo-grid-column>
+      <kendo-grid-column field="FinishTime" [title]="'FinishTime' | translate" width="180"></kendo-grid-column>
+    </kendo-grid>
+  </ot-tab-page>
+  <ot-tab-page [title]="'Child Processes' | translate">
+      <kendo-grid [data]="dataItem.Children"   [sortable]= "true" sortChange="handleSortChange($event)">
+          <kendo-grid-column field="ProcessInstanceId" [title]="'Process Instance Id' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="ProcessDefinitionName" [title]="'Process Definition Name' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="Status" [title]="'Status' | translate" width="180">
+              <ng-template kendoGridCellTemplate let-childGridItem>
+                  {{ childGridItem.Status | getName:'ProcessStatusId':'Name':processStatusService.completeList }}
+                </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="Parent" [title]="'Parent' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="StartDate" [title]="'Start Date' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="FinishDate" [title]="'Finish Date' | translate" width="180"></kendo-grid-column>
+      </kendo-grid>
+  </ot-tab-page>
+  <ot-tab-page [title]="'Exceptions' | translate">
+      <kendo-grid [data]="dataItem.Exceptions"   [sortable]= "true" sortChange="handleSortChange($event)">
+          <kendo-grid-column field="ErrorCode" [title]="'Error Code' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="Message" [title]="'Message' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="CreationDate" [title]="'Creation Date' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="StackTrace" [title]="'Stack Trace' | translate" width="180"></kendo-grid-column>
+          <kendo-grid-column field="InnerException" [title]="'Inner Exception' | translate" width="180"></kendo-grid-column>
+      </kendo-grid>
+  </ot-tab-page>
+</ot-tab-strip>

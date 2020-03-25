@@ -1,0 +1,14 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="DaysOffId" [caption]="'Days Off Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <ot-date-entry formControlName="OffDay" [caption]="'Off Day' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry *ngIf = "container.actionName !== 'Create'" formControlName="Store" [caption]="'Store' | translate" [items]="storeService.completeList" textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading"></ot-dropdown-entry>
+    <ot-multi-select-entry *ngIf="container.actionName === 'Create'" summaryLimit=1 [(value)]="StoreList" [caption]="'Store' | translate" [items]="storeService.completeList"
+                               textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-12" [loading]="storeService.loading" [disabled] = "storeListReadOnly">
+      <ng-container summaryTemplate>
+        Çoklu seçim yapıldı
+      </ng-container>
+    </ot-multi-select-entry>
+    <ot-switch-entry *ngIf="container.actionName === 'Create'" [(value)]="allStoresFlag" [caption]="'All Stores' | translate" color="primary" labelStyle="check" class="col-12" (valueChange)="onAllStoresChanged()"></ot-switch-entry>
+  </form>
+</ot-edit-screen-container>

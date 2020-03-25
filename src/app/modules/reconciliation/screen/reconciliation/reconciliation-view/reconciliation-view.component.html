@@ -1,0 +1,172 @@
+﻿<ot-list-screen-container [header]="'Reconciliation' | translate" [breadcrumbItems]="breadcrumbItems"
+    [showAsDetail]="isEmbedded">
+    <ng-container header-items>
+        <table>
+            <tr>
+                <th> <ot-button [caption]="'Mutabakat Yapmayanlar'" color="primary" size="sm" (click)="onNotReconStores()"> </ot-button> </th>
+                <th> <ot-button [caption]="'Filter' | translate" color="primary" size="sm" (click)="onFilter()"> </ot-button> </th>
+            </tr>
+        </table>
+    </ng-container>
+    <div class="row">
+        <ot-dropdown-entry (valueChange)="onStoreSelected($event)" [caption]="'Store' | translate" [items]="storeList"
+            textField="Name" valueField="StoreId" usePrimitiveValue="true" class="col-md-6" [(value)]="selectedStore"
+            [loading]="storeListLoading"></ot-dropdown-entry>
+    </div>
+    <div class="row">
+        <ot-date-entry [(value)]="startDate" [caption]="'Start Date' | translate" format="dd.MM.yyyy" class="col-md-6">
+        </ot-date-entry>
+        <ot-date-entry [(value)]="endDate" [caption]="'End Date' | translate" format="dd.MM.yyyy" class="col-md-6">
+        </ot-date-entry>
+    </div>
+
+    
+    
+    <kendo-grid class="mt-3" [data]="recActiveList" [height]="525" [pageable]="listParams.pageable" [pageSize]="listParams.take"
+        [navigable]="true" [loading]="recLoading" [height]="575" [skip]="listParams.skip"
+        [sortable]= "true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter"
+        (dataStateChange)="handleDataStateChange($event)">
+        <kendo-grid-command-column title=""
+            [width]="120" locked="true">
+            <ng-container >
+                <ng-template kendoGridHeaderTemplate>
+                    <ot-button kendoGridExcelCommand [caption]="'Excel'" [block]="false" color="primary" size="sm">
+                    </ot-button>
+                </ng-template>
+            </ng-container>
+            <ng-container>
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <ot-light-button color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)" icon="fas fa-search"></ot-light-button>
+                    <!-- <ot-light-button color="primary" otTooltip="{{ 'Show Zet Image' | translate }}" (onClick)="onZetImageViewClicked(dataItem)" icon="fas fa-camera"></ot-light-button> -->
+                    <ot-light-button *ngIf="authorization==='HQ'" color="primary" otTooltip="{{ 'Update' | translate }}"
+                        (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit">
+                    </ot-light-button>
+                    <ot-light-button *ngIf="authorization==='HQ' && dataItem.AllowCancel" color="danger" otTooltip="{{ 'Delete' | translate }}"
+                        (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt">
+                    </ot-light-button>
+                </ng-template>
+            </ng-container>
+        </kendo-grid-command-column>
+        <kendo-grid-column field="StoreName" [title]="'Store' | translate" width="180"> </kendo-grid-column>
+        <kendo-grid-column field="UserName" [title]="'User Full Name' | translate" width="180"> </kendo-grid-column>
+        <kendo-grid-column field="RegionManagerName" [title]="'Region Manager' | translate" width="180"> </kendo-grid-column>
+        <!-- <kendo-grid-column field="Store" [title]="'Store' | translate" width="180">      
+            <ng-template kendoGridFilterCellTemplate let-dataItem>
+                <ot-dropdown-list-filter
+                  [data]="storeList"
+                  valueField="StoreId"
+                  textField="Name"
+                  memberField="Store"
+                  [filter]="listParams.filter">
+                </ot-dropdown-list-filter>
+              </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.Store | getName:'StoreId':'Name':storeList }}
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-column field="ReconciliationDate" [title]="'Tarih'" filter="date" width="100">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.ReconciliationDate | date: 'dd.MM.yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="UpdateDate" [title]="'İşlem Zamanı'" filter="date" width="130">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.UpdateDate | date: 'dd.MM.yyyy HH:mm'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CashDeficit" [title]="'Kasa Eksiği'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CashDeficit | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CashSurplus" [title]="'Kasa Fazlası'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CashSurplus | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CumulativeDiff" [title]="'Kümüle Fark'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CumulativeDiff | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="RecoveredAmount" [title]="'Tazmin Tutarı'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.RecoveredAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="BankAmount" [title]="'Bankaya Gönderilen'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.BankAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="AdjustmentAmount" [title]="'Düzeltme'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.AdjustmentAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ExpenseAmount" [title]="'Günlük Masraf'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.ExpenseAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ExpenseReturn" [title]="'Günlük Masraf Ödenen'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.ExpenseReturn | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="TotalOpenExpense" [title]="'Toplam Masraf Alacak'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.TotalOpenExpense | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ReasonCodes" [title]="'Fark Nedenleri'" width="120"></kendo-grid-column>
+        <kendo-grid-column field="DiffReason" [title]="'Fark Açıklaması'" width="120"></kendo-grid-column>
+        <kendo-grid-column field="CurrentAdvance" [title]="'Devreden Avans'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CurrentAdvance | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="DeficitCycleCount" [title]="'Geciken Gün'" width="70" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.DeficitCycleCount | number:'1.0-0':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="ZetAmount" [title]="'Z Değeri'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.ZetAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="InvoiceTotal" [title]="'E-Fatura'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.InvoiceTotal | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CashAmount" [title]="'Sayılan Nakit'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CashAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="CardAmount" [title]="'Kart Toplamı'" width="90" filter="numeric">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span>{{dataItem.CardAmount | number:'1.2-2':'tr'}}</span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-excel [fileName]="getxlsFileName()" [fetchData]="allData"></kendo-grid-excel>
+    </kendo-grid>
+
+
+</ot-list-screen-container>
+<ot-reconciliation-edit #editScreen screenName="ot-expense-edit"></ot-reconciliation-edit>
+<ot-zet-image-view #zetImageViewScreen screenName="ot-zet-image-view"></ot-zet-image-view>
+
+<ot-custom-dialog #notReconStores size="lg">
+        <kendo-grid [data]="notReconList" [height]="200">
+                <kendo-grid-column field="STORE_NM" [title]="'Mağaza Adı'" width="180" > </kendo-grid-column>
+                <kendo-grid-column field="DATE_DT" [title]="'Tarih'" width="180" >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.DATE_DT | date:'dd.MM.yyyy'}}
+                    </ng-template>
+                    <!-- <ng-template kendoGridFooterTemplate let-column="column"> {{rec.CardAmount | currency:'TRY':'symbol-narrow':'1.2-2':'tr'}} </ng-template> -->
+                </kendo-grid-column>
+            </kendo-grid>
+</ot-custom-dialog>

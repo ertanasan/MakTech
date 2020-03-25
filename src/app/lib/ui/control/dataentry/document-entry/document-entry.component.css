@@ -1,0 +1,39 @@
+.custom-file-label {
+    border-radius: 0rem;
+}
+
+.btn-append {
+    border-radius: 0rem;
+}
+.fa-trash-alt{
+    color: white;
+}
+.fa-download{
+    color: white;
+}
+
+.custom-file-label{
+    text-align: left !important;
+    margin-top: 0rem!important;
+    margin-bottom: 0px!important;
+    padding: 0.5rem 0.75rem!important;
+    height: calc(1.2em + 1.3rem + 2px)!important;
+}
+
+.custom-file-label::after {
+    height: calc(1.2em + 1.3rem)!important;
+    padding: 0.5rem 0.75rem!important;
+}
+
+.input-item-selected {
+    height: calc(1.2em + 1.3rem + 2px)!important;
+}
+
+.input-item > .input-group-append > button {
+    padding: 0.50rem 1rem!important;
+}
+
+.extensionsInfo{
+    font-size: 12px !important;
+    margin-top: 0px !important;
+}

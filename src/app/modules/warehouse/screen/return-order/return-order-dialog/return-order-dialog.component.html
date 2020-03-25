@@ -1,0 +1,13 @@
+﻿<ot-input-dialog #container [caption]="isApprove?'Onay':'Ret'" [color]="isApprove?'success':'danger'" (onAction)="onAction()" (onClose)="onClose()">
+  <div *ngIf="isApprove" class="modal-body">
+    {{ approveMessage }}
+  </div>
+  <div *ngIf="!isApprove" class="modal-body">
+    <p>
+    {{ rejectMesssage }}
+    </p>
+
+    <ot-text-entry [caption]="'Ret Nedeni'" class="col-12" [(value)]="rejectReason"></ot-text-entry>
+      
+  </div>
+</ot-input-dialog>

@@ -1,0 +1,74 @@
+﻿<ot-list-screen-container [header]="'Store Reconciliation' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+ 
+  <ng-container header-items>
+    <div class="row float-right m-auto">
+      <ot-button class="col-md-5"  color="primary" [caption]="'Approve' | translate " (click)="approveReconciliations(0)"></ot-button>
+      <ot-date-entry class="col-md-5" [format]="'dd.MM.yyyy'" [(value)]="reconciliationDate" caption="" captionWidth="8" editorWidth="6"></ot-date-entry>
+      <ot-button class="col-md-2"  color="primary" [caption]="'List' | translate " (click)="listReconciliations()"></ot-button>
+    </div>
+  </ng-container>
+  
+  <kendo-grid [data]="dataService.reconciliations_filtered" [loading]="dataService.loading" [height]="615"
+    [sortable]= "true" [sort]="listParams.sort"
+    [filterable]="true" [filter]="listParams.filter" 
+    (dataStateChange)="handleDataStateChange($event)"
+  >
+  <ng-template kendoGridToolbarTemplate>
+    <ot-light-button color="success" icon="fas fa-file-excel" kendoGridExcelCommand></ot-light-button>
+  </ng-template>
+  
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="" [width]="commandColumnWidth" locked="true">
+      <ng-container *ngIf="createEnabled">
+        <ng-template kendoGridHeaderTemplate>
+          <ot-button [caption]="'New' | translate" icon="fa fa-plus fa-fw" (onClick)="showDialog(editScreen, 'Create')" [block]="false" color="primary" size="sm"></ot-button>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="readEnabled || updateEnabled || deleteEnabled">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="readEnabled && (dataItem.StoreReconciliationId > 0)" color="primary" otTooltip="{{ 'Read' | translate }}" (onClick)="showDialog(editScreen, 'Read', dataItem)"><i class="fa fa-search"></i></ot-light-button>
+          <ot-light-button *ngIf="updateEnabled && (dataItem.StoreReconciliationId > 0) && !dataItem.Approved" color="primary" otTooltip="{{ 'Update' | translate }}" (onClick)="showDialog(editScreen, 'Update', dataItem)" icon="fas fa-edit"></ot-light-button>
+          <ot-light-button *ngIf="deleteEnabled && (dataItem.StoreReconciliationId > 0) && !dataItem.Approved" color="primary" otTooltip="{{ 'Delete' | translate }}" (onClick)="showDialog(editScreen, 'Delete', dataItem)" icon="fas fa-trash-alt"></ot-light-button>
+        </ng-template>
+      </ng-container>
+    </kendo-grid-command-column>
+
+    <kendo-grid-column field="StoreID" [title]="'Store ID' | translate" width="200"></kendo-grid-column>  
+    <kendo-grid-column field="StoreName" [title]="'Store Name' | translate" width="200"></kendo-grid-column>  
+
+  <kendo-grid-column field="UserFullName" [title]="'User Full Name' | translate" width="300"></kendo-grid-column>  
+
+    <kendo-grid-column field="Reconciliated" [title]="'Reconciliated' | translate" width="108" filter="boolean">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <ot-check-box [value]="dataItem.Reconciliated" optionName="checkbox_{{ dataItem.Reconciliated }}" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+      </ng-template>
+    </kendo-grid-column>
+    
+    <kendo-grid-column field="Approved" [title]="'Approved' | translate" width="108" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-check-box [value]="dataItem.Approved" optionName="checkbox_{{ dataItem.Approved }}" [inGrid]="true" [isReadOnly]="true"></ot-check-box>
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-command-column *ngIf="createEnabled || readEnabled || updateEnabled || deleteEnabled" title="Approve" [width]="70" locked="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <ot-light-button *ngIf="dataItem.Reconciliated && !dataItem.Approved" color="primary" otTooltip="{{ 'Transfer to Accounting' | translate }}" (onClick)="approveReconciliations(dataItem.StoreReconciliationId)"><i class="fa fa-arrow-right"></i></ot-light-button>
+        </ng-template>
+    </kendo-grid-command-column>
+
+
+    <kendo-grid-column field="PreviousDayAmount" [title]="'Previous Day Amount' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="SaleTotal" [title]="'Sale Total' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="CashTotal" [title]="'Cash Total' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="CardTotal" [title]="'Card Total' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="ToBank" [title]="'To Bank' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="Difference" [title]="'Difference' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="DifferenceExplanation" [title]="'Difference Explanation' | translate" width="750"></kendo-grid-column>
+    <kendo-grid-column field="Completed" [title]="'Completed' | translate" width="150" filter="numeric"></kendo-grid-column>
+    <kendo-grid-column field="EodAdvance" [title]="'Eod Advance' | translate" width="150" filter="numeric"></kendo-grid-column>
+ 
+    <kendo-grid-excel fileName="Mutabakatlar.xlsx" [fetchData]="allData"></kendo-grid-excel>
+
+    </kendo-grid>
+
+  </ot-list-screen-container>
+<ot-store-reconciliation-edit #editScreen screenName="ot-store-reconciliation-edit"></ot-store-reconciliation-edit>

@@ -1,0 +1,88 @@
+﻿<ot-edit-screen-container #container size="lg" class="modal fade" [childActions]="modeContext?modeContext.childActions:null">
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ProductionOrderId" [caption]="'Production Order Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+
+    <ot-dropdown-entry formControlName="Production" [caption]="'Production' | translate" (valueChange)="onProductionChange($event)"
+                       [items]="productionService.completeList" textField="ProductName" valueField="ProductionId" 
+                       usePrimitiveValue="true" class="col-12" [loading]="productionService.loading"
+                       [isReadOnly]="container.actionName==='Review'">
+    </ot-dropdown-entry>
+    <ot-numeric-entry formControlName="Quantity" [caption]="'Quantity' | translate" class="col-12" (onBlur)="onQuantityChange($event)"
+                      [isReadOnly]="container.actionName==='Review' || (activeItem && (activeItem.StatusCode > 2))">
+    </ot-numeric-entry>
+    <ot-numeric-entry *ngIf="activeItem && (activeItem.StatusCode >= 2)" formControlName="CompletedQuantity" 
+                      [caption]="'Completed Quantity' | translate" class="col-12" [isReadOnly]="true">
+    </ot-numeric-entry>  
+    <ot-numeric-entry *ngIf="container.actionName ==='Create'" formControlName="ProductionOrderCost" [caption]="'Order Cost' | translate" class="col-12" [isReadOnly]="true">
+    </ot-numeric-entry>  
+  </form>
+
+  <kendo-grid *ngIf="!activeItem || activeItem.StatusCode < 2" [data]="contentList" [loading]="contentsLoading" [height]="300"
+  (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="120"></kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="MainWarehouseStock" [title]="'Main Warehouse Stock' | translate" width="80" >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.MainWarehouseStock | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="ProductionWarehouseStock" [title]="'Production Warehouse Stock' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ProductionWarehouseStock | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="ShareRate" [title]="'Share Rate' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.ShareRate / 100 | percent:'1.0-0': 'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="UnitWeight" [title]="'Unit Weight' | translate" width="60">
+      <!-- <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.UnitWeight}}
+      </ng-template> -->
+      <ng-template kendoGridEditTemplate
+        let-dataItem="dataItem"
+        let-column="column"
+        let-formGroup="formGroup">
+        <kendo-dropdownlist
+          [data]="dataItem.UnitWeightList"
+          textField="value"
+          valueField="value"
+          [valuePrimitive]="true"
+          [formControl]="formGroup.get('UnitWeight')"
+          (valueChange)="onUnitWeightChange($event, dataItem)">
+        </kendo-dropdownlist>
+      </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.UnitWeight | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="RequiredPackage" [title]="'Required Package' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.RequiredPackage | number:'1.0-0':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="activeItem && activeItem.StatusCode === 1" [headerStyle]="{'text-align': 'center'}" [style]="{'text-align': 'center'}" 
+                       field="AllocatedPackage" [title]="'Allocated Package' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.AllocatedPackage | number:'1.0-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column *ngIf="activeItem && activeItem.StatusCode === 1" [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" 
+                       field="AllocatedQuantity" [title]="'Allocated Quantity' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.AllocatedQuantity | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerStyle]="{'text-align': 'right'}" [style]="{'text-align': 'right'}" field="Remnant" [title]="'Remnant' | translate" width="80">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <span>{{dataItem.Remnant | number:'1.2-2':'tr'}}</span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-edit-screen-container>
+
+<ot-input-dialog #partialComplete (onAction)="onActionPartialInput($event)">
+  <div class="col-12">
+    <ot-numeric-entry [caption]="'Completed Quantity' | translate" class="col-12" [(value)]="partialCompleteQuantity"></ot-numeric-entry>
+  </div>
+</ot-input-dialog>

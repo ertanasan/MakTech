@@ -1,0 +1,7 @@
+<button
+  [type]="type"
+  [disabled]="disabled"
+  [class]="'btn btn-elevate btn-icon'"
+  (click)="onClick.emit($event)">
+  <i class="{{ icon }} kt-font-{{ color }}"></i>
+</button>

@@ -1,0 +1,41 @@
+<ot-data-entry-template  *ngIf="!inGrid, else inGridTemplate"
+  caption="{{ caption }}" 
+  [showCaption]="showCaption" [editorWidth]="editorWidth" [captionWidth]="captionWidth"
+  [hasFormControl]="ngControl"
+  [hasError]="ngControl && ngControl.control.invalid && ngControl.control.touched"
+  [validationMessages]="getValidationMessages()"
+  [captionBS]="captionBS"
+  [editorBS]="editorBS"
+>
+  <kendo-datepicker
+    [ngStyle]="otStyle"
+    editor
+    [ngClass]="getControlClasses()"
+    [readonly]="isReadOnly"
+    [disabled]="ngControl ? ngControl.control.disabled : isDisabled"
+    [(ngModel)]="dateValue"
+    (blur)="touch()"
+    [placeholder]="placeholder"
+    [format]="format"
+    [formatPlaceholder]="formatPattern"
+    [min]="min"
+    [max]="max"
+  ></kendo-datepicker>
+</ot-data-entry-template>
+
+<ng-template #inGridTemplate>
+  <kendo-datepicker
+    [ngStyle]="otStyle"
+    editor
+    [readonly]="isReadOnly"
+    [disabled]="disabled ? disabled : (ngControl ? ngControl.control.disabled : isDisabled)"
+    [(ngModel)]="dateValue"
+    (blur)="touch()"
+    [placeholder]="placeholder"
+    [format]="format"
+    [formatPlaceholder]="formatPattern"
+    [min]="min"
+    [max]="max"
+    
+  ></kendo-datepicker>
+</ng-template>

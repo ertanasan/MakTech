@@ -1,0 +1,75 @@
+﻿<ot-list-screen-container [header]="'Product Price' | translate" [breadcrumbItems]="breadcrumbItems" [showAsDetail]="isEmbedded">
+  <div class="row">
+    <ot-dropdown-entry
+    [(value)]="packageId" 
+    [caption]="'Package' | translate" 
+    [items]="packageService.completeList" 
+    textField="PackageName" 
+    valueField="PackageId" 
+    usePrimitiveValue="true" 
+    class="col-md-6" 
+    [loading]="packageService.loading"
+    (valueChange)="packageChanged()">
+    </ot-dropdown-entry>
+    <div class="col-md-6 float-right priceSave-btn">
+      <ot-button color="primary" [caption]="'Print' | translate " (onClick)="onPrint()" ></ot-button>
+      <ot-button color="primary" [caption]="'Save' | translate " (onClick)="onSave()" ></ot-button>
+    </div>
+  </div>
+  
+  <kendo-grid [data]="isEmbedded ? dataList : dataService.activeList" [loading]="dataLoading" [height]="575"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip" (pageChange)="handlePageChange($event)"
+    [sortable]="true" [sort]="listParams.sort" [filterable]="true" [filter]="listParams.filter" (sortChange)="handleSortChange($event)"
+    (dataStateChange)="handleDataStateChange($event)" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)"
+    [navigable]="true" >
+    <!-- <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Add new</button>
+    </ng-template> -->
+    
+    <kendo-grid-column field="ProductCodeName" [title]="'Product Code' | translate" width="60"></kendo-grid-column>
+    <kendo-grid-column field="Plu1" [title]="'Barcode' | translate" width="70"></kendo-grid-column>
+    <kendo-grid-column field="ProductName" [title]="'Product Name' | translate" width="100"></kendo-grid-column>
+    <kendo-grid-column field="ProductFamilyName" [title]="'Category' | translate" width="100"></kendo-grid-column>
+    
+    <kendo-grid-column field="CurrentPriceAmount" filter="numeric" [title]="'Current Price' | translate" width="75"></kendo-grid-column>
+    <kendo-grid-column field="PriceAmount" editor="numeric" filter="numeric" [title]="'New Price' | translate" width="75"></kendo-grid-column>
+    <kendo-grid-column field="PackageProduct" filter="boolean" [title]="'Changed' | translate" width="40">
+      <ng-template kendoGridCellTemplate let-dataItem> 
+        <ot-check-box [(value)]="dataItem.PackageProduct" optionName="checkbox_changed_{{ dataItem.ProductPriceId }}" [inGrid]="true" [isReadOnly]="false"></ot-check-box>
+      </ng-template> 
+    </kendo-grid-column>
+    <kendo-grid-column field="TopPriceAmount" editor="numeric" filter="numeric" [title]="'Top Price' | translate" width="75"></kendo-grid-column>
+    <kendo-grid-column field="PrintTopPriceFlag" filter="boolean" [title]="'Print' | translate" width="40">
+      <ng-template kendoGridCellTemplate let-dataItem> 
+        <ot-check-box [(value)]="dataItem.PrintTopPriceFlag" optionName="checkbox_print_{{ dataItem.ProductPriceId }}" [inGrid]="true"></ot-check-box>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="UpdateUser" filter="numeric" [title]="'Last Update User' | translate" width="75">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div *ngIf="dataItem.UpdateUser">{{ dataItem.UpdateUser | getName:'UserId':'UserFullName':userService.completeList }}</div>
+        <div *ngIf="!dataItem.UpdateUser">{{ dataItem.CreateUser | getName:'UserId':'UserFullName':userService.completeList }}</div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="UpdateDate" filter="date" [title]="'Update Date' | translate" width="90">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.UpdateDate | date: 'dd.MM.yyyy HH:mm'}}
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</ot-list-screen-container>
+
+<div #packagePricePrint class="row" hidden="true">
+  <ot-product-price-print class="col-12 mx-auto" 
+                          [packageToPrint]="selectedPackage" 
+                          [packageStoresToPrint]="selectedPackageStores" 
+                          [productsToPrint]="selectedPackageProducts"
+                          > 
+  </ot-product-price-print>
+</div>
+
+<!-- <ot-message-dialog #rawDataDialog caption="{{ Approve Save | translate }}" size="xl">
+  <kendo-grid [data]="genericReportService.activeList.data" [loading]="genericReportService.loading"
+    [pageable]="listParams.pageable" [pageSize]="listParams.take" [skip]="listParams.skip"
+    [sortable]= "true" [sort]="listParams.sort">
+  </kendo-grid>
+</ot-message-dialog> -->

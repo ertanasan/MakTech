@@ -1,0 +1,16 @@
+﻿-- Created by OverGenerator
+/*Section="Main"*/
+CREATE PROCEDURE ANN_LST_NOTIFICATIONSTATUS_SP
+AS
+BEGIN
+    /*Section="Query"*/
+    -- Select all
+    SELECT
+           N.NOTIFICATIONSTATUSID,
+           N.NOTIFICATIONSTATUS_NM,
+           N.DESCRIPTION_DSC
+      FROM ANN_NOTIFICATIONSTATUS N (NOLOCK)
+     ORDER BY NOTIFICATIONSTATUS_NM;
+
+/*Section="End"*/
+END;

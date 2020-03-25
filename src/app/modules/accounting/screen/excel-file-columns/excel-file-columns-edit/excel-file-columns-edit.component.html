@@ -1,0 +1,13 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="ExcelFileColumnsId" [caption]="'Excel File Columns Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry>
+    <!-- <ot-dropdown-entry formControlName="ExcelFile" [caption]="'Excel File' | translate" [items]="container.MasterId ? [container.MasterObject] : excelFileService.completeList"
+      [isReadOnly]="container.MasterId" textField="TransferName" valueField="ExcelFileId" usePrimitiveValue="true" class="col-12" [loading]="excelFileService.loading"></ot-dropdown-entry> -->
+    <ot-alpha-entry formControlName="ColumnName" [caption]="'Column Name' | translate" class="col-12"></ot-alpha-entry>
+    <ot-numeric-entry formControlName="ColumnIndex" [caption]="'Column Index' | translate" class="col-12" [format]="'n0'"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="ColumnType" [caption]="'Column Type' | translate" 
+    [items]="columntypes" textField="text" valueField="value" usePrimitiveValue="true" class="col-12"></ot-dropdown-entry> 
+    <!-- <ot-alpha-entry formControlName="ColumnType" [caption]="'Column Type' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-alpha-entry formControlName="ColumnFormat" [caption]="'Column Format' | translate" class="col-12"></ot-alpha-entry>
+  </form>
+</ot-edit-screen-container>

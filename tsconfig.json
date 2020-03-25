@@ -1,0 +1,134 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "allowJs": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@otscreen-base/*": [
+        "app/lib/common/screen-base/*"
+      ],
+      "@otcore/*": [
+        "app/lib/core/*"
+      ],
+      "@otcommon/*": [
+        "app/lib/common/*"
+      ],
+      "@otmodel/*": [
+        "app/lib/model/*"
+      ],
+      "@otservice/*": [
+        "app/lib/service/*"
+      ],
+      "@otuiscreen/*": [
+        "app/lib/ui/container/screen/*"
+      ],
+      "@otuicontainer/*": [
+        "app/lib/ui/container/*"
+      ],
+      "@otuidataentry/*": [
+        "app/lib/ui/control/dataentry/*"
+      ],
+      "@otuicontrol/*": [
+        "app/lib/ui/control/*"
+      ],
+      "@otui/*": [
+        "app/lib/ui/*"
+      ],
+      "@otlib/*": [
+        "app/lib/*"
+      ],
+      "@frame/*": [
+        "app/frame/*"
+      ],
+      "@contact/*": [
+        "app/frame/contact/*"
+      ],
+      "@organization/*": [
+        "app/frame/organization/*"
+      ],
+      "@parameter/*": [
+        "app/frame/parameter/*"
+      ],
+      "@reporting/*": [
+        "app/frame/reporting/*"
+      ],
+      "@system/*": [
+        "app/frame/system/*"
+      ],
+      "@document/*": [
+        "app/frame/document/*"
+      ],
+      "@security/*": [
+        "app/frame/security/*"
+      ],
+      "@bpm-core/*": [
+        "app/frame/bpm-core/*"
+      ],
+      "@digital-signing/*": [
+        "app/frame/digital-signing/*"
+      ],
+      "@app-main/*": [
+        "app/modules/app-main/*"
+      ],
+      "@store-upload/*": [
+        "app/modules/store-upload/*"
+      ],
+      "@store/*": [
+        "app/modules/store/*"
+      ],
+      "@product/*": [
+        "app/modules/product/*"
+      ],
+      "@reconciliation/*": [
+        "app/modules/reconciliation/*"
+      ],
+      "@sale/*": [
+        "app/modules/sale/*"
+      ],
+      "@transfer/*": [
+        "app/modules/transfer/*"
+      ],
+      "@price/*": [
+        "app/modules/price/*"
+      ],
+      "@warehouse/*": [
+        "app/modules/warehouse/*"
+      ],
+      "@announcement/*": [
+        "app/modules/announcement/*"
+      ],
+      "@accounting/*": [
+        "app/modules/accounting/*"
+      ],
+      "@gamification/*": [
+        "app/modules/gamification/*"
+      ],
+      "@helpdesk/*": [
+        "app/modules/helpdesk/*"
+      ],
+      "@over-store-main/*": [
+        "app/modules/app-main/*"
+      ],
+      "@finance/*": [
+        "app/modules/finance/*"
+      ]
+    },
+    "module": "esnext",
+    "downlevelIteration": true
+  }
+}

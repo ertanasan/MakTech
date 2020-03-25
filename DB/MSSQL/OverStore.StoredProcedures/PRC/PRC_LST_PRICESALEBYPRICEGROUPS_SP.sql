@@ -1,0 +1,59 @@
+﻿CREATE PROCEDURE PRC_LST_PRICESALEBYPRICEGROUPS_SP                         
+ @Store INT = NULL,           
+ @Product INT,          
+ @StartDate DATE = '2019-01-01',          
+ @EndDate DATE = NULL          
+AS                            
+BEGIN           
+ -- Initializing parameters          
+ IF @EndDate IS NULL          
+ SET @EndDate = GETDATE() - 1          
+          
+ -- Section: Table Drops                        
+ IF OBJECT_ID('tempdb..#SALES') IS NOT NULL DROP TABLE #SALES                          
+ IF OBJECT_ID('tempdb..#CHANGES') IS NOT NULL DROP TABLE #CHANGES            
+          
+ -- Section: Temp Tables Preperations          
+ SELECT SD.STORE    
+ , SD.TRANSACTION_DT    
+ , S.TRANSACTION_TM    
+ , SD.PRODUCT    
+ , CASE WHEN SD.UNIT = 1 THEN 'KG' ELSE 'ADET' END UNIT_NM    
+ , SD.UNITPRICE_AMT    
+ , CASE WHEN SD.UNIT = 1 THEN SD.QUANTITY_QTY / 1000.0 ELSE SD.QUANTITY_QTY END QUANTITY_QTY    
+ , SD.PRICE          
+ , LAG(SD.UNITPRICE_AMT) OVER (PARTITION BY SD.STORE ORDER BY S.TRANSACTION_TM) PREVUNITPRICE_AMT          
+ INTO #SALES          
+ FROM SLS_SALEDETAIL SD (NOLOCK)          
+   JOIN SLS_SALE S (NOLOCK) ON SD.SALE = S.SALEID AND S.DELETED_FL = 'N' AND S.CANCELLED_FL = 'N'        
+ WHERE SD.DELETED_FL = 'N'       
+   AND S.TRANSACTIONTYPE != 5        
+   AND SD.TRANSACTION_DT BETWEEN @StartDate AND @EndDate          
+   AND SD.PRODUCT = @Product          
+   AND SD.STORE = @Store          
+          
+ SELECT STORE          
+   , TRANSACTION_TM START_TM          
+   , ISNULL(LEAD(TRANSACTION_TM) OVER (PARTITION BY STORE ORDER BY TRANSACTION_TM),GETDATE()) END_TM          
+   , CAST((ISNULL(LEAD(TRANSACTION_TM) OVER (PARTITION BY STORE ORDER BY TRANSACTION_TM),GETDATE()) - TRANSACTION_TM) AS float) DAY_CNT          
+   --, ISNULL(LEAD(TRANSACTION_TM) OVER (PARTITION BY STORE ORDER BY TRANSACTION_TM),GETDATE()) - TRANSACTION_TM DAY_CNT          
+   , UNITPRICE_AMT          
+   , ROW_NUMBER() OVER(PARTITION BY STORE ORDER BY TRANSACTION_TM) GROUPID          
+  INTO #CHANGES          
+  FROM #SALES          
+ WHERE ISNULL(PREVUNITPRICE_AMT,0) != UNITPRICE_AMT          
+ ORDER BY TRANSACTION_TM          
+          
+ -- Section: Main Query          
+ SELECT C.STORE, C.GROUPID, C.START_TM, C.END_TM, C.DAY_CNT, S.UNIT_NM, C.UNITPRICE_AMT          
+   , COUNT(*) TRAN_CNT          
+   --, COUNT(DISTINCT S.TRANSACTION_DT) TRANDAY_CNT          
+   , SUM(S.QUANTITY_QTY)/C.DAY_CNT TRANDAILYAVRG_QTY          
+   , CAST(SUM(S.PRICE)/C.DAY_CNT AS INT) SALEDAILYAVRG_AMT           
+   --, ( SUM(S.PRICE)/DAY_CNT ) / ( SUM(QUANTITY_QTY)/DAY_CNT / 1000)   controlX          
+  FROM #CHANGES C          
+  JOIN #SALES S ON C.STORE = S.STORE AND C.UNITPRICE_AMT = S.UNITPRICE_AMT AND S.TRANSACTION_TM >= C.START_TM AND S.TRANSACTION_TM < C.END_TM          
+ GROUP BY C.STORE, C.GROUPID, C.START_TM, C.END_TM, C.DAY_CNT, S.UNIT_NM, C.UNITPRICE_AMT          
+ ORDER BY C.STORe, C.GROUPID                
+            
+END

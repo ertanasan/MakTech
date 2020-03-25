@@ -1,0 +1,138 @@
+﻿<ot-base-screen-container #container>
+
+  <ot-list-screen-container [header]="'Branch Reconciliation' | translate" [breadcrumbItems]="breadcrumbItems"
+    [showAsDetail]="isEmbedded">
+
+    <ng-container header-items>
+      <ot-button color="primary" [caption]="'Oku' | translate " (click)="gotoReconciliationDate()"></ot-button>
+    </ng-container>
+
+    <div align="center">
+        <ot-date-entry [format]="'dd.MM.yyyy'" [(value)]="reconciliationDate" captionWidth="0" editorWidth="12"></ot-date-entry>
+    </div>
+    <!-- {{ (this.contextState$ | async).Branch.Name }} -->
+    <br>
+    
+    <!-- <div class="row justify-content-center mb-2">
+
+      <div *ngFor="let item of storeReconciliationService.storeReconciliationIncome" class="col-xs-12 col-sm-6 col-md-4">
+        <div class="card card-accent-primary cash-card" otTooltip="{{ 'Z raporu gelmeden mutabakat yapılamaz.' | translate }}"
+          placement="top">
+
+          <div class="card-header">
+            <b>
+              {{"Cash Register" | translate}} {{ item.CashRegister }}
+            </b>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td class="cash-first-row">{{"Receipt No" | translate}}</td>
+                  <td class="cash-first-row"><span class="float-right">{{ item.ZetNo }}</span></td>
+                </tr>
+                <tr>
+                  <td>{{"Cash Total" | translate}}</td>
+                  <td><span class="float-right">{{ item.CashTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</span></td>
+                </tr>
+                <tr>
+                  <td>{{"Card Total" | translate}}</td>
+                  <td><span class="float-right">{{ item.CardTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</span></td>
+                </tr>
+                <tr>
+                  <td>{{"Refund Total" | translate}}</td>
+                  <td><span class="float-right">{{ item.RefundTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</span></td>
+                </tr>
+                <tr>
+                  <td>{{"TOTAL" | translate}}</td>
+                  <td><span class="float-right">{{ item.SaleTotal | currency:'TRY':'symbol-narrow':'1.2-2':'tr' }}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+ -->
+
+      <!-- <ot-store-expense *ngFor="let item of storeTotalService.reconciliationExpense; let i = index" [expenseId]="item.m_Item5"
+        [cashRegisterId]="item.m_Item1" [refund]="item.m_Item2" [expense]="item.m_Item3" [total]="item.m_Item4"
+        (expenseChange)="expenseChangeHandler($event, i)" class="col-sm-6 col-md-3 col-xs-12 mx-auto">
+      </ot-store-expense> -->
+
+
+
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-xs-12 mx-auto">
+        <div class="card card-accent-primary cash-card">
+          <div class="card-header">
+            <b>
+              {{"Daily Totals" | translate}}
+            </b>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm" [formGroup]="mainForm" (ngSubmit)="showContactDialog()" class="form-horizontal row">
+              <ot-alpha-entry formControlName="StoreReconciliationId" [caption]="'Store Reconciliation Id' | translate"
+                class="col-12" [ngClass]="{'ot-hidden': true}"></ot-alpha-entry>
+              <ot-date-entry formControlName="TransactionDate" [caption]="'Transaction Date' | translate" format="dd.MM.yyyy"
+                class="col-12" [ngClass]="{'ot-hidden': true}"></ot-date-entry>
+              <ot-alpha-entry formControlName="StoreID" [caption]="'Store ID' | translate" class="col-12" [ngClass]="{'ot-hidden': true}"></ot-alpha-entry>
+              <!-- Previous day advance amount. -->
+              <ot-numeric-entry formControlName="PreviousDayAmount" otTooltip="{{ 'Önceki günden devir alınan kasa avansıdır.' | translate }}"
+                [caption]="'Previous Day Advance' | translate" class="col-12"  [captionWidth]="4" [editorWidth]="8" [isReadOnly]="true"></ot-numeric-entry>
+                <!-- Total of all sales included. -->
+              <ot-numeric-entry formControlName="SaleTotal" otTooltip="{{ 'Tüm satışların toplamıdır.' | translate }}"
+                [min]="0" [caption]="'Sale Total' | translate" class="col-12"  [captionWidth]="4" [editorWidth]="8" [isReadOnly]="true"></ot-numeric-entry>
+                <!-- Total of all cash, including previous day advance amaount. -->
+              <ot-numeric-entry formControlName="CashTotal" otTooltip="{{ 'Avans miktarını da içeren tüm nakit toplamıdır.' | translate }}"
+                (change)="this.calculateFields('CashTotal')" [(value)]="this.storeReconciliation.CashTotal" [min]="0" [caption]="'Cash Total' | translate"
+                class="col-12"  [captionWidth]="4" [editorWidth]="8" style="font-weight: bold;"></ot-numeric-entry>
+                <!-- Total of only credit or debit kart sales. -->
+              <ot-numeric-entry formControlName="CardTotal" otTooltip="{{ 'Sadece POS satışlarının toplamdır.' | translate }}"
+                (change)="this.calculateFields('CardTotal')" [(value)]="this.storeReconciliation.CardTotal" [min]="0" [caption]="'Card Total' | translate"
+                class="col-12"  [captionWidth]="4" [editorWidth]="8" style="font-weight: bold;"></ot-numeric-entry>
+                <!-- The amount of cash which will be sent to bank. -->
+              <ot-numeric-entry formControlName="ToBank" otTooltip="{{ 'Bankaya gönderilecek tutardır.' | translate }}"
+                [(value)]="this.storeReconciliation.ToBank" [min]="0" [caption]="'To Bank' | translate" class="col-12" [captionWidth]="4" [editorWidth]="8"
+                [isReadOnly]="true"></ot-numeric-entry>
+                <!-- Difference amount between sales in system and sales in store. -->
+              <ot-numeric-entry formControlName="Difference" otTooltip="{{ 'Sistemden gelen toplam satış ile kasa sayımı arasındaki fark miktarıdır.'}}"
+                [(value)]="this.storeReconciliation.Difference" [caption]="'Difference' | translate" class="col-12"  [captionWidth]="4" [editorWidth]="8" [isReadOnly]="true"></ot-numeric-entry>
+                <!-- If there is a differece, explain the reason for it. -->
+              <ot-text-entry formControlName="DifferenceExplanation" otTooltip="{{ 'E-fatura tutarı ya da varsa kasa farkı tutarı bu kısımda ayrı ayrı belirtilmelidir. Sadece kasa farkı var ise, nedeni yazılmalıdır.' }}"
+                [caption]="'Difference Explanation' | translate" rows="3" class="col-12" style="font-weight: bold;"></ot-text-entry>
+                <!-- Enter the amount of missing ammount you see in (-) Difference field. -->
+              <ot-numeric-entry formControlName="Completed" otTooltip="{{ 'Tazmin edilen kasa farkını bu kısma yazınız.'}}"
+                (change)="this.calculateFields('Completed')" [(value)]="this.storeReconciliation.Completed" [min]="0" [caption]="'Completed' | translate"
+                class="col-12"  [captionWidth]="4" [editorWidth]="8" style="font-weight: bold;"></ot-numeric-entry>
+                <!-- The amount of advance to transfer for tomorrow. -->
+              <ot-numeric-entry formControlName="EodAdvance" otTooltip="{{ 'Yarına devredilecek avans miktarıdır.' }}"
+                [(value)]="this.storeReconciliation.EodAdvance" [caption]="'Eod Advance' | translate" class="col-12"  [captionWidth]="4" [editorWidth]="8"
+                [isReadOnly]="true"></ot-numeric-entry>
+              <div class="col-12">
+                  <!-- Once reconciliated successfully then this form will be read only. If saved unsuccessfully then you can edit later. -->
+                <ot-button [disabled]="this.reconciliationSaved || this.storeReconciliation.Reconciliated || this.storeReconciliation.ZetCount == 0 "
+                  otTooltip="{{ 'Mutabalat başarılı bir şekilde tamamladıktan sonra güncelleme yapılamaz.' }}"
+                  placement="top" color="primary" caption="{{ 'Mutabakatı Bitir' }}" actionType="submit" [block]="true"></ot-button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </ot-list-screen-container>
+
+</ot-base-screen-container>
+<ot-input-dialog #contactDialog [caption]="'Emin misiniz?' " (onAction)="saveReconciliation($event)"
+  (onClose)="generateAction($event)">
+  <!-- <kendo-grid [data]="contactService.activeList" [kendoGridSelectBy]="'SemAddress'" [selectable]="selectableSettings"
+    [selectedKeys]="mySelection" [height]="610" [filterable]="true" [filter]="contactListParams.filter"
+    (dataStateChange)="handleDataStateChange($event)">
+    <kendo-grid-checkbox-column showSelectAll="true"></kendo-grid-checkbox-column>
+    <kendo-grid-column field="Name" title="Name">
+    </kendo-grid-column>
+    <kendo-grid-column field="SemAddress" title="Sem Address">
+    </kendo-grid-column>
+  </kendo-grid> -->
+</ot-input-dialog>

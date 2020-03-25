@@ -1,0 +1,12 @@
+﻿<ot-edit-screen-container #container >
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="StoreOrderId" [caption]="'Store Order Id' | translate" class="col-12" [isReadOnly]="true" ></ot-alpha-entry>
+    <ot-alpha-entry formControlName="OrderCode" [caption]="'Order Code' | translate" class="col-12" [isReadOnly]="true"></ot-alpha-entry>
+    <ot-date-entry formControlName="ShipmentDate" [caption]="'Shipment Date' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry>
+    <ot-dropdown-entry formControlName="Status" [caption]="'Status' | translate" 
+      [items]="storeOrderStatusService.previousStatusArr" textField="StatusName" valueField="StoreOrderStatusId" 
+      usePrimitiveValue="true" class="col-12" [loading]="storeOrderStatusService.loading">
+    </ot-dropdown-entry>
+    <!-- <ot-switch-entry formControlName="StatusToBackStep" [caption]="'Change Status To One Step Back' | translate" [(value)]="statusStepBack" [isReadOnly]="statusReadOnly" color="primary" class="col-md-12"></ot-switch-entry> -->
+  </form>
+</ot-edit-screen-container>

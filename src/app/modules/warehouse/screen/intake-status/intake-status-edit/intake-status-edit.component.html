@@ -1,0 +1,15 @@
+﻿<ot-edit-screen-container #container>
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <!-- <ot-alpha-entry formControlName="IntakeStatusId" [caption]="'Intake Status Id' | translate" class="col-12" [ngClass]="{'ot-hidden': container.isIdentityHidden}" [isReadOnly]="!container.isIdentityEditable"></ot-alpha-entry> -->
+    <!-- <ot-alpha-entry formControlName="StoreOrderDetail" [caption]="'Store Order Detail' | translate" class="col-12"></ot-alpha-entry> -->
+    <ot-dropdown-entry formControlName="IntakeStatusType" [caption]="'Product' | translate" 
+                       [items]="intakeStatusTypeService.completeList" textField="IntakeStatusTypeName" 
+                       valueField="IntakeStatusTypeId" usePrimitiveValue="true" class="col-md-12" 
+                       [loading]="intakeStatusTypeService.loading">
+    </ot-dropdown-entry>
+    <ot-text-entry formControlName="Description" [caption]="'Description' | translate" rows="6" class="col-12"></ot-text-entry>
+    <!-- <ot-switch-entry formControlName="IsTransferred" [caption]="'Is Transferred' | translate" color="primary" labelStyle="check" class="col-12"></ot-switch-entry> -->
+    <!-- <ot-date-entry formControlName="MikroTransferTime" [caption]="'Mikro Transfer Time' | translate" format="dd.MM.yyyy" class="col-12"></ot-date-entry> -->
+    <!-- <ot-numeric-entry formControlName="QuantityDifference" [caption]="'Quantity Difference' | translate" class="col-12"></ot-numeric-entry> -->
+  </form>
+</ot-edit-screen-container>

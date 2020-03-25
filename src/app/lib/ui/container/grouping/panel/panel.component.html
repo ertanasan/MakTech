@@ -1,0 +1,15 @@
+<kt-portlet class="{{styleClass}}">
+  <kt-portlet-header [title]="caption" [noTitle]="false" [hideTools] = "hideTools">
+    <ng-container ktPortletTitle>
+        <ng-content select="[panel-header]"></ng-content>
+    </ng-container>    
+    <ng-container ktPortletTools>
+      <div class="kt-portlet__head-group">
+        <ng-content select="[panel-header-tools]"></ng-content>
+      </div>
+    </ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body *ngIf="!collapsed">
+      <ng-content></ng-content>
+  </kt-portlet-body>
+</kt-portlet>

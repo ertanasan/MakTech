@@ -1,0 +1,12 @@
+<kendo-sortable
+  [kendoSortableBinding]="items"
+  [navigatable]="true"
+  [animation]="true"
+  class="row"
+  [itemClass]="itemClass"
+  [activeItemClass]="activeItemClass"
+>
+  <ng-template let-item="item">
+    <ng-template [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{$implicit: item}"></ng-template>
+  </ng-template>
+</kendo-sortable>

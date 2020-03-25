@@ -1,0 +1,16 @@
+﻿CREATE PROCEDURE [dbo].[ACC_SEL_POSMIKROTRANSFERCONTROL_SP]
+	@StoreRef VARCHAR(100), 
+	@PosRef VARCHAR(100), 
+	@BlockedDate DATETIME,
+	@ValueDate DATETIME,
+	@MikroStatusCode INT AS
+BEGIN
+	SELECT *
+	  FROM ACC_BANKPOSTRAN
+	 WHERE BANK = 1
+	   AND STOREREF_TXT = @StoreRef
+	   AND POSREF_TXT = @PosRef	
+	   AND BLOCKED_DT = @BlockedDate
+	   AND VALUE_DT = @ValueDate
+	   AND MIKROSTATUS_CD = @MikroStatusCode
+END

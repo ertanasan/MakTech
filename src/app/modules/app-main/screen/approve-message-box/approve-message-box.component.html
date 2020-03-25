@@ -1,0 +1,7 @@
+<ot-custom-dialog #dialog [caption]="approveTitle" size="sm">
+    <p>{{approveMessage}}</p>
+    <ng-container dialog-actions>
+      <ot-button [caption]="'Cancel' | translate" (onClick)="cancelOnClicked()"></ot-button>
+      <ot-button [caption]="'Confirm' | translate" color="primary" (onClick)="approveOnClicked()"></ot-button>
+    </ng-container>
+</ot-custom-dialog>

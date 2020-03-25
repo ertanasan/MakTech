@@ -1,0 +1,11 @@
+<ot-edit-screen-container #container size="lg">
+  <form #form="ngForm" [formGroup]="container.mainForm" (ngSubmit)="onSubmit()" class="form-horizontal row">
+    <ot-alpha-entry formControlName="GatheringId" [caption]="'Gathering Id' | translate" class="col-md-12" isReadOnly=true></ot-alpha-entry>
+    <ot-alpha-entry formControlName="StoreOrder" [caption]="'Store Order' | translate" class="col-md-12" isReadOnly=true></ot-alpha-entry>
+    <ot-alpha-entry formControlName="StoreName" [caption]="'Store Name' | translate" class="col-md-12" isReadOnly=true></ot-alpha-entry>
+    <ot-numeric-entry formControlName="Priority" [caption]="'Priority' | translate" class="col-md-12"></ot-numeric-entry>
+    <ot-dropdown-entry formControlName="GatheringUser" [caption]="'Gathering User' | translate" [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-md-12" [loading]="userService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="ControllerUser" [caption]="'Controller User' | translate" [items]="userService.completeList" textField="UserFullName" valueField="UserId" usePrimitiveValue="true" class="col-md-12" [loading]="userService.loading"></ot-dropdown-entry>
+    <ot-dropdown-entry formControlName="GatheringStatus" [caption]="'Status' | translate" [items]="gatheringStatusService.completeList" textField="StatusName" valueField="GatheringStatusId" usePrimitiveValue="true" class="col-md-12" [loading]="gatheringStatusService.loading"></ot-dropdown-entry>
+  </form>
+  </ot-edit-screen-container>
